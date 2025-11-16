@@ -1,0 +1,25 @@
+uuid: b86f3a7d-b8db-4feb-ade8-3f4ef3f8371a
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:0d35d8c6-7190-4e5c-a054-26d36477549a'
+  module:
+    - block_content
+  theme:
+    - tbring
+id: tbring_logo
+theme: tbring
+region: header
+weight: 0
+provider: null
+plugin: 'block_content:0d35d8c6-7190-4e5c-a054-26d36477549a'
+settings:
+  id: 'block_content:0d35d8c6-7190-4e5c-a054-26d36477549a'
+  label: Logo
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

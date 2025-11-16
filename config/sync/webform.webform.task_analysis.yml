@@ -13,9 +13,6 @@ title: 'Module 2: Task Analysis'
 description: ''
 categories: {  }
 elements: |-
-  module_2_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Tasks</h2><p class="module-description">Below are common tasks in your role. For each one, tell us if you''d welcome AI help or prefer to keep doing it yourself.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

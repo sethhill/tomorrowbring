@@ -1,6 +1,6 @@
 name: Tbring
 type: theme
-base theme: stark
+base theme: stable9
 description: A flexible theme with a responsive, mobile-first layout.
 package: Custom
 core_version_requirement: ^10 || ^11

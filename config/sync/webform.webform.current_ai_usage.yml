@@ -13,9 +13,6 @@ title: 'Module 1: Current AI Usage'
 description: ''
 categories: {  }
 elements: |-
-  module_1_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Current AI Usage</h2><p class="module-description">Let’s start with understanding how you’re currently using AI tools.</p><p class="module-duration">Estimated time: 5 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

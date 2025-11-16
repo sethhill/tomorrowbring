@@ -1,3 +1,4 @@
+
 @font-face {
   font-family: "FitVariable";
   src: url("../fonts/FitVariable-VF.woff2") format("woff2");
@@ -16,6 +17,7 @@
   src: url("../fonts/BanterGrotesk-Black.woff2") format("woff2");
   font-weight: bold;
 }
+
 
 :root {
   --color-cream: rgba(255, 236, 180, 1);
@@ -282,17 +284,36 @@ label {
   margin-top: 3em;
 }
 
+
+.webform-progress-tracker {
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+
 .progress-marker:before {
   content: "";
+}
+
+.progress-marker:after {
+  background-color: white;
+}
+
+.webform-progress-tracker .progress-step .progress-marker::after {
+  background-color: var(--color-white);
 }
 
 .progress-step.is-active .progress-marker::before {
   background-color: var(--color-green);
 }
 
-.module-intro {
-  margin-bottom: 2em;
-  border-bottom: 12px solid var(--color-white);
+.field--name-field-intro {
+  font-size: 1.5em;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 4em;
+  text-align: center;
+  text-wrap: balance;
 }
 
 .module-title {
@@ -300,8 +321,10 @@ label {
   margin-bottom: 0.25em;
 }
 .module-description {
-  font-size: 1.5em;
-  margin-top: 0;
+}
+
+.module-duration {
+  margin-top: 0.5em;
 }
 
 .range {
@@ -329,7 +352,6 @@ label {
 }
 
 header {
-  background-color: var(--color-deep-green);
   margin-bottom: 3em;
 }
 
@@ -345,4 +367,79 @@ footer {
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
+}
+
+.webform-submission-data {
+  .webform-element {
+    font-size: 1.25em;
+    padding: 1em;
+    border-end-end-radius: 1em;
+    background-color: var(--color-white);
+    color: var(--color-deep-green);
+    margin-bottom: 1em;
+  }
+  .webform-element label {
+    font-weight: bold;
+    display: block;
+  }
+
+  details {
+    margin-bottom: 1em;
+  }
+
+  details summary {
+    background-color: var(--color-green);
+    color: var(--color-white);
+    padding: 0.5em 1em;
+    border-radius: 1em;
+    /* display: inline-block; */
+  }
+
+
+  details[open] {
+    summary {
+    border-radius: 1em 0 0 0;
+    }
+  }
+}
+
+#block-tbring-page-title {
+  margin-bottom: 2em;
+}
+
+#block-tbring-logo {
+  font-family: "FitVariable", sans-serif;
+  font-size: 3em;
+  font-weight: normal;
+  text-align: center;
+
+  h1 {
+    font-weight: normal;
+  }
+
+  .l1 {
+    color: var(--color-gold);
+    display: inline-block;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+    margin-bottom: 0.7svh;
+    font-variation-settings: "wdth" 400;
+    /* margin-bottom: -3svh; */
+  }
+  .l2 {
+    color: var(--color-orange);
+    display: inline-block;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+    margin-bottom: 0.7svh;
+    /* margin-bottom: -3svh; */
+  }
+  .l3 {
+    color: var(--color-green);
+    display: inline-block;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+    font-variation-settings: "wdth" 140;
+  }
+
 }

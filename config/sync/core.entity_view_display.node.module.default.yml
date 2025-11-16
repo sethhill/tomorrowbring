@@ -1,0 +1,50 @@
+uuid: 4a1debb0-b4c4-4998-8132-8426a407bd37
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.module.field_duration
+    - field.field.node.module.field_form
+    - field.field.node.module.field_intro
+    - field.field.node.module.field_number
+    - node.type.module
+  module:
+    - text
+    - user
+    - webform
+id: node.module.default
+targetEntityType: node
+bundle: module
+mode: default
+content:
+  field_duration:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_form:
+    type: webform_entity_reference_entity_view
+    label: hidden
+    settings:
+      source_entity: true
+      lazy: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_intro:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_number: true

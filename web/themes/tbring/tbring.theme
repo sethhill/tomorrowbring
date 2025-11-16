@@ -27,3 +27,25 @@ function tbring_preprocess_page(array &$variables): void {
 function tbring_preprocess_node(array &$variables): void {
 
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ */
+function tbring_preprocess_field(array &$variables): void {
+  $element = $variables['element'];
+
+  // Add field name class (e.g., field--name-field-my-field).
+  if (isset($element['#field_name'])) {
+    $variables['attributes']['class'][] = 'field--name-' . strtr($element['#field_name'], '_', '-');
+  }
+
+  // Add field type class (e.g., field--type-text-with-summary).
+  if (isset($element['#field_type'])) {
+    $variables['attributes']['class'][] = 'field--type-' . strtr($element['#field_type'], '_', '-');
+  }
+
+  // Add label display class (e.g., field--label-above).
+  if (isset($variables['label_display'])) {
+    $variables['attributes']['class'][] = 'field--label-' . $variables['label_display'];
+  }
+}

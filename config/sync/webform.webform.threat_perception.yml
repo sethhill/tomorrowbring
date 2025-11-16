@@ -9,13 +9,10 @@ uid: 1
 template: false
 archive: false
 id: threat_perception
-title: 'Module 3: Threat Perception: Light'
+title: 'Module 3: Understanding Change'
 description: ''
 categories: {  }
 elements: |-
-  module_3_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Understanding Change</h2><p class="module-description">AI is changing how we work. We want to understand how you’re experiencing these changes.</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

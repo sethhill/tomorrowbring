@@ -3,6 +3,8 @@ global:
   js:
     js/tbring.js: {}
   css:
+    base:
+      css/reset.css: {}
     theme:
       css/styles.css: {}
       css/theme/print.css: { media: print }
