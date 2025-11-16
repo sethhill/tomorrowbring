@@ -1,0 +1,695 @@
+uuid: 0bd11425-fa62-4414-a23f-fb09c13525c1
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: task_analysis
+title: 'Module 2: Task Analysis'
+description: ''
+categories: {  }
+elements: |-
+  1:
+    '#type': webform_wizard_page
+    '#title': '1'
+    module_2_intro:
+      '#type': webform_markup
+      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 2: Task Analysis</strong></p><p>Below are common tasks in your role. For each one, tell us if you''d welcome AI help or prefer to keep doing it yourself.</p><p><em>Estimated time: 4 minutes</em></p></div>'
+    m2_q1_role_category:
+      '#type': radios
+      '#title': 'Select your role category:'
+      '#options':
+        sales: Sales/Customer-facing
+        marketing: Marketing/Creative
+        engineering: Engineering/Technical
+        operations: Operations/Admin
+        management: Management/Leadership
+        finance: Finance/Analytics
+        hr: 'HR/People Ops'
+        other: Other
+      '#required': true
+    m2_q1_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: other
+  2:
+    '#type': webform_wizard_page
+    '#title': '2'
+    m2_q2_sales_container:
+      '#type': container
+      '#title': 'Sales/Customer-facing Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: sales
+      m2_q2_sales_followup:
+        '#type': radios
+        '#title': 'Writing follow-up emails'
+        '#options':
+          help: "Help me - I'd love AI to handle or assist with this"
+          keep: 'Keep it - I want to keep doing this myself'
+          unsure: Unsure
+      m2_q2_sales_research:
+        '#type': radios
+        '#title': 'Researching prospects/accounts'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_sales_scheduling:
+        '#type': radios
+        '#title': 'Scheduling meetings'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_sales_relationships:
+        '#type': radios
+        '#title': 'Building relationships with clients'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_sales_proposals:
+        '#type': radios
+        '#title': 'Creating proposals/quotes'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_sales_crm:
+        '#type': radios
+        '#title': 'Entering data into CRM'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_sales_negotiations:
+        '#type': radios
+        '#title': 'Having complex negotiations'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_sales_analysis:
+        '#type': radios
+        '#title': 'Analyzing sales data'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+    m2_q2_engineering_container:
+      '#type': container
+      '#title': 'Engineering/Technical Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: engineering
+      m2_q2_eng_boilerplate:
+        '#type': radios
+        '#title': 'Writing boilerplate code'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_debugging:
+        '#type': radios
+        '#title': 'Debugging errors'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_docs:
+        '#type': radios
+        '#title': 'Writing documentation'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_reviews:
+        '#type': radios
+        '#title': 'Code reviews'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_architecture:
+        '#type': radios
+        '#title': 'System architecture decisions'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_learning:
+        '#type': radios
+        '#title': 'Learning new frameworks'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_tests:
+        '#type': radios
+        '#title': 'Writing tests'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_eng_mentoring:
+        '#type': radios
+        '#title': 'Mentoring junior developers'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+    m2_q2_marketing_container:
+      '#type': container
+      '#title': 'Marketing/Creative Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: marketing
+      m2_q2_mkt_brainstorm:
+        '#type': radios
+        '#title': 'Brainstorming campaign ideas'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_social:
+        '#type': radios
+        '#title': 'Writing social media posts'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_design:
+        '#type': radios
+        '#title': 'Designing visual assets'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_analysis:
+        '#type': radios
+        '#title': 'Analyzing campaign performance'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_strategy:
+        '#type': radios
+        '#title': 'Creating brand strategy'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_ab:
+        '#type': radios
+        '#title': 'A/B test analysis'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_presentations:
+        '#type': radios
+        '#title': 'Client presentations'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mkt_calendar:
+        '#type': radios
+        '#title': 'Content calendar planning'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+    m2_q2_ops_container:
+      '#type': container
+      '#title': 'Operations/Admin Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: operations
+      m2_q2_ops_data_entry:
+        '#type': radios
+        '#title': 'Data entry'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_scheduling:
+        '#type': radios
+        '#title': 'Scheduling / calendar management'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_email:
+        '#type': radios
+        '#title': 'Email management'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_reports:
+        '#type': radios
+        '#title': 'Report generation'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_docs:
+        '#type': radios
+        '#title': 'Process documentation'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_vendors:
+        '#type': radios
+        '#title': 'Vendor coordination'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_meetings:
+        '#type': radios
+        '#title': 'Meeting coordination'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_ops_edge_cases:
+        '#type': radios
+        '#title': 'Problem-solving edge cases'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+    m2_q2_mgmt_container:
+      '#type': container
+      '#title': 'Management/Leadership Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: management
+      m2_q2_mgmt_reviews:
+        '#type': radios
+        '#title': 'Performance review writing'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_communication:
+        '#type': radios
+        '#title': 'Team communication'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_planning:
+        '#type': radios
+        '#title': 'Strategic planning'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_budget:
+        '#type': radios
+        '#title': 'Budget analysis'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_coaching:
+        '#type': radios
+        '#title': 'One-on-one coaching'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_hiring:
+        '#type': radios
+        '#title': 'Hiring decisions'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_conflict:
+        '#type': radios
+        '#title': 'Conflict resolution'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_mgmt_vision:
+        '#type': radios
+        '#title': 'Vision setting'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+    m2_q2_finance_container:
+      '#type': container
+      '#title': 'Finance/Analytics Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: finance
+      m2_q2_fin_cleaning:
+        '#type': radios
+        '#title': 'Data cleaning / preparation'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_models:
+        '#type': radios
+        '#title': 'Building financial models'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_viz:
+        '#type': radios
+        '#title': 'Creating visualizations'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_trends:
+        '#type': radios
+        '#title': 'Identifying trends/patterns'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_forecasting:
+        '#type': radios
+        '#title': Forecasting
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_reconciliation:
+        '#type': radios
+        '#title': 'Reconciliation tasks'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_recommendations:
+        '#type': radios
+        '#title': 'Strategic recommendations'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_fin_presentations:
+        '#type': radios
+        '#title': 'Stakeholder presentations'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+    m2_q2_hr_container:
+      '#type': container
+      '#title': 'HR/People Ops Tasks'
+      '#states':
+        visible:
+          ':input[name="m2_q1_role_category"]':
+            value: hr
+      m2_q2_hr_screening:
+        '#type': radios
+        '#title': 'Resume screening'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_scheduling:
+        '#type': radios
+        '#title': 'Interview scheduling'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_onboarding:
+        '#type': radios
+        '#title': 'Onboarding documentation'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_benefits:
+        '#type': radios
+        '#title': 'Benefits administration'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_relations:
+        '#type': radios
+        '#title': 'Employee relations / sensitive issues'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_training:
+        '#type': radios
+        '#title': 'Training program design'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_performance:
+        '#type': radios
+        '#title': 'Performance management'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+      m2_q2_hr_culture:
+        '#type': radios
+        '#title': 'Culture building'
+        '#options':
+          help: 'Help me'
+          keep: 'Keep it'
+          unsure: Unsure
+  3:
+    '#type': webform_wizard_page
+    '#title': '3'
+    m2_q3_time_saved:
+      '#type': checkboxes
+      '#title': 'If AI saved you 5 hours per week, what would you do with that time?'
+      '#description': 'Check your top 2'
+      '#options':
+        strategic: 'Focus on more strategic/creative work'
+        relationships: 'Build deeper relationships (clients/team)'
+        learn: 'Learn new skills'
+        breaks: 'Actually take breaks/reduce burnout'
+        more_projects: 'Take on more projects'
+        balance: 'Better work-life balance'
+        other: Other
+      '#multiple': 2
+      '#required': true
+    m2_q3_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m2_q3_time_saved[other]"]':
+            checked: true
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: both
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_file_limit_message: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }

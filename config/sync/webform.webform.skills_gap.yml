@@ -1,0 +1,312 @@
+uuid: 08f77ab3-8dc6-4b1f-b717-83badbfdc6d1
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: skills_gap
+title: 'Module 5: Skills Gap'
+description: ''
+categories: {  }
+elements: |-
+  1:
+    '#type': webform_wizard_page
+    '#title': '1'
+    module_5_intro:
+      '#type': webform_markup
+      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 5: Skills & Learning</strong></p><p>Help us understand your current AI skills and what training would be most valuable to you.</p><p><em>Estimated time: 4 minutes</em></p></div>'
+    m5_q1_skill_level:
+      '#type': radios
+      '#title': 'How would you rate your current skill level with AI tools?'
+      '#options':
+        never_used: 'Never used them / Complete beginner'
+        beginner: "Beginner - I've tried them a few times"
+        intermediate: 'Intermediate - I use them regularly'
+        advanced: "Advanced - I'm comfortable and creative with them"
+        expert: 'Expert - I could train others'
+      '#required': true
+  2:
+    '#type': webform_wizard_page
+    '#title': '2'
+    m5_q2_current_skills:
+      '#type': checkboxes
+      '#title': 'Which AI skills do you currently have?'
+      '#description': 'Check all that apply'
+      '#options':
+        prompts: 'Writing effective prompts to get good results'
+        tool_selection: 'Knowing which AI tool to use for which task'
+        evaluation: 'Critically evaluating AI outputs (spotting errors)'
+        integration: 'Integrating AI into my daily workflow'
+        limitations: 'Understanding AI limitations'
+        none: 'None of these yet'
+      '#required': true
+  3:
+    '#type': webform_wizard_page
+    '#title': '3'
+    m5_q3_want_to_develop:
+      '#type': checkboxes
+      '#title': 'Which skills would you most like to develop?'
+      '#description': 'Check your top 3'
+      '#options':
+        prompt_engineering: 'Prompt engineering / getting better results'
+        accuracy_evaluation: 'Evaluating AI accuracy in my field'
+        data_analysis: 'Using AI for data analysis'
+        automation: 'Automating repetitive tasks with AI'
+        creative_applications: 'Creative applications of AI in my role'
+        how_it_works: 'Understanding how AI actually works'
+        ethical_use: 'Ethical use of AI'
+        training_others: 'Training my team on AI tools'
+        custom_solutions: 'Building custom AI solutions'
+        other: Other
+      '#multiple': 3
+      '#required': true
+    m5_q3_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m5_q3_want_to_develop[other]"]':
+            checked: true
+  4:
+    '#type': webform_wizard_page
+    '#title': '4'
+    m5_q4_learning_style:
+      '#type': checkboxes
+      '#title': 'How do you learn best?'
+      '#description': 'Check your top 2'
+      '#options':
+        video: 'Short video tutorials (5-10 min)'
+        hands_on: 'Hands-on practice / experimentation'
+        workshops: 'Live workshops or training sessions'
+        documentation: 'Written guides and documentation'
+        peers: 'Learning from colleagues/peers'
+        coaching: 'One-on-one coaching'
+        self_paced: 'Self-paced online courses'
+        just_in_time: 'Just-in-time help when I need it'
+      '#multiple': 2
+      '#required': true
+  5:
+    '#type': webform_wizard_page
+    '#title': '5'
+    m5_q5_time_available:
+      '#type': radios
+      '#title': 'Realistically, how much time per week can you dedicate to learning AI tools?'
+      '#options':
+        less_1: 'Less than 1 hour'
+        range_1_2: '1-2 hours'
+        range_3_5: '3-5 hours'
+        more_5: '5+ hours'
+        no_time: 'Honestly, no time right now'
+      '#required': true
+  6:
+    '#type': webform_wizard_page
+    '#title': '6'
+    m5_q6_biggest_barrier:
+      '#type': radios
+      '#title': "What's your biggest barrier to learning AI tools?"
+      '#options':
+        no_time: 'No time'
+        dont_know_start: "Don't know where to start"
+        no_access: 'No access to tools/resources'
+        overwhelming: 'Feels overwhelming'
+        not_priority: 'Not a priority for my manager'
+        need_support: 'I learn better with support, not alone'
+        other: Other
+      '#required': true
+    m5_q6_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m5_q6_biggest_barrier"]':
+            value: other
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: both
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_file_limit_message: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }
