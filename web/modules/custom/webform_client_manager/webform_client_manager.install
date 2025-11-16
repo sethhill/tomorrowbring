@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the webform_client_manager module.
+ */
+
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Implements hook_install().
+ */
+function webform_client_manager_install() {
+  // Create field storage for client reference on user entity.
+  if (!FieldStorageConfig::loadByName('user', 'field_client')) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_client',
+      'entity_type' => 'user',
+      'type' => 'entity_reference',
+      'settings' => [
+        'target_type' => 'client',
+      ],
+      'cardinality' => 1,
+    ])->save();
+  }
+
+  // Create field instance for client reference on user entity.
+  if (!FieldConfig::loadByName('user', 'user', 'field_client')) {
+    FieldConfig::create([
+      'field_name' => 'field_client',
+      'entity_type' => 'user',
+      'bundle' => 'user',
+      'label' => 'Client',
+      'description' => 'The client this user belongs to.',
+      'required' => FALSE,
+      'settings' => [
+        'handler' => 'default',
+        'handler_settings' => [
+          'target_bundles' => NULL,
+        ],
+      ],
+    ])->save();
+
+    // Add to form display.
+    $form_display = \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->load('user.user.default');
+
+    if ($form_display) {
+      $form_display->setComponent('field_client', [
+        'type' => 'entity_reference_autocomplete',
+        'weight' => 50,
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+      ])->save();
+    }
+
+    // Add to view display.
+    $view_display = \Drupal::entityTypeManager()
+      ->getStorage('entity_view_display')
+      ->load('user.user.default');
+
+    if ($view_display) {
+      $view_display->setComponent('field_client', [
+        'type' => 'entity_reference_label',
+        'weight' => 50,
+        'label' => 'above',
+        'settings' => [
+          'link' => FALSE,
+        ],
+      ])->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function webform_client_manager_uninstall() {
+  // Delete field config.
+  if ($field = FieldConfig::loadByName('user', 'user', 'field_client')) {
+    $field->delete();
+  }
+
+  // Delete field storage.
+  if ($field_storage = FieldStorageConfig::loadByName('user', 'field_client')) {
+    $field_storage->delete();
+  }
+}

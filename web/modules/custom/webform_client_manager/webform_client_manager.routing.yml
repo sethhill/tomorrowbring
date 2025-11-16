@@ -1,0 +1,31 @@
+entity.client.collection:
+  path: '/admin/structure/client'
+  defaults:
+    _entity_list: 'client'
+    _title: 'Clients'
+  requirements:
+    _permission: 'administer clients'
+
+entity.client.add_form:
+  path: '/admin/structure/client/add'
+  defaults:
+    _entity_form: 'client.add'
+    _title: 'Add Client'
+  requirements:
+    _permission: 'administer clients'
+
+entity.client.edit_form:
+  path: '/admin/structure/client/{client}/edit'
+  defaults:
+    _entity_form: 'client.edit'
+    _title: 'Edit Client'
+  requirements:
+    _permission: 'administer clients'
+
+entity.client.delete_form:
+  path: '/admin/structure/client/{client}/delete'
+  defaults:
+    _entity_form: 'client.delete'
+    _title: 'Delete Client'
+  requirements:
+    _permission: 'administer clients'

@@ -1,0 +1,6 @@
+entity.client.collection:
+  title: 'Clients'
+  route_name: entity.client.collection
+  description: 'Manage client webform access'
+  parent: system.admin_structure
+  weight: 10

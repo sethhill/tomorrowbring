@@ -1,0 +1,4 @@
+administer clients:
+  title: 'Administer clients'
+  description: 'Create, edit, and delete client entities'
+  restrict access: true

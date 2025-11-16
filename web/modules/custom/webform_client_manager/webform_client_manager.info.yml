@@ -1,0 +1,8 @@
+name: Webform Client Manager
+type: module
+description: 'Manages client-specific webform module access and flow'
+core_version_requirement: ^11
+package: Custom
+dependencies:
+  - drupal:user
+  - webform:webform

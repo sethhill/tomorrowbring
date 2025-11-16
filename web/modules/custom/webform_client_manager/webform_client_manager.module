@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Contains webform_client_manager.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\webform\WebformInterface;
+
+/**
+ * Implements hook_webform_access().
+ */
+function webform_client_manager_webform_access(WebformInterface $webform, $operation, AccountInterface $account) {
+  // Only control access for 'create' operation (submitting the form).
+  if ($operation !== 'create') {
+    return AccessResult::neutral();
+  }
+
+  // Allow admin users full access.
+  if ($account->hasPermission('administer clients')) {
+    return AccessResult::neutral();
+  }
+
+  /** @var \Drupal\webform_client_manager\WebformClientManager $manager */
+  $manager = \Drupal::service('webform_client_manager.manager');
+
+  // Check if this is a module webform.
+  if (strpos($webform->label(), 'Module') !== 0) {
+    return AccessResult::neutral();
+  }
+
+  // Check if user has access to this webform.
+  if ($manager->userHasAccessToWebform($webform->id())) {
+    return AccessResult::allowed()->cachePerUser();
+  }
+
+  return AccessResult::forbidden('User does not have access to this webform module.')
+    ->cachePerUser();
+}
