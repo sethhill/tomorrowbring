@@ -8,6 +8,7 @@ module:
   field_ui: 0
   file: 0
   filter: 0
+  gin_login: 0
   gin_toolbar: 0
   image: 0
   media: 0
@@ -28,4 +29,5 @@ theme:
   stark: 0
   claro: 0
   gin: 0
+  tbring: 0
 profile: minimal

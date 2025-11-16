@@ -1,0 +1,8 @@
+# Main theme library.
+global:
+  js:
+    js/tbring.js: {}
+  css:
+    theme:
+      css/styles.css: {}
+      css/theme/print.css: { media: print }

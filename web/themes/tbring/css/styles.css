@@ -1,0 +1,339 @@
+@font-face {
+  font-family: "FitVariable";
+  src: url("../fonts/FitVariable-VF.woff2") format("woff2");
+  font-feature-settings: "ss04";
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Banter Grotesk";
+  src: url("../fonts/BanterGrotesk-Regular.woff2") format("woff2");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Banter Grotesk";
+  src: url("../fonts/BanterGrotesk-Black.woff2") format("woff2");
+  font-weight: bold;
+}
+
+:root {
+  --color-cream: rgba(255, 236, 180, 1);
+  --color-chobani: rgba(26, 60, 52, 1);
+  --color-green: rgba(163, 167, 72, 1);
+  --color-gold: rgba(244, 161, 39, 1);
+  --color-orange: rgba(229, 119, 30, 1);
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+}
+
+body {
+  background-color: var(--color-cream);
+  color: rgba(26, 60, 52, 1);
+  font-family: "Banter Grotesk", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+xxxsection {
+  margin: 0;
+  overflow: hidden;
+
+  &.logo {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100svh;
+
+    .inner {
+      transform: scaleX(1.015);
+    }
+  }
+
+  &.content {
+    display: flex;
+    font-family: "Banter Grotesk", sans-serif;
+    padding-top: 3em;
+    padding-bottom: 3em;
+    font-weight: normal;
+
+    .inner {
+      max-width: 32ch;
+      margin: 0 auto;
+      padding: 0 1em;
+      box-sizing: border-box;
+    }
+  }
+}
+
+h1 {
+  /* font-family: "FitVariable", sans-serif; */
+  /* font-size: 47.33333svh; */
+  /* font-size: 43.9svh; */
+  margin: 0;
+  font-weight: normal;
+  display: inline;
+  text-align: center;
+
+  .l1 {
+    color: var(--color-gold);
+    display: inline-block;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+    margin-bottom: 0.7svh;
+    /* margin-bottom: -3svh; */
+  }
+  .l2 {
+    color: var(--color-orange);
+    display: inline-block;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+    margin-bottom: 0.7svh;
+    /* margin-bottom: -3svh; */
+  }
+  .l3 {
+    color: var(--color-green);
+    display: inline-block;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+  }
+}
+
+h2 {
+  font-size: 1.875em;
+  line-height: 0.9;
+  margin: 0;
+  font-weight: bold;
+  font-feature-settings: normal;
+}
+
+.content {
+  font-size: 1.5rem;
+  font-feature-settings: "ss06";
+  font-variant-numeric: oldstyle-nums;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    font-size: 2rem;
+  }
+}
+
+.reverse {
+  background-color: var(--color-chobani);
+  color: var(--color-white);
+
+  h2,
+  h3 {
+    color: var(--color-cream);
+    color: var(--color-green);
+  }
+}
+.content p {
+  line-height: 1.1;
+}
+
+.inner {
+  max-width: 48em;
+  margin: 0 auto;
+  padding: 0 1em;
+  box-sizing: border-box;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 2em 0;
+}
+
+legend {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.webform-type-range-slider > label,
+.webform-type-webform-likert > label {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+button,
+input[type="submit"] {
+  background-color: var(--color-chobani);
+  color: var(--color-white);
+  font-family: "Banter Grotesk", sans-serif;
+  border: none;
+  padding: 0.5em 1.5em;
+  font-size: 1.25em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 2em;
+  transition: all 0.2s ease;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background-color: var(--color-green);
+}
+
+button:focus,
+input[type="submit"]:focus {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Custom checkbox styles */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.5em;
+  height: 1.5em;
+  border: 2px solid var(--color-chobani);
+  border-radius: 0.25em;
+  background-color: var(--color-white);
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  margin-right: 0.5em;
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--color-green);
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color-chobani);
+  border-color: var(--color-chobani);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 0.4em;
+  top: 0.1em;
+  width: 0.35em;
+  height: 0.7em;
+  border: solid var(--color-white);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Custom radio button styles */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.5em;
+  height: 1.5em;
+  border: 2px solid var(--color-chobani);
+  border-radius: 50%;
+  background-color: var(--color-white);
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  margin-right: 0.5em;
+  transition: all 0.2s ease;
+}
+
+input[type="radio"]:hover {
+  border-color: var(--color-green);
+}
+
+input[type="radio"]:focus {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+input[type="radio"]:checked {
+  border-color: var(--color-chobani);
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.75em;
+  height: 0.75em;
+  border-radius: 50%;
+  background-color: var(--color-chobani);
+}
+
+/* Label styling for form elements */
+label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 0.75em;
+  line-height: 1.5;
+}
+
+.form-actions {
+  margin-top: 3em;
+}
+
+.progress-marker:before {
+  content: "";
+}
+
+.progress-step.is-active .progress-marker::before {
+  background-color: var(--color-green);
+}
+
+.module-intro {
+  margin-bottom: 2em;
+  border-bottom: 12px solid var(--color-white);
+}
+
+.module-title {
+  font-size: 2.5em;
+  margin-bottom: 0.25em;
+}
+.module-description {
+  font-size: 1.5em;
+  margin-top: 0;
+}
+
+.range {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.875em;
+  color: #333;
+  margin-bottom: -0.75em;
+  margin-top: 0.75em;
+}
+
+
+.rangeslider__handle,
+.rangeslider [data-thumb] {
+  background-color: var(--color-orange);
+}
+.rangeslider__fill,
+.rangeslider [data-track-fill] {
+  background-color: var(--color-gold);
+}
+.rangeslider__track,
+.rangeslider [data-track] {
+  background-color: #ccc;
+}
+
+header {
+  background-color: var(--color-chobani);
+  margin-bottom: 3em;
+}
+
+footer {
+  margin-top: 3em;
+  background-color: var(--color-chobani);
+}

@@ -1,0 +1,22 @@
+uuid: 5303aa4e-9d62-4860-a03e-517c9e01d744
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - tbring
+_core:
+  default_config_hash: aeqlWs7HwctZeZC7ADcbxfqehJzBRfZKmuZz3DsH3_4
+id: tbring_messages
+theme: tbring
+region: header
+weight: 0
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }
