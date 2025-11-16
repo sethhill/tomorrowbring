@@ -34,6 +34,6 @@ webform_client_manager.dashboard:
   path: '/dashboard'
   defaults:
     _controller: '\Drupal\webform_client_manager\Controller\DashboardController::view'
-    _title: 'My Dashboard'
+    _title: 'Your Dashboard'
   requirements:
-    _role: 'member'
+    _user_is_logged_in: 'TRUE'

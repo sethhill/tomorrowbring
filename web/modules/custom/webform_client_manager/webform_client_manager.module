@@ -58,11 +58,14 @@ function webform_client_manager_user_insert(UserInterface $account) {
  * Implements hook_user_login().
  */
 function webform_client_manager_user_login(UserInterface $account) {
-  // Redirect members to dashboard after login.
+  // Set destination for members to dashboard after login.
   if ($account->hasRole('member') && !$account->hasRole('administrator')) {
-    $response = new RedirectResponse(Url::fromRoute('webform_client_manager.dashboard')->toString());
-    $response->send();
-    exit;
+    // Store the redirect in the session for the event subscriber.
+    $request_stack = \Drupal::service('request_stack');
+    $request = $request_stack->getCurrentRequest();
+    if ($request && !$request->query->has('destination')) {
+      $request->query->set('destination', '/dashboard');
+    }
   }
 }
 

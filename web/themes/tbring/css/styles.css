@@ -68,7 +68,7 @@ xxxsection {
   }
 }
 
-h1 {
+.front h1 {
   /* font-family: "FitVariable", sans-serif; */
   /* font-size: 47.33333svh; */
   /* font-size: 43.9svh; */
@@ -339,4 +339,10 @@ footer {
   padding-top: 6em;
   padding-bottom: 6em;
   color: var(--color-white);
+}
+
+#block-tbring-page-title h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
 }
