@@ -13,12 +13,12 @@ title: 'Module 3: Threat Perception: Light'
 description: ''
 categories: {  }
 elements: |-
+  module_3_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Understanding Change</h2><p class="module-description">AI is changing how we work. We want to understand how you’re experiencing these changes.</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_3_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 3: Understanding Change</strong></p><p>AI is changing how we work. We want to understand how you''re experiencing these changes.</p><p><em>Estimated time: 3 minutes</em></p></div>'
     m3_q1_industry_change_pace:
       '#type': radios
       '#title': 'How quickly is AI changing your industry/field?'

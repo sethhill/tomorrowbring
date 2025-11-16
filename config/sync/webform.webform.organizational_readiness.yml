@@ -13,21 +13,21 @@ title: 'Module 8: Organizational Readiness'
 description: ''
 categories: {  }
 elements: |-
+  module_8_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Organizational Readiness</h2><p class="module-description">Help us understand how prepared the organization is for AI transformation.</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_8_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 8: Organizational Readiness</strong></p><p>Help us understand how prepared the organization is for AI transformation.</p><p><em>Estimated time: 3 minutes</em></p></div>'
     m8_q1_ai_strategy:
       '#type': radios
       '#title': 'Does your team/department have a clear AI strategy?'
       '#options':
-        yes_clear: "Yes, and it's been communicated clearly"
-        somewhat: "Somewhat - there's a strategy but it's vague"
-        figuring_out: "No, we're figuring it out as we go"
-        causing_confusion: "No, and it's causing confusion"
-        dont_know: "I don't know"
+        yes_clear: "Yes, and it’s been communicated clearly"
+        somewhat: "Somewhat - there’s a strategy but it’s vague"
+        figuring_out: "No, we’re figuring it out as we go"
+        causing_confusion: "No, and it’s causing confusion"
+        dont_know: "I don’t know"
       '#required': true
   2:
     '#type': webform_wizard_page
@@ -42,7 +42,7 @@ elements: |-
         it: 'IT/Technology team'
         individuals: 'Individuals experimenting on their own'
         consultants: 'External consultants'
-        no_one: "No one - it's not being driven"
+        no_one: "No one - it’s not being driven"
         dont_know: "Don't know"
   3:
     '#type': webform_wizard_page
@@ -67,7 +67,7 @@ elements: |-
         yes_written: 'Yes, clear written policy'
         informal: 'Informal guidelines'
         no_freeforall: 'No policy - people do what they want'
-        no_confusing: "No policy - and it's confusing/risky"
+        no_confusing: "No policy - and it’s confusing/risky"
         dont_know: "Don't know"
       '#required': true
   5:
@@ -94,7 +94,7 @@ elements: |-
         somewhat: Somewhat
         not_really: 'Not really'
         definitely_not: 'Definitely not'
-        havent_tried: "Haven't tried"
+        havent_tried: "Haven’t tried"
       '#required': true
 css: ''
 javascript: ''

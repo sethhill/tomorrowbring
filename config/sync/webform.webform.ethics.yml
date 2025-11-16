@@ -13,12 +13,12 @@ title: 'Module 11: Ethics & Values'
 description: ''
 categories: {  }
 elements: |-
+  module_11_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Ethics & Values</h2><p class="module-description">Understanding your perspective on ethical AI use.</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_11_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 11: Ethics & Values</strong></p><p>Understanding your perspective on ethical AI use.</p><p><em>Estimated time: 3 minutes</em></p></div>'
     m11_q1_importance:
       '#type': radios
       '#title': 'How important are ethical considerations in AI use to you?'
@@ -67,7 +67,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_performance:
@@ -76,7 +76,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_savings:
@@ -85,7 +85,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_service:
@@ -94,7 +94,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_moderation:
@@ -103,7 +103,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_medical:
@@ -112,7 +112,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_financial:
@@ -121,7 +121,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
     m11_q3_trust_creative:
@@ -130,7 +130,7 @@ elements: |-
       '#options':
         trust_fully: 'Trust fully'
         trust_oversight: 'Trust with oversight'
-        dont_trust: "Don't trust"
+        dont_trust: "Don’t trust"
         unsure: Unsure
       '#required': true
   4:

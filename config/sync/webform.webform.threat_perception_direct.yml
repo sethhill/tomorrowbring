@@ -13,22 +13,23 @@ title: 'Module 4: Threat Perception: Direct'
 description: ''
 categories: {  }
 elements: |-
+  module_4_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Honest Conversation About AI</h2><p class="module-description">We believe in being honest about change. AI will transform work, and we want to hear your real concerns so we can address them together.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_4_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; color: #856404;"><p><strong>Module 4: Honest Conversation About AI</strong></p><p>We believe in being honest about change. AI will transform work - and we want to hear your real concerns so we can address them together.</p><p><em>Estimated time: 4 minutes</em></p></div>'
     m4_q1_job_security:
-      '#type': range
+      '#type': range_slider
       '#title': 'How secure do you feel in your role over the next 3 years?'
+      '#description': '<div class="range"><span class="range-min">Not secure at all</span> <span class="range-max">Very secure</span></div>'
+      '#description_display': before
+      '#required': true
       '#min': 1
-      '#max': 10
-      '#step': 1
+      '#max': 9
       '#range__output': true
       '#min_text': 'Very insecure (1)'
       '#max_text': 'Very secure (10)'
-      '#required': true
   2:
     '#type': webform_wizard_page
     '#title': '2'

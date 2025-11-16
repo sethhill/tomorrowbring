@@ -13,12 +13,12 @@ title: 'Module 1: Current AI Usage'
 description: ''
 categories: {  }
 elements: |-
+  module_1_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Current AI Usage</h2><p class="module-description">Let’s start with understanding how you’re currently using AI tools.</p><p class="module-duration">Estimated time: 5 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_1_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 1: Current AI Usage</strong></p><p>Let''s start with understanding how you''re currently using AI tools.</p><p><em>Estimated time: 5 minutes</em></p></div>'
     m1_q1_tools_used:
       '#type': checkboxes
       '#title': 'Which AI tools have you used in the last 3 months?'

@@ -13,12 +13,12 @@ title: 'Module 9: Industry & Role-specific Impacts'
 description: ''
 categories: {  }
 elements: |-
+  module_9_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Industry & Role Impact</h2><p class="module-description">Let’s explore how AI is changing your specific field and role.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_9_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #d1ecf1; border: 1px solid #bee5eb; border-radius: 6px; color: #0c5460;"><p><strong>Module 9: Industry & Role Impact</strong></p><p>Let''s explore how AI is changing your specific field and role.</p><p><em>Estimated time: 4 minutes</em></p></div>'
     m9_q1_role_changed:
       '#type': radios
       '#title': 'How much has AI already changed your specific role?'
@@ -107,8 +107,8 @@ elements: |-
         more_creative: 'More creative / less repetitive'
         more_human: 'More human-focused (relationships, judgment)'
         different: 'Completely different / unrecognizable'
-        wont_exist: "I don't think my role will exist"
-        unsure: "Unsure / can't predict"
+        wont_exist: "I don’t think my role will exist"
+        unsure: "Unsure / can’t predict"
       '#required': true
 css: ''
 javascript: ''

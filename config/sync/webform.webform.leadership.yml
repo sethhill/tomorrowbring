@@ -13,12 +13,12 @@ title: 'Module 15: Leadership & Management-specific'
 description: ''
 categories: {  }
 elements: |-
+  module_15_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">Leadership Perspective</h2><p class="module-description">This module is specifically for people managers. Skip if you don’t manage others.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_15_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; color: #856404;"><p><strong>Module 15: Leadership Perspective</strong></p><p>This module is specifically for people managers. Skip if you don''t manage others.</p><p><em>Estimated time: 4 minutes</em></p></div>'
     m15_q1_helping_team:
       '#type': radios
       '#title': 'How are you helping your team navigate AI transformation?'

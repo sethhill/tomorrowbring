@@ -13,12 +13,12 @@ title: 'Module 7: Confidence & Psychological State'
 description: ''
 categories: {  }
 elements: |-
+  module_7_intro:
+    '#type': webform_markup
+    '#markup': '<div class="module-intro"><h2 class="module-title">How You’re Feeling</h2><p class="module-description">Change can be stressful. We want to understand how you’re feeling so we can provide the right support.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
-    module_7_intro:
-      '#type': webform_markup
-      '#markup': '<div style="padding: 1rem; margin-bottom: 1.5rem; background-color: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 6px; color: #004085;"><p><strong>Module 7: How You''re Feeling</strong></p><p>Change can be stressful. We want to understand how you''re feeling so we can provide the right support.</p><p><em>Estimated time: 4 minutes</em></p></div>'
     m7_q1_anxiety:
       '#type': radios
       '#title': 'Anxiety: How anxious do you feel about AI at work?'
@@ -56,12 +56,12 @@ elements: |-
       '#type': radios
       '#title': 'Which statement best describes you?'
       '#options':
-        energized: "I'm energized by AI - bring it on"
-        cautious_optimistic: "I'm cautiously optimistic"
-        neutral: "I'm neutral / waiting to see"
-        skeptical: "I'm skeptical but open to learning"
-        overwhelmed: "I'm overwhelmed and stressed"
-        resistant: "I'm actively resistant to AI tools"
+        energized: 'I’m energized by AI - bring it on'
+        cautious_optimistic: 'I’m cautiously optimistic'
+        neutral: 'I’m neutral / waiting to see'
+        skeptical: 'I’m skeptical but open to learning'
+        overwhelmed: 'I’m overwhelmed and stressed'
+        resistant: 'I’m actively resistant to AI tools'
       '#required': true
   3:
     '#type': webform_wizard_page
@@ -97,7 +97,7 @@ elements: |-
       '#title': 'What kind of support would help you most right now?'
       '#description': 'Check your top 3'
       '#options':
-        communication: "Clear communication about what's happening"
+        communication: 'Clear communication about what’s happening'
         permission: 'Permission to make mistakes while learning'
         time: 'Dedicated learning time (guilt-free)'
         mentor: 'A mentor or AI buddy'
@@ -105,7 +105,7 @@ elements: |-
         leadership_example: 'Seeing leadership use AI too'
         voice_concerns: 'Space to voice concerns without judgment'
         success_stories: 'Success stories from peers'
-        understand_why: 'Understanding the "why" behind changes'
+        understand_why: 'Understanding the “why” behind changes'
         other: Other
       '#multiple': 3
       '#required': true
@@ -129,20 +129,21 @@ elements: |-
         friends_family: 'Friends/family outside work'
         online: 'Online communities'
         no_one: 'No one - keeping it to myself'
-        no_concerns: "I don't have concerns or excitement"
+        no_concerns: 'I don’t have concerns or excitement'
   7:
     '#type': webform_wizard_page
     '#title': '7'
     m7_q7_quality_of_life:
-      '#type': range
-      '#title': 'On a scale of 1-10, how much do you feel AI will improve your quality of work life?'
+      '#type': range_slider
+      '#title': 'How much do you feel AI will improve your quality of work life?'
+      '#description': '<div class="range"><span class="range-min">Not at all</span> <span class="range-max">Quite a lot</span></div>'
+      '#description_display': before
+      '#required': true
       '#min': 1
-      '#max': 10
-      '#step': 1
+      '#max': 9
       '#range__output': true
       '#min_text': 'Make it much worse (1)'
       '#max_text': 'Make it much better (10)'
-      '#required': true
 css: ''
 javascript: ''
 settings:
