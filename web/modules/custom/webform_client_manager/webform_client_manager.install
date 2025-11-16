@@ -7,11 +7,40 @@
 
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
  */
 function webform_client_manager_install() {
+  // Ensure the member role exists.
+  if (!Role::load('member')) {
+    $role = Role::create([
+      'id' => 'member',
+      'label' => 'Member',
+      'weight' => 3,
+    ]);
+    $role->grantPermission('access content');
+    $role->grantPermission('access user profiles');
+    $role->grantPermission('view own webform submission');
+    $role->save();
+  }
+  else {
+    // If role exists, ensure it has the necessary permissions.
+    $role = Role::load('member');
+    $role->grantPermission('view own webform submission');
+    $role->save();
+  }
+
+  // Set member role as default for new users.
+  $config = \Drupal::configFactory()->getEditable('user.settings');
+  $config->set('register', 'visitors');
+  $config->save();
+
+  // Get the role to assign to new users.
+  $user_settings = \Drupal::configFactory()->getEditable('user.role.authenticated');
+  // Note: Drupal automatically assigns 'authenticated' role.
+  // We'll handle member role assignment via hook_user_insert.
   // Create field storage for client reference on user entity.
   if (!FieldStorageConfig::loadByName('user', 'field_client')) {
     FieldStorageConfig::create([

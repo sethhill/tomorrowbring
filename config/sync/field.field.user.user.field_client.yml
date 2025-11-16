@@ -1,0 +1,23 @@
+uuid: e0765e54-0305-4d51-ad97-f94211723e8a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_client
+  module:
+    - user
+id: user.user.field_client
+field_name: field_client
+entity_type: user
+bundle: user
+label: Client
+description: 'The client this user belongs to.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:client'
+  handler_settings:
+    target_bundles: null
+field_type: entity_reference

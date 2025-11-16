@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Dashboard template for webform client manager.
+ *
+ * Available variables:
+ * - client_name: The name of the client.
+ * - modules: Array of module data.
+ * - total_modules: Total number of modules.
+ * - completed_modules: Number of completed modules.
+ * - progress_percentage: Completion percentage.
+ */
+#}
+<div class="webform-client-dashboard">
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">{{ 'Welcome to your training'|t }}</h1>
+    {% if client_name %}
+      <p class="dashboard-subtitle">{{ client_name }}</p>
+    {% endif %}
+  </div>
+
+  <div class="dashboard-progress">
+    <div class="progress-info">
+      <span class="progress-text">{{ 'Your Progress'|t }}</span>
+      <span class="progress-count">{{ completed_modules }} / {{ total_modules }} {{ 'modules completed'|t }}</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" style="width: {{ progress_percentage }}%"></div>
+    </div>
+    <span class="progress-percentage">{{ progress_percentage }}%</span>
+  </div>
+
+  <div class="dashboard-modules">
+    {% for module in modules %}
+      <div class="module-card {% if module.completed %}module-completed{% endif %}">
+        <div class="module-header">
+          <div class="module-number">{{ module.number }}</div>
+          <div class="module-info">
+            <h2 class="module-name">{{ module.name }}</h2>
+            {% if module.description %}
+              <p class="module-description">{{ module.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="module-footer">
+          {% if module.completed %}
+            <span class="module-status completed">
+              <svg class="status-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="10" fill="#10B981"/>
+                <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{ 'Completed'|t }}
+            </span>
+            <a href="{{ module.url }}" class="module-button secondary">{{ 'Review'|t }}</a>
+          {% else %}
+            <span class="module-status pending">{{ 'Not Started'|t }}</span>
+            <a href="{{ module.url }}" class="module-button primary">{{ 'Start Module'|t }}</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

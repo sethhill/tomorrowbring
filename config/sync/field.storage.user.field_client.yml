@@ -1,0 +1,20 @@
+uuid: 8cfbaeb5-6620-4098-b30b-a9ed1578019b
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+    - webform_client_manager
+id: user.field_client
+field_name: field_client
+entity_type: user
+type: entity_reference
+settings:
+  target_type: client
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

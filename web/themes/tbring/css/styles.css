@@ -19,7 +19,7 @@
 
 :root {
   --color-cream: rgba(255, 236, 180, 1);
-  --color-chobani: rgba(26, 60, 52, 1);
+  --color-deep-green: rgba(26, 60, 52, 1);
   --color-green: rgba(163, 167, 72, 1);
   --color-gold: rgba(244, 161, 39, 1);
   --color-orange: rgba(229, 119, 30, 1);
@@ -122,7 +122,7 @@ h2 {
 }
 
 .reverse {
-  background-color: var(--color-chobani);
+  background-color: var(--color-deep-green);
   color: var(--color-white);
 
   h2,
@@ -163,7 +163,7 @@ legend {
 
 button,
 input[type="submit"] {
-  background-color: var(--color-chobani);
+  background-color: var(--color-deep-green);
   color: var(--color-white);
   font-family: "Banter Grotesk", sans-serif;
   border: none;
@@ -192,7 +192,7 @@ input[type="checkbox"] {
   -webkit-appearance: none;
   width: 1.5em;
   height: 1.5em;
-  border: 2px solid var(--color-chobani);
+  border: 2px solid var(--color-deep-green);
   border-radius: 0.25em;
   background-color: var(--color-white);
   cursor: pointer;
@@ -212,8 +212,8 @@ input[type="checkbox"]:focus {
 }
 
 input[type="checkbox"]:checked {
-  background-color: var(--color-chobani);
-  border-color: var(--color-chobani);
+  background-color: var(--color-deep-green);
+  border-color: var(--color-deep-green);
 }
 
 input[type="checkbox"]:checked::after {
@@ -234,7 +234,7 @@ input[type="radio"] {
   -webkit-appearance: none;
   width: 1.5em;
   height: 1.5em;
-  border: 2px solid var(--color-chobani);
+  border: 2px solid var(--color-deep-green);
   border-radius: 50%;
   background-color: var(--color-white);
   cursor: pointer;
@@ -254,7 +254,7 @@ input[type="radio"]:focus {
 }
 
 input[type="radio"]:checked {
-  border-color: var(--color-chobani);
+  border-color: var(--color-deep-green);
 }
 
 input[type="radio"]:checked::after {
@@ -266,7 +266,7 @@ input[type="radio"]:checked::after {
   width: 0.75em;
   height: 0.75em;
   border-radius: 50%;
-  background-color: var(--color-chobani);
+  background-color: var(--color-deep-green);
 }
 
 /* Label styling for form elements */
@@ -329,11 +329,14 @@ label {
 }
 
 header {
-  background-color: var(--color-chobani);
+  background-color: var(--color-deep-green);
   margin-bottom: 3em;
 }
 
 footer {
   margin-top: 3em;
-  background-color: var(--color-chobani);
+  background-color: var(--color-deep-green);
+  padding-top: 6em;
+  padding-bottom: 6em;
+  color: var(--color-white);
 }

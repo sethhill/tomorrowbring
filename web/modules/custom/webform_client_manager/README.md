@@ -49,21 +49,26 @@ This module provides client-specific webform access control and automated flow b
 2. **Module Order**: Modules are presented in numerical order based on their "Module X:" prefix
 3. **Automatic Flow**: After submitting a module, users are automatically redirected to the next enabled module
 4. **Completion**: After the last module, users are redirected to the custom URL (if configured) or shown the default confirmation
+5. **Review Mode**: When users click "Review" on a completed module, they see their previous submission with all values prepopulated
 
-### Adding the Handler to Webforms
+### Setup Commands
 
-For each webform module, you need to add the "Client Module Flow" handler:
+After installing the module, run these Drush commands to configure webforms:
+
+```bash
+# Add the Client Module Flow handler to all module webforms
+ddev drush wcm-add-handlers
+
+# Configure webforms to allow users to view their own submissions
+ddev drush wcm-configure-access
+```
+
+You can also add handlers manually via the UI:
 
 1. Navigate to the webform settings (`/admin/structure/webform/manage/{webform_id}/handlers`)
 2. Click **Add handler**
 3. Select **Client Module Flow**
 4. Save
-
-Or use Drush to add it to all module webforms:
-
-```bash
-# This would need to be done manually via the UI or with a custom script
-```
 
 ## Architecture
 
@@ -97,11 +102,16 @@ Or use Drush to add it to all module webforms:
 2. Create a test user and assign them to the client
 3. Log in as the test user
 4. Verify:
+   - Redirected to `/dashboard` after login
+   - Dashboard shows progress bar and module cards
    - Can access modules 1, 2, and 10
    - Cannot access other modules (access denied)
    - After completing module 1, automatically redirected to module 2
+   - Dashboard shows module 1 as completed with a checkmark
    - After completing module 2, automatically redirected to module 10
+   - Clicking "Review" on completed modules shows previous submission
    - After completing module 10, redirected to completion URL or confirmation page
+   - Dashboard shows 100% completion
 
 ## Permissions
 

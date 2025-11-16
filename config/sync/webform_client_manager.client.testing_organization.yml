@@ -1,0 +1,12 @@
+uuid: 984c77c7-556f-4be1-a29e-25dac348be0a
+langcode: en
+status: true
+dependencies: {  }
+id: testing_organization
+label: 'Testing Organization'
+enabled_modules:
+  - current_ai_usage
+  - skills_gap
+  - task_analysis
+  - threat_perception
+completion_redirect_url: ''

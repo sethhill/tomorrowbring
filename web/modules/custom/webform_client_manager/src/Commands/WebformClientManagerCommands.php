@@ -117,4 +117,48 @@ class WebformClientManagerCommands extends DrushCommands {
     $this->output()->writeln(sprintf('Removed handlers from %d webforms.', $count));
   }
 
+  /**
+   * Configure module webforms to allow viewing own submissions.
+   *
+   * @command webform-client-manager:configure-access
+   * @aliases wcm-configure-access
+   * @usage webform-client-manager:configure-access
+   *   Configure module webforms to allow users to view their own submissions.
+   */
+  public function configureAccess() {
+    $webforms = $this->entityTypeManager->getStorage('webform')->loadMultiple();
+    $count = 0;
+
+    foreach ($webforms as $webform) {
+      // Check if this is a module webform.
+      if (strpos($webform->label(), 'Module') !== 0) {
+        continue;
+      }
+
+      // Get current access settings.
+      $access = $webform->getAccessRules();
+
+      // Enable view_own access for authenticated users.
+      if (!isset($access['view_own'])) {
+        $access['view_own'] = [];
+      }
+
+      if (!isset($access['view_own']['roles']) || !in_array('authenticated', $access['view_own']['roles'])) {
+        if (!isset($access['view_own']['roles'])) {
+          $access['view_own']['roles'] = [];
+        }
+        $access['view_own']['roles'][] = 'authenticated';
+        $access['view_own']['roles'][] = 'member';
+
+        $webform->setAccessRules($access);
+        $webform->save();
+        $count++;
+
+        $this->output()->writeln(sprintf('Configured access for %s', $webform->label()));
+      }
+    }
+
+    $this->output()->writeln(sprintf('Configured access for %d webforms.', $count));
+  }
+
 }

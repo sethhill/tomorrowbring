@@ -1,0 +1,25 @@
+uuid: c594fe89-f2cc-4d61-baae-ad6ba01bc9c8
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:8b88d4aa-bf22-462f-8093-1c83d88cdba5'
+  module:
+    - block_content
+  theme:
+    - tbring
+id: tbring_copyright
+theme: tbring
+region: footer
+weight: 0
+provider: null
+plugin: 'block_content:8b88d4aa-bf22-462f-8093-1c83d88cdba5'
+settings:
+  id: 'block_content:8b88d4aa-bf22-462f-8093-1c83d88cdba5'
+  label: Copyright
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

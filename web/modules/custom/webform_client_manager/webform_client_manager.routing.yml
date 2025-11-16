@@ -29,3 +29,11 @@ entity.client.delete_form:
     _title: 'Delete Client'
   requirements:
     _permission: 'administer clients'
+
+webform_client_manager.dashboard:
+  path: '/dashboard'
+  defaults:
+    _controller: '\Drupal\webform_client_manager\Controller\DashboardController::view'
+    _title: 'My Dashboard'
+  requirements:
+    _role: 'member'

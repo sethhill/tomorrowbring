@@ -8,6 +8,9 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\webform\WebformInterface;
+use Drupal\user\UserInterface;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_webform_access().
@@ -38,4 +41,44 @@ function webform_client_manager_webform_access(WebformInterface $webform, $opera
 
   return AccessResult::forbidden('User does not have access to this webform module.')
     ->cachePerUser();
+}
+
+/**
+ * Implements hook_user_insert().
+ */
+function webform_client_manager_user_insert(UserInterface $account) {
+  // Assign member role to new users (except uid 1).
+  if ($account->id() != 1) {
+    $account->addRole('member');
+    $account->save();
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function webform_client_manager_user_login(UserInterface $account) {
+  // Redirect members to dashboard after login.
+  if ($account->hasRole('member') && !$account->hasRole('administrator')) {
+    $response = new RedirectResponse(Url::fromRoute('webform_client_manager.dashboard')->toString());
+    $response->send();
+    exit;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function webform_client_manager_theme($existing, $type, $theme, $path) {
+  return [
+    'webform_client_dashboard' => [
+      'variables' => [
+        'client_name' => NULL,
+        'modules' => [],
+        'total_modules' => 0,
+        'completed_modules' => 0,
+        'progress_percentage' => 0,
+      ],
+    ],
+  ];
 }

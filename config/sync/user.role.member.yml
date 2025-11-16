@@ -1,0 +1,15 @@
+uuid: 66be5df9-bd56-4a8f-acf1-ea1787ff2581
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+    - webform
+id: member
+label: Member
+weight: 3
+is_admin: false
+permissions:
+  - 'access content'
+  - 'access user profiles'
+  - 'view own webform submission'
