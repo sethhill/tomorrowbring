@@ -4,7 +4,7 @@ namespace Drupal\webform_client_manager\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\Entity\Webform;
+use Drupal\node\Entity\Node;
 
 /**
  * Form handler for the Client add and edit forms.
@@ -38,13 +38,25 @@ class ClientForm extends EntityForm {
       '#disabled' => !$client->isNew(),
     ];
 
-    // Get all webforms that are module webforms (have "Module" in title)
-    $webforms = Webform::loadMultiple();
+    // Get all Module nodes.
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', 'module')
+      ->condition('status', 1)
+      ->accessCheck(FALSE);
+    $nids = $query->execute();
+
     $options = [];
-    foreach ($webforms as $webform_id => $webform) {
-      if (strpos($webform->label(), 'Module') === 0) {
-        $options[$webform_id] = $webform->label();
+    if (!empty($nids)) {
+      $nodes = Node::loadMultiple($nids);
+      foreach ($nodes as $nid => $node) {
+        $module_number = '';
+        if ($node->hasField('field_number') && !$node->get('field_number')->isEmpty()) {
+          $module_number = $node->get('field_number')->value . ': ';
+        }
+        $options[$nid] = $module_number . $node->label();
       }
+      // Sort by module number.
+      asort($options);
     }
 
     $form['enabled_modules'] = [
@@ -52,7 +64,7 @@ class ClientForm extends EntityForm {
       '#title' => $this->t('Enabled Modules'),
       '#options' => $options,
       '#default_value' => $client->getEnabledModules(),
-      '#description' => $this->t('Select which webform modules this client can access. Modules will be presented in numerical order.'),
+      '#description' => $this->t('Select which Module nodes this client can access. Modules will be presented in numerical order.'),
     ];
 
     $form['completion_redirect_url'] = [

@@ -64,7 +64,7 @@ class Client extends ConfigEntityBase implements ClientInterface {
   protected $label;
 
   /**
-   * Enabled webform module IDs.
+   * Enabled Module node IDs.
    *
    * @var array
    */
@@ -113,8 +113,7 @@ class Client extends ConfigEntityBase implements ClientInterface {
   public function getSortedEnabledModules() {
     $modules = $this->getEnabledModules();
 
-    // Sort by extracting module number from webform ID
-    // Assuming format like "module_2", "task_analysis" (Module 2), etc.
+    // Sort by extracting module number from node's field_number.
     usort($modules, function($a, $b) {
       $num_a = $this->extractModuleNumber($a);
       $num_b = $this->extractModuleNumber($b);
@@ -125,27 +124,25 @@ class Client extends ConfigEntityBase implements ClientInterface {
   }
 
   /**
-   * Extract module number from webform ID.
+   * Extract module number from Module node ID.
    *
-   * @param string $webform_id
-   *   The webform ID.
+   * @param int $nid
+   *   The Module node ID.
    *
    * @return int
    *   The module number.
    */
-  protected function extractModuleNumber($webform_id) {
-    // Load the webform and extract module number from title.
-    $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
+  protected function extractModuleNumber($nid) {
+    // Load the Module node and get field_number value.
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
 
-    if (!$webform) {
+    if (!$node || $node->bundle() !== 'module') {
       return 999;
     }
 
-    $title = $webform->label();
-
-    // Extract number from "Module X: Name" format.
-    if (preg_match('/^Module (\d+):/i', $title, $matches)) {
-      return (int) $matches[1];
+    // Get the module number from field_number.
+    if ($node->hasField('field_number') && !$node->get('field_number')->isEmpty()) {
+      return (int) $node->get('field_number')->value;
     }
 
     return 999;

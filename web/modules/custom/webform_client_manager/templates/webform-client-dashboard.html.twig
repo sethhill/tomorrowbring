@@ -33,7 +33,6 @@
     {% for module in modules %}
       <div class="module-card {% if module.completed %}module-completed{% endif %}">
         <div class="module-header">
-          <div class="module-number">{{ module.number }}</div>
           <div class="module-info">
             <h2 class="module-name">{{ module.name }}</h2>
             {% if module.description %}
@@ -51,6 +50,9 @@
               {{ 'Completed'|t }}
             </span>
             <a href="{{ module.url }}" class="module-button secondary">{{ 'Review'|t }}</a>
+          {% elseif module.in_progress %}
+            <span class="module-status in-progress">{{ 'In Progress'|t }}</span>
+            <a href="{{ module.url }}" class="module-button primary">{{ 'Continue'|t }}</a>
           {% else %}
             <span class="module-status pending">{{ 'Not Started'|t }}</span>
             <a href="{{ module.url }}" class="module-button primary">{{ 'Start Module'|t }}</a>

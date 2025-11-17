@@ -11,7 +11,7 @@ dependencies:
 id: tbring_logo
 theme: tbring
 region: header
-weight: 0
+weight: -4
 provider: null
 plugin: 'block_content:0d35d8c6-7190-4e5c-a054-26d36477549a'
 settings:

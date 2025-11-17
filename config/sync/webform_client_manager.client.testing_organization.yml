@@ -5,8 +5,8 @@ dependencies: {  }
 id: testing_organization
 label: 'Testing Organization'
 enabled_modules:
-  - current_ai_usage
-  - skills_gap
-  - task_analysis
-  - threat_perception
+  - '1'
+  - '5'
+  - '2'
+  - '3'
 completion_redirect_url: ''

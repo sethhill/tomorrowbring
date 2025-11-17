@@ -68,59 +68,85 @@ class DashboardController extends ControllerBase {
       ];
     }
 
-    // Get enabled modules for this client.
-    $enabled_modules = $this->clientManager->getEnabledWebforms();
+    // Get enabled Module nodes for this client.
+    $enabled_module_nids = $this->clientManager->getEnabledModules();
 
-    if (empty($enabled_modules)) {
+    if (empty($enabled_module_nids)) {
       return [
         '#markup' => $this->t('No modules have been assigned to your client yet.'),
       ];
     }
 
+    // Load Module nodes.
+    $module_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($enabled_module_nids);
+
     // Build module cards.
     $modules = [];
-    foreach ($enabled_modules as $webform_id) {
-      $webform = $this->entityTypeManager->getStorage('webform')->load($webform_id);
-
-      if (!$webform) {
-        continue;
+    foreach ($module_nodes as $nid => $node) {
+      // Get module number.
+      $module_number = 0;
+      if ($node->hasField('field_number') && !$node->get('field_number')->isEmpty()) {
+        $module_number = $node->get('field_number')->value;
       }
 
-      // Check if user has completed this module and get submission ID.
-      $submission_id = $this->getModuleSubmission($webform_id, $current_user->id());
-      $is_completed = !empty($submission_id);
-
-      // Extract module number and description.
-      $title = $webform->label();
-      $module_number = $this->extractModuleNumber($title);
-      $module_name = $this->extractModuleName($title);
-
-      // Get description from webform intro if available.
-      $description = $webform->get('description') ?: $this->t('Complete this module to continue.');
+      // Get module intro/description.
       $description = '';
+      if ($node->hasField('field_intro') && !$node->get('field_intro')->isEmpty()) {
+        $description = $node->get('field_intro')->value;
+      }
 
-      // Determine URL based on completion status.
-      if ($is_completed && $submission_id) {
-        // Link to the submission for review (prepopulated).
-        $url = Url::fromRoute('entity.webform_submission.canonical', [
+      // Get estimated time.
+      $duration = '';
+      if ($node->hasField('field_duration') && !$node->get('field_duration')->isEmpty()) {
+        $duration = $node->get('field_duration')->value;
+      }
+
+      // Get the webform associated with this module.
+      $webform_id = NULL;
+      if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+        $webform_id = $node->get('field_form')->target_id;
+      }
+
+      // Check if user has any submission for this module (draft or completed).
+      $submission_id = NULL;
+      $is_completed = FALSE;
+      if ($webform_id) {
+        $submission_id = $this->getModuleSubmission($webform_id, $current_user->id());
+
+        // If a submission exists, check if it's actually completed.
+        if ($submission_id) {
+          $submission = $this->entityTypeManager->getStorage('webform_submission')->load($submission_id);
+          if ($submission && $submission->get('completed')->value > 0) {
+            $is_completed = TRUE;
+          }
+        }
+      }
+
+      // Determine URL based on submission status.
+      if ($submission_id && $webform_id) {
+        // User has a submission - take them directly to the edit form.
+        $url = Url::fromRoute('entity.webform_submission.edit_form', [
           'webform' => $webform_id,
           'webform_submission' => $submission_id,
         ]);
       }
       else {
-        // Link to start new submission.
-        $url = Url::fromRoute('entity.webform.canonical', ['webform' => $webform_id]);
+        // No submission yet - take them to the Module node page.
+        $url = Url::fromRoute('entity.node.canonical', ['node' => $nid]);
       }
 
       $modules[] = [
-        'id' => $webform_id,
+        'id' => $nid,
         'number' => $module_number,
-        'name' => $module_name,
-        'title' => $title,
+        'name' => $node->label(),
+        'title' => $node->label(),
         'description' => $description,
+        'duration' => $duration,
         'url' => $url,
         'completed' => $is_completed,
+        'in_progress' => !empty($submission_id) && !$is_completed,
         'submission_id' => $submission_id,
+        'webform_id' => $webform_id,
       ];
     }
 
@@ -155,53 +181,21 @@ class DashboardController extends ControllerBase {
    *   The user ID.
    *
    * @return int|null
-   *   The submission ID if completed, NULL otherwise.
+   *   The submission ID if exists (draft or completed), NULL otherwise.
    */
   protected function getModuleSubmission($webform_id, $uid) {
+    // Get any submission (draft or completed) by this user for this webform.
     $submissions = $this->entityTypeManager
       ->getStorage('webform_submission')
       ->getQuery()
       ->condition('webform_id', $webform_id)
       ->condition('uid', $uid)
-      ->condition('completed', 0, '>')
-      ->sort('completed', 'DESC')
+      ->sort('changed', 'DESC')
       ->range(0, 1)
       ->accessCheck(FALSE)
       ->execute();
 
     return !empty($submissions) ? reset($submissions) : NULL;
-  }
-
-  /**
-   * Extract module number from title.
-   *
-   * @param string $title
-   *   The webform title.
-   *
-   * @return int
-   *   The module number.
-   */
-  protected function extractModuleNumber($title) {
-    if (preg_match('/^Module (\d+):/i', $title, $matches)) {
-      return (int) $matches[1];
-    }
-    return 0;
-  }
-
-  /**
-   * Extract module name from title.
-   *
-   * @param string $title
-   *   The webform title.
-   *
-   * @return string
-   *   The module name.
-   */
-  protected function extractModuleName($title) {
-    if (preg_match('/^Module \d+:\s*(.+)$/i', $title, $matches)) {
-      return $matches[1];
-    }
-    return $title;
   }
 
 }

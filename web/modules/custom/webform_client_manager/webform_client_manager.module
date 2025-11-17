@@ -11,6 +11,38 @@ use Drupal\webform\WebformInterface;
 use Drupal\user\UserInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_node_access().
+ */
+function webform_client_manager_node_access(NodeInterface $node, $operation, AccountInterface $account) {
+  // Only control access for Module nodes.
+  if ($node->bundle() !== 'module') {
+    return AccessResult::neutral();
+  }
+
+  // Only control access for 'view' operation.
+  if ($operation !== 'view') {
+    return AccessResult::neutral();
+  }
+
+  // Allow admin users full access.
+  if ($account->hasPermission('administer clients') || $account->hasPermission('administer nodes')) {
+    return AccessResult::neutral();
+  }
+
+  /** @var \Drupal\webform_client_manager\WebformClientManager $manager */
+  $manager = \Drupal::service('webform_client_manager.manager');
+
+  // Check if user has access to this module.
+  if ($manager->userHasAccessToModule($node->id())) {
+    return AccessResult::allowed()->cachePerUser();
+  }
+
+  return AccessResult::forbidden('User does not have access to this module.')
+    ->cachePerUser();
+}
 
 /**
  * Implements hook_webform_access().
@@ -29,17 +61,12 @@ function webform_client_manager_webform_access(WebformInterface $webform, $opera
   /** @var \Drupal\webform_client_manager\WebformClientManager $manager */
   $manager = \Drupal::service('webform_client_manager.manager');
 
-  // Check if this is a module webform.
-  if (strpos($webform->label(), 'Module') !== 0) {
-    return AccessResult::neutral();
-  }
-
-  // Check if user has access to this webform.
+  // Check if user has access to this webform (via Module nodes).
   if ($manager->userHasAccessToWebform($webform->id())) {
     return AccessResult::allowed()->cachePerUser();
   }
 
-  return AccessResult::forbidden('User does not have access to this webform module.')
+  return AccessResult::forbidden('User does not have access to this webform.')
     ->cachePerUser();
 }
 

@@ -15,15 +15,18 @@ module:
   mysql: 0
   node: 0
   page_cache: 0
+  path: 0
   path_alias: 0
   range_slider: 0
   system: 0
   text: 0
+  token: 0
   user: 0
   views_ui: 0
   webform: 0
   webform_client_manager: 0
   webform_ui: 0
+  pathauto: 1
   views: 10
   minimal: 1000
 theme:

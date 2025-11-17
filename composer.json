@@ -22,6 +22,7 @@
         "drupal/core-recommended": "^11.2",
         "drupal/gin": "^5.0",
         "drupal/gin_login": "^2.1",
+        "drupal/pathauto": "^1.14",
         "drupal/range_slider": "^3.0@alpha",
         "drupal/webform": "^6.3@beta",
         "drush/drush": "^13.6"

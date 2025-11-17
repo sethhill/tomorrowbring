@@ -76,7 +76,31 @@ class WebformClientManager {
   }
 
   /**
-   * Check if the current user has access to a webform.
+   * Check if the current user has access to a Module node.
+   *
+   * @param int $nid
+   *   The Module node ID.
+   *
+   * @return bool
+   *   TRUE if user has access, FALSE otherwise.
+   */
+  public function userHasAccessToModule($nid) {
+    // Allow admin users full access.
+    if ($this->currentUser->hasPermission('administer clients')) {
+      return TRUE;
+    }
+
+    $client = $this->getCurrentUserClient();
+
+    if (!$client) {
+      return FALSE;
+    }
+
+    return in_array($nid, $client->getEnabledModules());
+  }
+
+  /**
+   * Check if the current user has access to a webform (via Module node).
    *
    * @param string $webform_id
    *   The webform ID.
@@ -96,7 +120,53 @@ class WebformClientManager {
       return FALSE;
     }
 
-    return in_array($webform_id, $client->getEnabledModules());
+    // Get enabled module node IDs.
+    $enabled_modules = $client->getEnabledModules();
+
+    // Load module nodes and check their field_form values.
+    if (!empty($enabled_modules)) {
+      $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($enabled_modules);
+      foreach ($nodes as $node) {
+        if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+          if ($node->get('field_form')->target_id === $webform_id) {
+            return TRUE;
+          }
+        }
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Get the next Module node in the sequence after the given Module.
+   *
+   * @param int $current_nid
+   *   The current Module node ID.
+   *
+   * @return int|null
+   *   The next Module node ID or NULL if this is the last one.
+   */
+  public function getNextModule($current_nid) {
+    $client = $this->getCurrentUserClient();
+
+    if (!$client) {
+      return NULL;
+    }
+
+    $sorted_modules = $client->getSortedEnabledModules();
+    $current_index = array_search($current_nid, $sorted_modules);
+
+    if ($current_index === FALSE) {
+      return NULL;
+    }
+
+    // Check if there's a next module.
+    if (isset($sorted_modules[$current_index + 1])) {
+      return $sorted_modules[$current_index + 1];
+    }
+
+    return NULL;
   }
 
   /**
@@ -115,19 +185,54 @@ class WebformClientManager {
       return NULL;
     }
 
-    $sorted_modules = $client->getSortedEnabledModules();
-    $current_index = array_search($current_webform_id, $sorted_modules);
+    // Find the Module node that contains this webform.
+    $current_module_nid = $this->getModuleByWebform($current_webform_id);
 
-    if ($current_index === FALSE) {
+    if (!$current_module_nid) {
       return NULL;
     }
 
-    // Check if there's a next module.
-    if (isset($sorted_modules[$current_index + 1])) {
-      return $sorted_modules[$current_index + 1];
+    // Get the next Module node.
+    $next_module_nid = $this->getNextModule($current_module_nid);
+
+    if (!$next_module_nid) {
+      return NULL;
+    }
+
+    // Load the next Module node and get its webform.
+    $next_module = $this->entityTypeManager->getStorage('node')->load($next_module_nid);
+
+    if ($next_module && $next_module->hasField('field_form') && !$next_module->get('field_form')->isEmpty()) {
+      return $next_module->get('field_form')->target_id;
     }
 
     return NULL;
+  }
+
+  /**
+   * Get the previous Module node in the sequence before the given Module.
+   *
+   * @param int $current_nid
+   *   The current Module node ID.
+   *
+   * @return int|null
+   *   The previous Module node ID or NULL if this is the first one.
+   */
+  public function getPreviousModule($current_nid) {
+    $client = $this->getCurrentUserClient();
+
+    if (!$client) {
+      return NULL;
+    }
+
+    $sorted_modules = $client->getSortedEnabledModules();
+    $current_index = array_search($current_nid, $sorted_modules);
+
+    if ($current_index === FALSE || $current_index === 0) {
+      return NULL;
+    }
+
+    return $sorted_modules[$current_index - 1];
   }
 
   /**
@@ -146,26 +251,40 @@ class WebformClientManager {
       return NULL;
     }
 
-    $sorted_modules = $client->getSortedEnabledModules();
-    $current_index = array_search($current_webform_id, $sorted_modules);
+    // Find the Module node that contains this webform.
+    $current_module_nid = $this->getModuleByWebform($current_webform_id);
 
-    if ($current_index === FALSE || $current_index === 0) {
+    if (!$current_module_nid) {
       return NULL;
     }
 
-    return $sorted_modules[$current_index - 1];
+    // Get the previous Module node.
+    $previous_module_nid = $this->getPreviousModule($current_module_nid);
+
+    if (!$previous_module_nid) {
+      return NULL;
+    }
+
+    // Load the previous Module node and get its webform.
+    $previous_module = $this->entityTypeManager->getStorage('node')->load($previous_module_nid);
+
+    if ($previous_module && $previous_module->hasField('field_form') && !$previous_module->get('field_form')->isEmpty()) {
+      return $previous_module->get('field_form')->target_id;
+    }
+
+    return NULL;
   }
 
   /**
-   * Check if the given webform is the last one for the user's client.
+   * Check if the given Module is the last one for the user's client.
    *
-   * @param string $webform_id
-   *   The webform ID.
+   * @param int $nid
+   *   The Module node ID.
    *
    * @return bool
-   *   TRUE if this is the last webform, FALSE otherwise.
+   *   TRUE if this is the last module, FALSE otherwise.
    */
-  public function isLastWebform($webform_id) {
+  public function isLastModule($nid) {
     $client = $this->getCurrentUserClient();
 
     if (!$client) {
@@ -178,7 +297,43 @@ class WebformClientManager {
       return FALSE;
     }
 
-    return end($sorted_modules) === $webform_id;
+    return end($sorted_modules) === $nid;
+  }
+
+  /**
+   * Check if the given webform is the last one for the user's client.
+   *
+   * @param string $webform_id
+   *   The webform ID.
+   *
+   * @return bool
+   *   TRUE if this is the last webform, FALSE otherwise.
+   */
+  public function isLastWebform($webform_id) {
+    // Find the Module node that contains this webform.
+    $module_nid = $this->getModuleByWebform($webform_id);
+
+    if (!$module_nid) {
+      return FALSE;
+    }
+
+    return $this->isLastModule($module_nid);
+  }
+
+  /**
+   * Get all enabled Module nodes for the current user's client.
+   *
+   * @return array
+   *   Array of Module node IDs.
+   */
+  public function getEnabledModules() {
+    $client = $this->getCurrentUserClient();
+
+    if (!$client) {
+      return [];
+    }
+
+    return $client->getSortedEnabledModules();
   }
 
   /**
@@ -188,13 +343,57 @@ class WebformClientManager {
    *   Array of webform IDs.
    */
   public function getEnabledWebforms() {
-    $client = $this->getCurrentUserClient();
+    $module_nids = $this->getEnabledModules();
 
-    if (!$client) {
+    if (empty($module_nids)) {
       return [];
     }
 
-    return $client->getSortedEnabledModules();
+    $webform_ids = [];
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($module_nids);
+
+    foreach ($nodes as $node) {
+      if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+        $webform_ids[] = $node->get('field_form')->target_id;
+      }
+    }
+
+    return $webform_ids;
+  }
+
+  /**
+   * Get the Module node that contains the given webform.
+   *
+   * @param string $webform_id
+   *   The webform ID.
+   *
+   * @return int|null
+   *   The Module node ID or NULL if not found.
+   */
+  public function getModuleByWebform($webform_id) {
+    $client = $this->getCurrentUserClient();
+
+    if (!$client) {
+      return NULL;
+    }
+
+    $enabled_modules = $client->getEnabledModules();
+
+    if (empty($enabled_modules)) {
+      return NULL;
+    }
+
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($enabled_modules);
+
+    foreach ($nodes as $nid => $node) {
+      if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+        if ($node->get('field_form')->target_id === $webform_id) {
+          return $nid;
+        }
+      }
+    }
+
+    return NULL;
   }
 
   /**

@@ -13,7 +13,7 @@ _core:
 id: tbring_tools
 theme: tbring
 region: header
-weight: 0
+weight: -3
 provider: null
 plugin: 'system_menu_block:tools'
 settings:
