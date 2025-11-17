@@ -13,9 +13,6 @@ title: 'Module 12: Collaboration & Team Dynamics'
 description: ''
 categories: {  }
 elements: |-
-  module_12_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Team Collaboration</h2><p class="module-description">How is AI affecting how your team works together?</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
@@ -38,7 +35,7 @@ elements: |-
       '#options':
         yes_gap: 'Yes, creating a skill gap'
         yes_no_problem: 'Yes, but not causing problems'
-        no_aligned: "No, we’re mostly aligned"
+        no_aligned: 'No, we’re mostly aligned'
         dont_know: "Don't know what others are doing"
       '#required': true
   3:
@@ -67,7 +64,7 @@ elements: |-
         own_pace: 'Let people learn at their own pace'
         champions: 'Create AI champions on each team'
         specialists: 'Hire specialists to handle AI'
-        no_need: "Don’t need to address it"
+        no_need: 'Don’t need to address it'
         other: Other
       '#multiple': 2
       '#required': true

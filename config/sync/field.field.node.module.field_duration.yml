@@ -9,7 +9,7 @@ id: node.module.field_duration
 field_name: field_duration
 entity_type: node
 bundle: module
-label: Duration
+label: 'Estimated time'
 description: ''
 required: false
 translatable: false

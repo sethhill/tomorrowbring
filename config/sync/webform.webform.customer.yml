@@ -13,9 +13,6 @@ title: 'Module 16: Customer/Stakeholder Impact'
 description: ''
 categories: {  }
 elements: |-
-  module_16_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Customer & Stakeholder Impact</h2><p class="module-description">How is AI affecting your work with customers and stakeholders?</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
@@ -23,11 +20,11 @@ elements: |-
       '#type': radios
       '#title': "Are your customers/stakeholders aware you're using AI?"
       '#options':
-        yes_transparent: "Yes, we’re transparent about it"
+        yes_transparent: 'Yes, we’re transparent about it'
         sometimes: 'Sometimes - depends on context'
-        'no': "No, we don’t disclose"
+        'no': 'No, we don’t disclose'
         not_using: 'Not using AI with customers yet'
-        dont_know: "Don’t know our policy"
+        dont_know: 'Don’t know our policy'
       '#required': true
   2:
     '#type': webform_wizard_page

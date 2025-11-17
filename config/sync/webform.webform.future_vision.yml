@@ -13,9 +13,6 @@ title: 'Module 14: Future Vision & Career Planning'
 description: ''
 categories: {  }
 elements: |-
-  module_14_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Your Future</h2><p class="module-description">Help us understand how you see your career evolving with AI.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

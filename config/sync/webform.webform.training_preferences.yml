@@ -13,9 +13,6 @@ title: 'Module 6: Training Preferences & Readiness'
 description: ''
 categories: {  }
 elements: |-
-  module_6_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Training Preferences</h2><p class="module-description">Help us design training that actually works for you.</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

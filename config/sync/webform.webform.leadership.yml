@@ -13,9 +13,6 @@ title: 'Module 15: Leadership & Management-specific'
 description: ''
 categories: {  }
 elements: |-
-  module_15_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Leadership Perspective</h2><p class="module-description">This module is specifically for people managers. Skip if you don’t manage others.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

@@ -13,9 +13,6 @@ title: 'Module 7: Confidence & Psychological State'
 description: ''
 categories: {  }
 elements: |-
-  module_7_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">How You’re Feeling</h2><p class="module-description">Change can be stressful. We want to understand how you’re feeling so we can provide the right support.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

@@ -20,7 +20,7 @@ mode: full
 content:
   field_duration:
     type: string
-    label: hidden
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }

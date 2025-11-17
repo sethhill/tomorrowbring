@@ -13,9 +13,6 @@ title: 'Module 5: Skills Gap'
 description: ''
 categories: {  }
 elements: |-
-  module_5_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Skills & Learning</h2><p class="module-description">Help us understand your current AI skills and what training would be most valuable to you.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
@@ -24,9 +21,9 @@ elements: |-
       '#title': 'How would you rate your current skill level with AI tools?'
       '#options':
         never_used: 'Never used them / Complete beginner'
-        beginner: "Beginner - I’ve tried them a few times"
+        beginner: 'Beginner - I’ve tried them a few times'
         intermediate: 'Intermediate - I use them regularly'
-        advanced: "Advanced - I’m comfortable and creative with them"
+        advanced: 'Advanced - I’m comfortable and creative with them'
         expert: 'Expert - I could train others'
       '#required': true
   2:
@@ -107,10 +104,10 @@ elements: |-
     '#title': '6'
     m5_q6_biggest_barrier:
       '#type': radios
-      '#title': "What’s your biggest barrier to learning AI tools?"
+      '#title': 'What’s your biggest barrier to learning AI tools?'
       '#options':
         no_time: 'No time'
-        dont_know_start: "Don’t know where to start"
+        dont_know_start: 'Don’t know where to start'
         no_access: 'No access to tools/resources'
         overwhelming: 'Feels overwhelming'
         not_priority: 'Not a priority for my manager'

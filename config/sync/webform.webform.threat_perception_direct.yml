@@ -13,9 +13,6 @@ title: 'Module 4: Threat Perception: Direct'
 description: ''
 categories: {  }
 elements: |-
-  module_4_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Honest Conversation About AI</h2><p class="module-description">We believe in being honest about change. AI will transform work, and we want to hear your real concerns so we can address them together.</p><p class="module-duration">Estimated time: 4 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'

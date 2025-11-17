@@ -13,9 +13,6 @@ title: 'Module 13: Performance & Productivity'
 description: ''
 categories: {  }
 elements: |-
-  module_13_intro:
-    '#type': webform_markup
-    '#markup': '<div class="module-intro"><h2 class="module-title">Performance & Productivity</h2><p class="module-description">Help us understand the real impact AI is having on your work.</p><p class="module-duration">Estimated time: 3 minutes</p></div>'
   1:
     '#type': webform_wizard_page
     '#title': '1'
@@ -28,7 +25,7 @@ elements: |-
         slight_increase: 'Slightly increased (5–10% time saved)'
         no_change: 'No change'
         decreased: 'Actually decreased (learning curve, debugging AI)'
-        not_enough: "Haven’t used AI enough to know"
+        not_enough: 'Haven’t used AI enough to know'
       '#required': true
   2:
     '#type': webform_wizard_page
@@ -46,7 +43,7 @@ elements: |-
         tedious: 'Tedious tasks (automation)'
         decisions: 'Decision-making (better data/analysis)'
         communication: 'Communication (writing, presenting)'
-        no_benefits: "Haven’t seen benefits yet"
+        no_benefits: 'Haven’t seen benefits yet'
         other: Other
       '#multiple': 3
       '#required': true
@@ -67,12 +64,12 @@ elements: |-
       '#options':
         fixing_errors: 'Takes longer to fix AI errors than do it myself'
         generic: 'Outputs are too generic/mediocre'
-        no_nuance: "Can’t handle nuance in my field"
+        no_nuance: 'Can’t handle nuance in my field'
         second_guess: 'Makes me second-guess my own expertise'
         interrupts_flow: 'Interrupts my creative flow'
         more_work: 'Creates more work (reviewing, editing)'
-        no_context: "Doesn’t understand context"
-        helpful_everywhere: "Actually, it’s been helpful everywhere I’ve tried"
+        no_context: 'Doesn’t understand context'
+        helpful_everywhere: 'Actually, it’s been helpful everywhere I’ve tried'
         other: Other
     m13_q3_other:
       '#type': textfield
@@ -105,7 +102,7 @@ elements: |-
         expected: 'As expected / table stakes'
         not_evaluated: 'Not evaluated at all (neutral)'
         depends: 'Depends on the role'
-        dont_know: "Don’t know / haven’t thought about it"
+        dont_know: 'Don’t know / haven’t thought about it'
       '#required': true
   6:
     '#type': webform_wizard_page
