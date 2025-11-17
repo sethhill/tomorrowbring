@@ -24,20 +24,18 @@
           <div class="module-card__duration">
             {{ content.field_duration }}
           </div>
+        {% else %}
+          <div class="module-status module-status--{{ module_status }}">
+            {% if module_status == 'completed' %}
+              <svg class="status-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="10" fill="#a3a748"/>
+                <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {% endif %}
+            {{ module_status_label }}
+          </div>
         {% endif %}
       </div>
-    </div>
-
-    <div class="module-card__footer">
-      <span class="module-status module-status--{{ module_status }}">
-        {% if module_status == 'completed' %}
-          <svg class="status-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="10" fill="#a3a748"/>
-            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        {% endif %}
-        {{ module_status_label }}
-      </span>
     </div>
   </a>
 </article>

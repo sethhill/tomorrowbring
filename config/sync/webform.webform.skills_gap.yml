@@ -226,8 +226,8 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: url_message
-  confirmation_url: /dashboard
+  confirmation_type: url
+  confirmation_url: ''
   confirmation_title: ''
   confirmation_message: 'You have completed the module.'
   confirmation_attributes: {  }
@@ -305,5 +305,14 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers: {  }
+handlers:
+  client_module_flow:
+    id: client_module_flow
+    handler_id: client_module_flow
+    label: 'Client Module Flow'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings: {  }
 variants: {  }

@@ -111,6 +111,14 @@ function webform_client_manager_theme($existing, $type, $theme, $path) {
         'progress_percentage' => 0,
       ],
     ],
+    'webform_module_completion' => [
+      'variables' => [
+        'module_title' => NULL,
+        'dashboard_url' => NULL,
+        'next_module_url' => NULL,
+        'has_next_module' => FALSE,
+      ],
+    ],
   ];
 }
 
@@ -128,6 +136,7 @@ function webform_client_manager_views_data_alter(array &$data) {
     ],
   ];
 }
+
 
 /**
  * Implements template_preprocess_node().

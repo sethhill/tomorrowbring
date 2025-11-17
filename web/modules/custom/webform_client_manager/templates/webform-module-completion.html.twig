@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Template for module completion page.
+ *
+ * Available variables:
+ * - module_title: The title of the completed module.
+ * - dashboard_url: URL to the dashboard.
+ * - next_module_url: URL to the next module (if available).
+ * - has_next_module: Boolean indicating if there's a next module.
+ */
+#}
+<div class="module-completion">
+  <div class="module-completion__header">
+    <h1>{{ 'Thank you for your responses.'|t }}</h1>
+    <p class="module-completion__message">
+      {{ 'You have completed'|t }} <strong>{{ module_title }}</strong>.
+    </p>
+  </div>
+
+  <div class="module-completion__actions">
+    <a href="{{ dashboard_url }}" class="button button--primary module-completion__button">
+      {{ 'Return to Dashboard'|t }}
+    </a>
+
+    {% if has_next_module %}
+      <a href="{{ next_module_url }}" class="button button--secondary module-completion__button">
+        {{ 'Continue to Next Section'|t }}
+      </a>
+    {% endif %}
+  </div>
+</div>

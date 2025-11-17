@@ -78,16 +78,16 @@
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-  padding: 1em 1.5em;
+    padding: 1em 1.5em;
     gap: 2em;
   }
 
   &.module-card--completed {
-    background: rgba(255,255,255,0.4);
+    background: rgba(255, 255, 255, 0.4);
   }
 }
 
-.module-card__header{
+.module-card__header {
   width: 100%;
 }
 

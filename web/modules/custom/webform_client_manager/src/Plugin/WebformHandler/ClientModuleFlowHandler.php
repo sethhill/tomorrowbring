@@ -43,33 +43,11 @@ class ClientModuleFlowHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function confirmForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
-    $current_webform_id = $this->getWebform()->id();
-
-    // Check if there's a next webform.
-    $next_webform_id = $this->clientManager->getNextWebform($current_webform_id);
-
-    if ($next_webform_id) {
-      // Redirect to next webform.
-      $url = Url::fromRoute('entity.webform.canonical', ['webform' => $next_webform_id]);
-      $form_state->setRedirectUrl($url);
-    }
-    else {
-      // This is the last webform, check for custom redirect.
-      $redirect_url = $this->clientManager->getCompletionRedirectUrl();
-
-      if ($redirect_url) {
-        // Use custom redirect URL.
-        try {
-          $url = Url::fromUri($redirect_url);
-          $form_state->setRedirectUrl($url);
-        }
-        catch (\Exception $e) {
-          // If URL is invalid, let default confirmation page show.
-          \Drupal::logger('webform_client_manager')->error('Invalid completion redirect URL: @url', ['@url' => $redirect_url]);
-        }
-      }
-      // If no redirect URL, let the default webform confirmation page show.
-    }
+    // Redirect to our custom module completion page.
+    $url = Url::fromRoute('webform_client_manager.module_completion', [
+      'webform_submission' => $webform_submission->id(),
+    ]);
+    $form_state->setRedirectUrl($url);
   }
 
 }

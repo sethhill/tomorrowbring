@@ -44,18 +44,6 @@ display:
         type: tag
       empty: {  }
       sorts:
-        module_completion_sort:
-          id: module_completion_sort
-          table: node_field_data
-          field: module_completion_sort
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: module_completion_sort
-          order: ASC
-          expose:
-            label: ''
-          exposed: false
         field_number_value:
           id: field_number_value
           table: node__field_number
