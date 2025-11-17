@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Theme override to display a Module node in teaser view mode.
+ *
+ * Available variables:
+ * - node: The node entity.
+ * - label: The title of the node.
+ * - content: All node items.
+ * - module_status: The status (not-started, in-progress, completed).
+ * - module_status_label: Human-readable status label.
+ * - module_url: The URL object for the module/submission.
+ * - module_button_text: The button text based on status.
+ */
+#}
+<article{{ attributes.addClass('module-card', 'module-card--' ~ module_status) }}>
+  <a href="{{ module_url }}" class="module-card__link">
+    <div class="module-card__header">
+      <div class="module-card__info">
+        <h3{{ title_attributes.addClass('module-card__title') }}>
+          {{ label }}
+        </h3>
+        {% if content.field_duration %}
+          <div class="module-card__duration">
+            {{ content.field_duration }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="module-card__footer">
+      <span class="module-status module-status--{{ module_status }}">
+        {% if module_status == 'completed' %}
+          <svg class="status-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="10" fill="#a3a748"/>
+            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        {% endif %}
+        {{ module_status_label }}
+      </span>
+    </div>
+  </a>
+</article>

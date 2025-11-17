@@ -1,7 +1,8 @@
 .webform-client-dashboard {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  > h2 {
+    text-align: center;
+    margin-bottom: 0.75em;
+  }
 }
 
 .dashboard-header {
@@ -12,22 +13,20 @@
 .dashboard-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1f2937;
   margin: 0 0 0.5rem 0;
 }
 
 .dashboard-subtitle {
   font-size: 1.25rem;
-  color: #6b7280;
   margin: 0;
 }
 
 .dashboard-progress {
   background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  padding: 1em 1.5em;
+  border-start-start-radius: 1em;
+  border-end-end-radius: 1em;
+  margin-bottom: 1em;
 }
 
 .progress-info {
@@ -39,26 +38,24 @@
 
 .progress-text {
   font-weight: 600;
-  color: #1f2937;
   font-size: 1.125rem;
 }
 
 .progress-count {
-  color: #6b7280;
   font-size: 0.875rem;
 }
 
 .progress-bar {
-  height: 12px;
+  height: 8px;
   background: #e5e7eb;
-  border-radius: 9999px;
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25em;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  background: var(--color-green);
   transition: width 0.3s ease;
   border-radius: 9999px;
 }
@@ -67,35 +64,39 @@
   display: block;
   text-align: right;
   font-weight: 600;
-  color: #3b82f6;
   font-size: 1.125rem;
-}
-
-.dashboard-modules {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
 }
 
 .module-card {
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 0.625em 1.5em;
   display: flex;
-  flex-direction: column;
-  border: 2px solid transparent;
+  flex-direction: row;
+  margin-bottom: 4px;
+
+  > a {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &.module-card--completed {
+    background: rgba(255,255,255,0.4);
+  }
 }
 
-.module-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+.module-card__title {
+  font-size: 1.25em;
 }
 
-.module-card.module-completed {
-  border-color: #10b981;
-  background: #f0fdf4;
+.module-card__duration {
+  text-align: left;
+
+  .field--name-field-duration {
+    text-align: left;
+    margin: 0;
+  }
 }
 
 .module-header {

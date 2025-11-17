@@ -105,10 +105,99 @@ function webform_client_manager_theme($existing, $type, $theme, $path) {
       'variables' => [
         'client_name' => NULL,
         'modules' => [],
+        'modules_view' => NULL,
         'total_modules' => 0,
         'completed_modules' => 0,
         'progress_percentage' => 0,
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function webform_client_manager_views_data_alter(array &$data) {
+  // Add custom sort handler for module completion status.
+  $data['node_field_data']['module_completion_sort'] = [
+    'title' => t('Module Completion Status'),
+    'help' => t('Sort by module completion status (incomplete first, then completed).'),
+    'sort' => [
+      'field' => 'nid',
+      'id' => 'module_completion_sort',
+    ],
+  ];
+}
+
+/**
+ * Implements template_preprocess_node().
+ */
+function webform_client_manager_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  $view_mode = $variables['view_mode'];
+
+  // Only process Module nodes in teaser view mode.
+  if ($node->bundle() !== 'module' || $view_mode !== 'teaser') {
+    return;
+  }
+
+  $current_user = \Drupal::currentUser();
+  $entity_type_manager = \Drupal::entityTypeManager();
+
+  // Get the webform ID from the module.
+  $webform_id = NULL;
+  if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+    $webform_id = $node->get('field_form')->target_id;
+  }
+
+  // Default status and URL.
+  $status = 'not-started';
+  $status_label = t('Not Started');
+  $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
+  $button_text = t('Start Module');
+
+  // Check for user's submission if webform exists.
+  if ($webform_id) {
+    $submissions = $entity_type_manager
+      ->getStorage('webform_submission')
+      ->getQuery()
+      ->condition('webform_id', $webform_id)
+      ->condition('uid', $current_user->id())
+      ->sort('changed', 'DESC')
+      ->range(0, 1)
+      ->accessCheck(FALSE)
+      ->execute();
+
+    if (!empty($submissions)) {
+      $submission = $entity_type_manager
+        ->getStorage('webform_submission')
+        ->load(reset($submissions));
+
+      if ($submission) {
+        // Check if completed.
+        if ($submission->get('completed')->value > 0) {
+          $status = 'completed';
+          $status_label = t('Completed');
+          $button_text = t('Review');
+        }
+        else {
+          $status = 'in-progress';
+          $status_label = t('In Progress');
+          $button_text = t('Continue');
+        }
+
+        // Link to the submission edit form.
+        $url = Url::fromRoute('entity.webform_submission.edit_form', [
+          'webform' => $webform_id,
+          'webform_submission' => $submission->id(),
+        ]);
+      }
+    }
+  }
+
+  // Add variables for the template.
+  $variables['module_status'] = $status;
+  $variables['module_status_label'] = $status_label;
+  $variables['module_url'] = $url;
+  $variables['module_button_text'] = $button_text;
 }
