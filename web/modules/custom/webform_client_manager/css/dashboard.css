@@ -69,21 +69,33 @@
 
 .module-card {
   background: white;
-  padding: 0.625em 1.5em;
   display: flex;
   flex-direction: row;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 
   > a {
     display: flex;
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
+  padding: 1em 1.5em;
+    gap: 2em;
   }
 
   &.module-card--completed {
     background: rgba(255,255,255,0.4);
   }
+}
+
+.module-card__header{
+  width: 100%;
+}
+
+.module-card__info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .module-card__title {
