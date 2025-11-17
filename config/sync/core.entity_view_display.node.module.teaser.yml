@@ -1,0 +1,43 @@
+uuid: 00000000-0000-0000-0000-000000000000
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.module.field_duration
+    - field.field.node.module.field_form
+    - field.field.node.module.field_intro
+    - field.field.node.module.field_number
+    - node.type.module
+  module:
+    - text
+    - user
+id: node.module.teaser
+targetEntityType: node
+bundle: module
+mode: teaser
+content:
+  field_duration:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_intro:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  field_form: true
+  field_number: true
+  search_api_excerpt: true

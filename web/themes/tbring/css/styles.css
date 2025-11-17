@@ -21,10 +21,13 @@
   --color-cream: rgba(255, 236, 180, 1);
   --color-deep-green: rgba(26, 60, 52, 1);
   --color-green: rgba(163, 167, 72, 1);
-  --color-gold: rgba(244, 161, 39, 1);
+  --color-gold: rgb(244, 161, 39);
   --color-orange: rgba(229, 119, 30, 1);
   --color-white: rgba(255, 255, 255, 1);
   --color-black: rgba(0, 0, 0, 1);
+  --color-green-light: rgba(163, 167, 72, 0.5);
+  --color-green-light: #c7c37e;
+  --color-gold-light: rgba(244, 161, 39, 0.3);
 }
 
 body {
@@ -291,28 +294,38 @@ label {
   content: "";
 }
 
+.progress-step .progress-marker::before {
+  background-color: var(--color-white);
+}
+
 .progress-marker:after {
   background-color: white;
 }
 
 .webform-progress-tracker .progress-step .progress-marker::after {
   background-color: var(--color-white);
+  height: 3px;
 }
 
 .progress-step.is-active .progress-marker::before {
-  background-color: var(--color-green);
+  background-color: var(--color-orange);
 }
 
 .webform-progress-tracker .progress-step.is-complete .progress-marker::before {
-  background-color: var(--color-green);
+  background-color: var(--color-gold);
 }
 
-.webform-progress-tracker .progress-step.is-complete .progress-marker::before,
 .webform-progress-tracker
   .progress-step.is-complete:hover
   .progress-marker::before,
 .webform-progress-tracker .progress-step.is-complete .progress-marker::after {
-  background-color: var(--color-green);
+  background-color: var(--color-gold);
+}
+
+.webform-progress-tracker .progress-step.is-complete .progress-marker::after {
+  height: 9px;
+  margin-top: -3px;
+  background-color: var(--color-gold);
 }
 
 .field--name-field-intro {
@@ -361,10 +374,12 @@ label {
 .rangeslider__fill,
 .rangeslider [data-track-fill] {
   background-color: var(--color-gold);
+  height: 9px;
 }
 .rangeslider__track,
 .rangeslider [data-track] {
-  background-color: #ccc;
+  background-color: var(--color-white);
+  height: 3px;
 }
 
 header {

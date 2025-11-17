@@ -5,7 +5,7 @@
  *
  * Available variables:
  * - client_name: The name of the client.
- * - modules: Array of module data.
+ * - modules_view: Rendered view of modules.
  * - total_modules: Total number of modules.
  * - completed_modules: Number of completed modules.
  * - progress_percentage: Completion percentage.
@@ -17,6 +17,8 @@
       <p class="dashboard-subtitle">{{ client_name }}</p>
     {% endif %}
   </div>
+
+  <h2>Modules</h2>
 
   <div class="dashboard-progress">
     <div class="progress-info">
@@ -30,35 +32,6 @@
   </div>
 
   <div class="dashboard-modules">
-    {% for module in modules %}
-      <div class="module-card {% if module.completed %}module-completed{% endif %}">
-        <div class="module-header">
-          <div class="module-info">
-            <h2 class="module-name">{{ module.name }}</h2>
-            {% if module.description %}
-              <p class="module-description">{{ module.description }}</p>
-            {% endif %}
-          </div>
-        </div>
-        <div class="module-footer">
-          {% if module.completed %}
-            <span class="module-status completed">
-              <svg class="status-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <circle cx="10" cy="10" r="10" fill="#10B981"/>
-                <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              {{ 'Completed'|t }}
-            </span>
-            <a href="{{ module.url }}" class="module-button secondary">{{ 'Review'|t }}</a>
-          {% elseif module.in_progress %}
-            <span class="module-status in-progress">{{ 'In Progress'|t }}</span>
-            <a href="{{ module.url }}" class="module-button primary">{{ 'Continue'|t }}</a>
-          {% else %}
-            <span class="module-status pending">{{ 'Not Started'|t }}</span>
-            <a href="{{ module.url }}" class="module-button primary">{{ 'Start Module'|t }}</a>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
+    {{ modules_view }}
   </div>
 </div>
