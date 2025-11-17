@@ -76,7 +76,7 @@ elements: |-
       '#title': 'How do you learn best?'
       '#description': 'Check your top 2'
       '#options':
-        video: 'Short video tutorials (5-10 min)'
+        video: 'Short video tutorials (5–10 minutes)'
         hands_on: 'Hands-on practice / experimentation'
         workshops: 'Live workshops or training sessions'
         documentation: 'Written guides and documentation'
@@ -94,8 +94,8 @@ elements: |-
       '#title': 'Realistically, how much time per week can you dedicate to learning AI tools?'
       '#options':
         less_1: 'Less than 1 hour'
-        range_1_2: '1-2 hours'
-        range_3_5: '3-5 hours'
+        range_1_2: '1–2 hours'
+        range_3_5: '3–5 hours'
         more_5: '5+ hours'
         no_time: 'Honestly, no time right now'
       '#required': true

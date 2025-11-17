@@ -28,6 +28,7 @@
   --color-green-light: rgba(163, 167, 72, 0.5);
   --color-green-light: #c7c37e;
   --color-gold-light: rgba(244, 161, 39, 0.3);
+  --color-gray-medium: #666;
 }
 
 body {
@@ -148,7 +149,7 @@ h2 {
 fieldset {
   border: none;
   padding: 0;
-  margin: 0 0 2em 0;
+  margin: 0;
 }
 
 legend {
@@ -323,18 +324,18 @@ label {
   background-color: var(--color-gold);
 }
 
-
 .webform-progress-tracker .progress-step.is-complete .progress-marker::after {
   height: 9px;
   margin-top: -3px;
   background: linear-gradient(to right, var(--color-gold), var(--color-orange));
 }
 
-.webform-progress-tracker .progress-step.is-complete:has(+ .progress-step.is-complete) .progress-marker::after {
+.webform-progress-tracker
+  .progress-step.is-complete:has(+ .progress-step.is-complete)
+  .progress-marker::after {
   background: none;
   background-color: var(--color-gold);
 }
-
 
 .field--name-field-intro {
   font-size: 1.5em;
@@ -369,8 +370,7 @@ label {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  font-size: 0.875em;
-  color: #333;
+  color: var(--color-gray-medium);
   margin-bottom: -0.75em;
   margin-top: 0.75em;
 }
@@ -381,7 +381,11 @@ label {
 }
 .rangeslider__fill,
 .rangeslider [data-track-fill] {
-  background: linear-gradient(to right, var(--color-green), var(--color-deep-green));
+  background: linear-gradient(
+    to right,
+    var(--color-green),
+    var(--color-deep-green)
+  );
   height: 9px;
 }
 .rangeslider__track,
@@ -491,3 +495,11 @@ footer {
   background-color: transparent;
 }
 
+.webform-element-description {
+  color: #666;
+  margin-bottom: 1em;
+}
+
+legend + .fieldset-wrapper:has(.description) {
+  margin-top: -0.5em;
+}
