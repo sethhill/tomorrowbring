@@ -1,0 +1,307 @@
+uuid: 95e6d627-f1cf-447c-8197-ca18683c3ad4
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: module_25_mid_career_professiona
+title: 'Module 25: Mid-Career Professionals'
+description: ''
+categories: {  }
+elements: |-
+  1:
+    '#type': webform_wizard_page
+    '#title': '1'
+    m25_q1_experience:
+      '#type': radios
+      '#title': 'How many years of experience do you have in your field?'
+      '#options':
+        range_5_10: '5-10 years'
+        range_10_15: '10-15 years'
+        range_15_20: '15-20 years'
+        more_20: '20+ years'
+      '#required': true
+  2:
+    '#type': webform_wizard_page
+    '#title': '2'
+    m25_q2_expertise_view:
+      '#type': radios
+      '#title': 'How do you view your expertise in the age of AI?'
+      '#options':
+        more_valuable: 'My experience is MORE valuable (context AI lacks)'
+        equally: 'My experience is equally valuable'
+        less_valuable: 'My experience is LESS valuable (AI catching up)'
+        obsolete: 'My experience may become obsolete'
+        uncertain: 'Too uncertain to say'
+      '#required': true
+  3:
+    '#type': webform_wizard_page
+    '#title': '3'
+    m25_q3_younger_workers:
+      '#type': radios
+      '#title': 'Are you worried about younger, AI-native workers having an advantage?'
+      '#options':
+        yes_very: 'Yes, very worried'
+        somewhat: 'Somewhat worried'
+        not_experience: 'Not worried - my experience is an advantage'
+        not_learning: "Not worried - I'm learning AI too"
+        havent_thought: "Haven't thought about it"
+      '#required': true
+  4:
+    '#type': webform_wizard_page
+    '#title': '4'
+    m25_q4_challenge:
+      '#type': radios
+      '#title': "What's your biggest mid-career challenge with AI?"
+      '#options':
+        time: 'Finding time to learn while staying productive'
+        imposter: 'Feeling behind / imposter syndrome'
+        balancing: 'Balancing seniority expectations with learning mode'
+        uncertainty: 'Uncertainty about which skills to invest in'
+        advancement: 'Career advancement in a changing landscape'
+        managing: 'Managing teams through AI transition'
+        other: Other
+      '#required': true
+    m25_q4_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m25_q4_challenge"]':
+            value: other
+  5:
+    '#type': webform_wizard_page
+    '#title': '5'
+    m25_q5_trajectory:
+      '#type': radios
+      '#title': 'How is AI affecting your career trajectory?'
+      '#options':
+        opening: 'Opening new opportunities'
+        pivot: 'Requiring pivot / reskilling'
+        threatening: 'Threatening my advancement'
+        no_impact: 'No significant impact'
+        too_early: 'Too early to tell'
+        other: Other
+      '#required': true
+    m25_q5_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m25_q5_trajectory"]':
+            value: other
+  6:
+    '#type': webform_wizard_page
+    '#title': '6'
+    m25_q6_security:
+      '#type': checkboxes
+      '#title': 'What would make you feel secure about the next 10 years of your career?'
+      '#description': 'Check your top 2'
+      '#options':
+        ai_fluent: 'Becoming AI-fluent in my domain'
+        human_skills: 'Doubling down on uniquely human skills'
+        leadership: 'Moving into leadership/strategy'
+        network: 'Building a strong professional network'
+        learning: 'Continuous learning mindset'
+        financial: 'Financial cushion / savings'
+        diversifying: 'Diversifying my skills across areas'
+        other: Other
+      '#multiple': 2
+      '#required': true
+    m25_q6_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m25_q6_security[other]"]':
+            checked: true
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: both
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_file_limit_message: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }

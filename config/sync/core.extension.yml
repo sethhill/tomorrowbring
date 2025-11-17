@@ -20,6 +20,7 @@ module:
   path_alias: 0
   range_slider: 0
   system: 0
+  taxonomy: 0
   text: 0
   token: 0
   user: 0

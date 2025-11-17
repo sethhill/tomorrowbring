@@ -1,0 +1,318 @@
+uuid: 0004af96-bedd-47d3-9a04-0bf191ec36ce
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: module_19_legal_compliance
+title: 'Module 19: Legal & Compliance'
+description: ''
+categories: {  }
+elements: |-
+  1:
+    '#type': webform_wizard_page
+    '#title': '1'
+    m19_q1_current_use:
+      '#type': checkboxes
+      '#title': 'How is AI being used in your legal/compliance work?'
+      '#description': 'Check all that apply'
+      '#options':
+        ediscovery: 'Document review / e-discovery'
+        contracts: 'Contract analysis / generation'
+        research: 'Legal research / case law'
+        risk: 'Risk assessment / compliance monitoring'
+        regulatory: 'Regulatory change tracking'
+        diligence: 'Due diligence'
+        litigation: 'Predictive litigation analytics'
+        client_comm: 'Client communication / intake'
+        not_yet: 'Not being used yet'
+        other: Other
+    m19_q1_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m19_q1_current_use[other]"]':
+            checked: true
+  2:
+    '#type': webform_wizard_page
+    '#title': '2'
+    m19_q2_human_judgment:
+      '#type': checkboxes
+      '#title': 'What legal/compliance work should require human attorney judgment?'
+      '#description': 'Check all that apply'
+      '#options':
+        strategic: 'Strategic legal advice'
+        courtroom: 'Courtroom advocacy / litigation'
+        negotiating: 'Negotiating complex deals'
+        ethical: 'Ethical gray areas'
+        counseling: 'Client counseling on sensitive matters'
+        interpreting: 'Interpreting ambiguous regulations'
+        privilege: 'Privilege determinations'
+        relationships: 'Attorney-client relationships'
+        all: 'All of the above'
+        none: 'None - AI can handle anything with oversight'
+        other: Other
+    m19_q2_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m19_q2_human_judgment[other]"]':
+            checked: true
+  3:
+    '#type': webform_wizard_page
+    '#title': '3'
+    m19_q3_confidence_nuance:
+      '#type': radios
+      '#title': "How confident are you in AI's ability to understand legal nuance?"
+      '#options':
+        1: 'Not confident'
+        2: 'Slightly confident'
+        3: 'Moderately confident'
+        4: 'Very confident'
+        5: 'Extremely confident'
+      '#required': true
+  4:
+    '#type': webform_wizard_page
+    '#title': '4'
+    m19_q4_biggest_concern:
+      '#type': checkboxes
+      '#title': "What's your biggest concern about AI in legal work?"
+      '#description': 'Check your top 2'
+      '#options':
+        hallucinating: 'AI "hallucinating" fake cases or precedents'
+        malpractice: 'Malpractice / professional liability'
+        unauthorized: 'Unauthorized practice of law issues'
+        confidentiality: 'Client confidentiality / privilege breaches'
+        over_reliance: 'Over-reliance reducing critical thinking'
+        bias: 'Bias in legal predictions/analysis'
+        regulatory: 'Regulatory uncertainty'
+        pressure: 'Competitive pressure to use untested tools'
+        other: Other
+      '#multiple': 2
+      '#required': true
+    m19_q4_other:
+      '#type': textfield
+      '#title': 'If other, please specify:'
+      '#states':
+        visible:
+          ':input[name="m19_q4_biggest_concern[other]"]':
+            checked: true
+  5:
+    '#type': webform_wizard_page
+    '#title': '5'
+    m19_q5_disclosure:
+      '#type': radios
+      '#title': 'Should AI-generated legal work be disclosed to clients/courts?'
+      '#options':
+        yes_always: 'Yes, always required'
+        yes_best: 'Yes, best practice even if not required'
+        only_material: 'Only if materially impacts the work'
+        only_asked: 'Only if the client/court asks'
+        no_responsible: 'No, lawyers are responsible for all work product'
+        unsure: 'Unsure / evolving area'
+      '#required': true
+  6:
+    '#type': webform_wizard_page
+    '#title': '6'
+    m19_q6_ethics:
+      '#type': radios
+      '#title': 'How is your firm/organization addressing AI ethics in legal practice?'
+      '#options':
+        clear_policies: 'Clear written policies in place'
+        developing: 'Discussions happening, policies in development'
+        ad_hoc: 'Ad hoc / case-by-case basis'
+        not_yet: 'Not addressing it yet'
+        dont_know: "Don't know"
+      '#required': true
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: ''
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: both
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_file_limit_message: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }
