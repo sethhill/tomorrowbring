@@ -20,7 +20,7 @@
         <h3{{ title_attributes.addClass('module-card__title') }}>
           {{ label }}
         </h3>
-        {% if content.field_duration %}
+        {% if content.field_duration and module_status != 'completed' %}
           <div class="module-card__duration">
             {{ content.field_duration }}
           </div>
