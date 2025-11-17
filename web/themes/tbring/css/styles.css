@@ -165,7 +165,8 @@ legend {
 }
 
 button,
-input[type="submit"] {
+input[type="submit"],
+.button {
   background-color: var(--color-deep-green);
   color: var(--color-white);
   font-family: "Banter Grotesk", sans-serif;
@@ -179,12 +180,14 @@ input[type="submit"] {
 }
 
 button:hover,
-input[type="submit"]:hover {
+input[type="submit"]:hover,
+.button:hover {
   background-color: var(--color-green);
 }
 
 button:focus,
-input[type="submit"]:focus {
+input[type="submit"]:focus,
+.button:focus {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
@@ -281,10 +284,6 @@ label {
   line-height: 1.5;
 }
 
-.form-actions {
-  margin-top: 3em;
-}
-
 .webform-progress-tracker {
   margin: 0;
   margin-bottom: 1em;
@@ -300,10 +299,12 @@ label {
 
 .progress-marker:after {
   background-color: white;
+  background-color: transparent;
 }
 
 .webform-progress-tracker .progress-step .progress-marker::after {
   background-color: var(--color-white);
+  background-color: transparent;
   height: 3px;
 }
 
@@ -322,11 +323,18 @@ label {
   background-color: var(--color-gold);
 }
 
+
 .webform-progress-tracker .progress-step.is-complete .progress-marker::after {
   height: 9px;
   margin-top: -3px;
+  background: linear-gradient(to right, var(--color-gold), var(--color-orange));
+}
+
+.webform-progress-tracker .progress-step.is-complete:has(+ .progress-step.is-complete) .progress-marker::after {
+  background: none;
   background-color: var(--color-gold);
 }
+
 
 .field--name-field-intro {
   font-size: 1.5em;
@@ -369,11 +377,11 @@ label {
 
 .rangeslider__handle,
 .rangeslider [data-thumb] {
-  background-color: var(--color-orange);
+  background-color: var(--color-deep-green);
 }
 .rangeslider__fill,
 .rangeslider [data-track-fill] {
-  background-color: var(--color-gold);
+  background: linear-gradient(to right, var(--color-green), var(--color-deep-green));
   height: 9px;
 }
 .rangeslider__track,
@@ -472,3 +480,14 @@ footer {
     font-variation-settings: "wdth" 140;
   }
 }
+
+.webform-submission-form > .form-wrapper {
+  background-color: var(--color-white);
+  padding: 1.5em 1.5em;
+  border-start-start-radius: 1em;
+  border-end-end-radius: 1em;
+}
+.webform-submission-form > .form-wrapper.form-actions {
+  background-color: transparent;
+}
+

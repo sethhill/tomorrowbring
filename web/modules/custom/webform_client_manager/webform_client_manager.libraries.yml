@@ -3,5 +3,6 @@ dashboard:
   css:
     theme:
       css/dashboard.css: {}
+      css/completion.css: {}
   js:
     js/dashboard.js: {}

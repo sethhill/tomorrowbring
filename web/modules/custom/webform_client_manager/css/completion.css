@@ -1,0 +1,11 @@
+.module-completion {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-start-start-radius: 1em;
+  border-end-end-radius: 1em;
+}
+
+.module-completion__header {
+  margin-bottom: 2rem;
+}

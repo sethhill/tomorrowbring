@@ -5,3 +5,12 @@ webform_client_manager.dashboard:
     _title: 'Your Dashboard'
   requirements:
     _user_is_logged_in: 'TRUE'
+
+webform_client_manager.module_completion:
+  path: '/module/completion/{webform_submission}'
+  defaults:
+    _controller: '\Drupal\webform_client_manager\Controller\ModuleCompletionController::view'
+    _title: 'Section Complete'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    webform_submission: \d+

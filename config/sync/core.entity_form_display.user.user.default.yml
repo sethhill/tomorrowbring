@@ -17,6 +17,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_client:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   language:
     weight: 1
     region: content
@@ -24,7 +34,7 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -33,5 +43,4 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden:
-  field_client: true
+hidden: {  }
