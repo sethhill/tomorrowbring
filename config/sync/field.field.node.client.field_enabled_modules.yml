@@ -1,17 +1,16 @@
-uuid: d94e7009-17fb-4c21-8dba-04a4712ae605
+uuid: 80603961-3945-4d03-ae94-3f1cb466a1fa
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.user.field_client
+    - field.storage.node.field_enabled_modules
     - node.type.client
-  module:
-    - user
-id: user.user.field_client
-field_name: field_client
-entity_type: user
-bundle: user
-label: Client
+    - node.type.module
+id: node.client.field_enabled_modules
+field_name: field_enabled_modules
+entity_type: node
+bundle: client
+label: 'Enabled Modules'
 description: ''
 required: false
 translatable: true
@@ -21,5 +20,5 @@ settings:
   handler: 'default:node'
   handler_settings:
     target_bundles:
-      client: client
+      module: module
 field_type: entity_reference

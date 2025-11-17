@@ -4,7 +4,6 @@ namespace Drupal\webform_client_manager;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\webform_client_manager\Entity\Client;
 
 /**
  * Service for managing webform client access and flow.
@@ -41,15 +40,15 @@ class WebformClientManager {
   /**
    * Get the client for the current user.
    *
-   * @return \Drupal\webform_client_manager\ClientInterface|null
-   *   The client entity or NULL.
+   * @return \Drupal\node\NodeInterface|null
+   *   The client node or NULL.
    */
   public function getCurrentUserClient() {
     $user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
 
     if ($user && $user->hasField('field_client') && !$user->get('field_client')->isEmpty()) {
       $client_id = $user->get('field_client')->target_id;
-      return $this->entityTypeManager->getStorage('client')->load($client_id);
+      return $this->entityTypeManager->getStorage('node')->load($client_id);
     }
 
     return NULL;
@@ -61,18 +60,110 @@ class WebformClientManager {
    * @param int $uid
    *   The user ID.
    *
-   * @return \Drupal\webform_client_manager\ClientInterface|null
-   *   The client entity or NULL.
+   * @return \Drupal\node\NodeInterface|null
+   *   The client node or NULL.
    */
   public function getUserClient($uid) {
     $user = $this->entityTypeManager->getStorage('user')->load($uid);
 
     if ($user && $user->hasField('field_client') && !$user->get('field_client')->isEmpty()) {
       $client_id = $user->get('field_client')->target_id;
-      return $this->entityTypeManager->getStorage('client')->load($client_id);
+      return $this->entityTypeManager->getStorage('node')->load($client_id);
     }
 
     return NULL;
+  }
+
+  /**
+   * Get enabled module IDs from a client node.
+   *
+   * @param \Drupal\node\NodeInterface $client
+   *   The client node.
+   *
+   * @return array
+   *   Array of module node IDs.
+   */
+  protected function getClientEnabledModules($client) {
+    if (!$client || !$client->hasField('field_enabled_modules')) {
+      return [];
+    }
+
+    $module_ids = [];
+    foreach ($client->get('field_enabled_modules') as $item) {
+      if (!empty($item->target_id)) {
+        $module_ids[] = $item->target_id;
+      }
+    }
+
+    return $module_ids;
+  }
+
+  /**
+   * Get sorted enabled module IDs from a client node.
+   *
+   * @param \Drupal\node\NodeInterface $client
+   *   The client node.
+   *
+   * @return array
+   *   Array of module node IDs sorted by field_number.
+   */
+  protected function getClientSortedEnabledModules($client) {
+    $modules = $this->getClientEnabledModules($client);
+
+    // Sort by extracting module number from node's field_number.
+    usort($modules, function($a, $b) {
+      $num_a = $this->extractModuleNumber($a);
+      $num_b = $this->extractModuleNumber($b);
+      return $num_a <=> $num_b;
+    });
+
+    return $modules;
+  }
+
+  /**
+   * Extract module number from Module node ID.
+   *
+   * @param int $nid
+   *   The Module node ID.
+   *
+   * @return int
+   *   The module number.
+   */
+  protected function extractModuleNumber($nid) {
+    // Load the Module node and get field_number value.
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+
+    if (!$node || $node->bundle() !== 'module') {
+      return 999;
+    }
+
+    // Get the module number from field_number.
+    if ($node->hasField('field_number') && !$node->get('field_number')->isEmpty()) {
+      return (int) $node->get('field_number')->value;
+    }
+
+    return 999;
+  }
+
+  /**
+   * Get completion redirect URL from a client node.
+   *
+   * @param \Drupal\node\NodeInterface $client
+   *   The client node.
+   *
+   * @return string|null
+   *   The redirect URL or NULL.
+   */
+  protected function getClientCompletionRedirectUrl($client) {
+    if (!$client || !$client->hasField('field_completion_redirect_url')) {
+      return NULL;
+    }
+
+    if ($client->get('field_completion_redirect_url')->isEmpty()) {
+      return NULL;
+    }
+
+    return $client->get('field_completion_redirect_url')->uri;
   }
 
   /**
@@ -96,7 +187,8 @@ class WebformClientManager {
       return FALSE;
     }
 
-    return in_array($nid, $client->getEnabledModules());
+    $enabled_modules = $this->getClientEnabledModules($client);
+    return in_array($nid, $enabled_modules);
   }
 
   /**
@@ -121,7 +213,7 @@ class WebformClientManager {
     }
 
     // Get enabled module node IDs.
-    $enabled_modules = $client->getEnabledModules();
+    $enabled_modules = $this->getClientEnabledModules($client);
 
     // Load module nodes and check their field_form values.
     if (!empty($enabled_modules)) {
@@ -154,7 +246,7 @@ class WebformClientManager {
       return NULL;
     }
 
-    $sorted_modules = $client->getSortedEnabledModules();
+    $sorted_modules = $this->getClientSortedEnabledModules($client);
     $current_index = array_search($current_nid, $sorted_modules);
 
     if ($current_index === FALSE) {
@@ -225,7 +317,7 @@ class WebformClientManager {
       return NULL;
     }
 
-    $sorted_modules = $client->getSortedEnabledModules();
+    $sorted_modules = $this->getClientSortedEnabledModules($client);
     $current_index = array_search($current_nid, $sorted_modules);
 
     if ($current_index === FALSE || $current_index === 0) {
@@ -291,7 +383,7 @@ class WebformClientManager {
       return FALSE;
     }
 
-    $sorted_modules = $client->getSortedEnabledModules();
+    $sorted_modules = $this->getClientSortedEnabledModules($client);
 
     if (empty($sorted_modules)) {
       return FALSE;
@@ -333,7 +425,7 @@ class WebformClientManager {
       return [];
     }
 
-    return $client->getSortedEnabledModules();
+    return $this->getClientSortedEnabledModules($client);
   }
 
   /**
@@ -377,7 +469,7 @@ class WebformClientManager {
       return NULL;
     }
 
-    $enabled_modules = $client->getEnabledModules();
+    $enabled_modules = $this->getClientEnabledModules($client);
 
     if (empty($enabled_modules)) {
       return NULL;
@@ -409,7 +501,7 @@ class WebformClientManager {
       return NULL;
     }
 
-    return $client->getCompletionRedirectUrl();
+    return $this->getClientCompletionRedirectUrl($client);
   }
 
 }

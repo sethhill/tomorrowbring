@@ -1,5 +1,1 @@
-entity.client.add_form:
-  route_name: 'entity.client.add_form'
-  title: 'Add Client'
-  appears_on:
-    - entity.client.collection
+# Client is now a content type - use standard node/add/client URL

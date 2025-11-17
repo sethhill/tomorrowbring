@@ -1,6 +1,1 @@
-entity.client.collection:
-  title: 'Clients'
-  route_name: entity.client.collection
-  description: 'Manage client webform access'
-  parent: system.admin_structure
-  weight: 10
+# Client is now a content type - accessible via standard Content menu (admin/content)

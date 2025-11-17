@@ -1,0 +1,11 @@
+uuid: cffe678c-464d-447b-a4b6-a4d8771ff17a
+langcode: en
+status: true
+dependencies: {  }
+name: Client
+type: client
+description: 'A client organization with access to specific modules.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true

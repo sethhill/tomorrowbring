@@ -159,7 +159,7 @@ class DashboardController extends ControllerBase {
 
     return [
       '#theme' => 'webform_client_dashboard',
-      '#client_name' => $client->label(),
+      '#client_name' => $client->getTitle(),
       '#modules' => $modules,
       '#total_modules' => $total,
       '#completed_modules' => $completed,
