@@ -1001,18 +1001,21 @@ class RoleImpactAnalysis {
 
     if (!empty($irreplaceable)) {
       $first = reset($irreplaceable);
-      $parts[] = "Your expertise in {$first['skill']} provides irreplaceable value that AI cannot replicate.";
+      $parts[] = "Your expertise in " . strtolower($first['skill']) . " provides irreplaceable value that AI cannot replicate";
     }
 
     if (!empty($multipliers)) {
-      $parts[] = "You can leverage AI to amplify your capabilities in " . implode(', ', array_slice($multipliers, 0, 2)) . ".";
+      $items = array_map('strtolower', array_slice($multipliers, 0, 2));
+      $last = array_pop($items);
+      $list = empty($items) ? $last : implode(', ', $items) . ' and ' . $last;
+      $parts[] = "You can leverage AI to amplify your capabilities in " . $list;
     }
 
     if (!empty($context)) {
       $parts[] = reset($context);
     }
 
-    return implode(' ', $parts);
+    return implode('. ', $parts) . '.';
   }
 
   /**
@@ -1189,8 +1192,8 @@ class RoleImpactAnalysis {
       'focus' => 'Getting Started',
       'activities' => [
         'Set up account with one AI tool (ChatGPT or similar)',
-        'Try 3-5 simple prompts related to your work',
-        'Notice what works and what doesn\'t',
+        'Try 3–5 simple prompts related to your work',
+        'Notice what works and what doesn’t',
       ],
     ];
 
@@ -1211,7 +1214,7 @@ class RoleImpactAnalysis {
     $timeline['month_2_3'] = [
       'focus' => 'Building Proficiency',
       'activities' => [
-        'Expand AI use to 2-3 different task types',
+        'Expand AI use to 2–3 different task types',
         'Develop your personal prompt library',
         'Share learnings with a colleague',
       ],
@@ -1232,13 +1235,13 @@ class RoleImpactAnalysis {
   protected function getBarrierStrategies($barrier) {
     $strategies = [
       'no_time' => [
-        'Replace, don\'t add: Use AI for tasks you\'re already doing, rather than treating learning as extra work',
+        'Replace, don’t add: Use AI for tasks you’re already doing, rather than treating learning as extra work',
         'Start with your most time-consuming task and use AI to speed it up',
         'Just 15 minutes a day will build competency faster than you expect',
       ],
       'dont_know_start' => [
-        'Start here: Open ChatGPT and type "Help me write a professional email to..." for your next email',
-        'You don\'t need to understand how AI works to use it effectively',
+        'Start here: Open ChatGPT and type “Help me write a professional email to…” for your next email',
+        'You don’t need to understand how AI works to use it effectively',
         'This report provides your specific starting point',
       ],
       'no_access' => [
@@ -1248,12 +1251,12 @@ class RoleImpactAnalysis {
       ],
       'overwhelming' => [
         'Focus on ONE tool and ONE use case to start',
-        'You don\'t need to learn everything - just what helps YOUR work',
+        'You don’t need to learn everything - just what helps YOUR work',
         'Every expert started exactly where you are now',
       ],
       'not_priority' => [
         'Build the business case: Track time savings and productivity gains',
-        'Show, don\'t ask: Demonstrate results from free tools first',
+        'Show, don’t ask: Demonstrate results from free tools first',
         'Frame it as professional development that benefits the team',
       ],
       'need_support' => [

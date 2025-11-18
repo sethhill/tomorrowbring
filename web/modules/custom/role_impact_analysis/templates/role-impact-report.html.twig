@@ -43,18 +43,25 @@
       <h3>{{ 'Your Task Profile'|t }}</h3>
       <div class="task-percentages">
         <div class="task-bar">
-          <div class="bar-segment help-me" style="width: {{ report.current_state.task_profile.help_me_percentage }}%">
-            <span class="bar-label">{{ report.current_state.task_profile.help_me_percentage }}% {{ 'Help me'|t }}</span>
-          </div>
-          <div class="bar-segment keep-it" style="width: {{ report.current_state.task_profile.keep_it_percentage }}%">
-            <span class="bar-label">{{ report.current_state.task_profile.keep_it_percentage }}% {{ 'Keep it'|t }}</span>
-          </div>
-          <div class="bar-segment unsure" style="width: {{ report.current_state.task_profile.unsure_percentage }}%">
-            <span class="bar-label">{{ report.current_state.task_profile.unsure_percentage }}% {{ 'Unsure'|t }}</span>
-          </div>
+          {% if report.current_state.task_profile.help_me_percentage > 0 %}
+            <div class="bar-segment help-me" style="width: {{ report.current_state.task_profile.help_me_percentage }}%">
+              <span class="bar-label">{{ 'Help me'|t }}</span>
+            </div>
+          {% endif %}
+          {% if report.current_state.task_profile.keep_it_percentage > 0 %}
+            <div class="bar-segment keep-it" style="width: {{ report.current_state.task_profile.keep_it_percentage }}%">
+              <span class="bar-label">{{ 'Keep it'|t }}</span>
+            </div>
+          {% endif %}
+          {% if report.current_state.task_profile.unsure_percentage > 0 %}
+            <div class="bar-segment unsure" style="width: {{ report.current_state.task_profile.unsure_percentage }}%">
+              <span class="bar-label">{{ 'Unsure'|t }}</span>
+            </div>
+          {% endif %}
         </div>
       </div>
-      <p class="task-interpretation">
+      <div class="task-interpretation">
+      <p>
         {% if report.current_state.task_profile.help_me_percentage > 60 %}
           {{ 'You have identified many tasks where AI could help. This is an opportunity to multiply your productivity.'|t }}
         {% elseif report.current_state.task_profile.help_me_percentage > 40 %}
@@ -71,15 +78,13 @@
     <h2>{{ 'Your Displacement Risk'|t }}</h2>
 
     <div class="risk-header">
-      <div class="risk-badge risk-badge-{{ report.displacement_risk.risk_level }}">
-        {{ report.displacement_risk.risk_level|upper }}
-      </div>
-      <div class="risk-score">
-        <div class="score-number">{{ report.displacement_risk.risk_score }}</div>
+      <div class="risk-score risk-score-{{ report.displacement_risk.risk_level }}">
         <div class="score-label">{{ 'Risk Score'|t }}</div>
+        <div class="score-number">{{ report.displacement_risk.risk_score }}</div>
       </div>
       <div class="urgency-level">
-        <strong>{{ 'Urgency'|t }}:</strong> {{ report.displacement_risk.urgency|capitalize }}
+        <div class="urgency-label">{{ 'Urgency'|t }}</div>
+        <div class="urgency-value">{{ report.displacement_risk.urgency|capitalize }}</div>
       </div>
     </div>
 
@@ -116,7 +121,7 @@
             {% for task in report.displacement_risk.task_breakdown.keep %}
               <li class="task-item">
                 <span class="task-name">{{ task.label }}</span>
-                <span class="value-badge">{{ 'Your advantage'|t }}</span>
+                <span class="value-badge">{{ 'Your advantage'|t }} </span>
               </li>
             {% endfor %}
           </ul>
@@ -231,7 +236,7 @@
 
   {# Section 5: Value Proposition #}
   <section class="report-section value-proposition">
-    <h2>{{ 'Your AI-Era Value Proposition'|t }}</h2>
+    <h2>{{ 'Your Value Proposition'|t }}</h2>
 
     <div class="value-summary">
       <p class="summary-text">{{ report.value_proposition.summary }}</p>
@@ -243,7 +248,7 @@
           <h4>{{ 'Your Irreplaceable Skills'|t }}</h4>
           <ul>
             {% for item in report.value_proposition.irreplaceable_skills %}
-              <li><strong>{{ item.skill }}</strong> for {{ item.task }}</li>
+              <li><strong>{{ item.skill }}</strong> for {{ item.task|lower }}</li>
             {% endfor %}
           </ul>
         </div>
@@ -252,12 +257,12 @@
       {% if report.value_proposition.ai_multipliers %}
         <div class="value-component">
           <h4>{{ 'Your AI Multipliers'|t }}</h4>
+          <p class="component-note">{{ 'These skills make AI more effective in your hands:'|t }}</p>
           <ul>
             {% for skill in report.value_proposition.ai_multipliers %}
               <li>{{ skill }}</li>
             {% endfor %}
           </ul>
-          <p class="component-note">{{ 'These skills make AI more effective in your hands.'|t }}</p>
         </div>
       {% endif %}
     </div>
@@ -296,7 +301,7 @@
       </div>
 
       <div class="timeline-item six-month">
-        <h3>{{ '6-12 Month Strategy'|t }}</h3>
+        <h3>{{ '6–12 Month Strategy'|t }}</h3>
         <ul>
           {% for action in report.action_plan.six_month %}
             <li>{{ action }}</li>
@@ -341,7 +346,6 @@
   </section>
 
   <div class="report-footer">
-    <p>{{ 'This analysis is based on your assessment responses as of'|t }} {{ report.generated_at|date('F j, Y') }}. {{ 'Reassess every 6 months as AI capabilities and your role evolve.'|t }}</p>
     <div class="report-actions">
       <a href="/dashboard" class="button">{{ 'Back to Dashboard'|t }}</a>
     </div>
