@@ -1,0 +1,354 @@
+{#
+/**
+ * @file
+ * Template for Role Impact Analysis Report.
+ *
+ * Available variables:
+ * - report: Complete analysis report data
+ *   - current_state
+ *   - displacement_risk
+ *   - skill_evolution
+ *   - evolution_path
+ *   - value_proposition
+ *   - action_plan
+ *   - learning_path
+ */
+#}
+
+{{ attach_library('role_impact_analysis/role_impact_report') }}
+
+<div class="role-impact-report">
+  <div class="report-header">
+    <h1>{{ 'Your Role Impact Analysis'|t }}</h1>
+    <p class="report-date">{{ 'Generated'|t }}: {{ report.generated_at|date('F j, Y') }}</p>
+  </div>
+
+  {# Section 1: Current State #}
+  <section class="report-section current-state">
+    <h2>{{ 'Your Role Today'|t }}</h2>
+
+    <div class="current-state-summary">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-label">{{ 'Role Category'|t }}</div>
+          <div class="stat-value">{{ report.current_state.role_category|replace({'_': ' '})|capitalize }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">{{ 'AI Usage Frequency'|t }}</div>
+          <div class="stat-value">{{ report.current_state.ai_frequency|replace({'_': ' '})|capitalize }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">{{ 'Comfort Level'|t }}</div>
+          <div class="stat-value">{{ report.current_state.ai_comfort }}/5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-profile">
+      <h3>{{ 'Your Task Profile'|t }}</h3>
+      <div class="task-percentages">
+        <div class="task-bar">
+          <div class="bar-segment help-me" style="width: {{ report.current_state.task_profile.help_me_percentage }}%">
+            <span class="bar-label">{{ report.current_state.task_profile.help_me_percentage }}% {{ 'Help me'|t }}</span>
+          </div>
+          <div class="bar-segment keep-it" style="width: {{ report.current_state.task_profile.keep_it_percentage }}%">
+            <span class="bar-label">{{ report.current_state.task_profile.keep_it_percentage }}% {{ 'Keep it'|t }}</span>
+          </div>
+          <div class="bar-segment unsure" style="width: {{ report.current_state.task_profile.unsure_percentage }}%">
+            <span class="bar-label">{{ report.current_state.task_profile.unsure_percentage }}% {{ 'Unsure'|t }}</span>
+          </div>
+        </div>
+      </div>
+      <p class="task-interpretation">
+        {% if report.current_state.task_profile.help_me_percentage > 60 %}
+          {{ 'You have identified many tasks where AI could help. This is an opportunity to multiply your productivity.'|t }}
+        {% elseif report.current_state.task_profile.help_me_percentage > 40 %}
+          {{ 'You have a balanced mix of tasks - some AI can help with, some you want to keep.'|t }}
+        {% else %}
+          {{ 'You prefer to keep most tasks yourself. Focus on understanding where AI can augment your work without replacing your judgment.'|t }}
+        {% endif %}
+      </p>
+    </div>
+  </section>
+
+  {# Section 2: Displacement Risk #}
+  <section class="report-section displacement-risk risk-{{ report.displacement_risk.risk_level }}">
+    <h2>{{ 'Your Displacement Risk'|t }}</h2>
+
+    <div class="risk-header">
+      <div class="risk-badge risk-badge-{{ report.displacement_risk.risk_level }}">
+        {{ report.displacement_risk.risk_level|upper }}
+      </div>
+      <div class="risk-score">
+        <div class="score-number">{{ report.displacement_risk.risk_score }}</div>
+        <div class="score-label">{{ 'Risk Score'|t }}</div>
+      </div>
+      <div class="urgency-level">
+        <strong>{{ 'Urgency'|t }}:</strong> {{ report.displacement_risk.urgency|capitalize }}
+      </div>
+    </div>
+
+    <div class="task-breakdown">
+      <h3>{{ 'Task-by-Task Analysis'|t }}</h3>
+
+      {% if report.displacement_risk.task_breakdown.help %}
+        <div class="task-category high-automation">
+          <h4 class="category-title">{{ 'Tasks AI Can Help With (You marked "Help me")'|t }}</h4>
+          <ul class="task-list">
+            {% for task in report.displacement_risk.task_breakdown.help %}
+              <li class="task-item automation-{{ task.automation_potential }}">
+                <span class="task-name">{{ task.label }}</span>
+                <span class="automation-badge">
+                  {% if task.automation_potential == 'immediate' %}
+                    {{ 'AI can do this NOW'|t }}
+                  {% elseif task.automation_potential == 'high' %}
+                    {{ 'AI-assisted'|t }}
+                  {% else %}
+                    {{ 'Monitor AI capability'|t }}
+                  {% endif %}
+                </span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if report.displacement_risk.task_breakdown.keep %}
+        <div class="task-category low-automation">
+          <h4 class="category-title">{{ 'Your Defensible Tasks (You marked "Keep it")'|t }}</h4>
+          <ul class="task-list">
+            {% for task in report.displacement_risk.task_breakdown.keep %}
+              <li class="task-item">
+                <span class="task-name">{{ task.label }}</span>
+                <span class="value-badge">{{ 'Your advantage'|t }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+          <p class="category-note">{{ 'These tasks require your unique judgment, relationships, or expertise. Double down on these.'|t }}</p>
+        </div>
+      {% endif %}
+
+      {% if report.displacement_risk.task_breakdown.unsure %}
+        <div class="task-category medium-automation">
+          <h4 class="category-title">{{ 'Tasks to Explore (You marked "Unsure")'|t }}</h4>
+          <ul class="task-list">
+            {% for task in report.displacement_risk.task_breakdown.unsure %}
+              <li class="task-item">
+                <span class="task-name">{{ task.label }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+          <p class="category-note">{{ 'Experiment with AI on these tasks. Learn the boundaries between AI assistance and human judgment.'|t }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# Section 3: Skill Evolution #}
+  <section class="report-section skill-evolution">
+    <h2>{{ 'Your Skill Evolution'|t }}</h2>
+
+    {% if report.skill_evolution.increasing_value %}
+      <div class="skill-category increasing-value">
+        <h3>{{ 'Skills Increasing in Value'|t }}</h3>
+        <p class="category-intro">{{ 'Double down on these skills:'|t }}</p>
+        <ul class="skill-list">
+          {% for skill in report.skill_evolution.increasing_value %}
+            <li class="skill-item">
+              <strong>{{ skill.skill }}</strong>
+              <p class="skill-reason">{{ skill.reason }}</p>
+              <p class="skill-action">{{ 'Action'|t }}: {{ skill.action }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if report.skill_evolution.emerging_value %}
+      <div class="skill-category emerging-value">
+        <h3>{{ 'Skills to Acquire'|t }}</h3>
+        <p class="category-intro">{{ 'These skills will be critical for your future:'|t }}</p>
+        <ul class="skill-list">
+          {% for skill in report.skill_evolution.emerging_value %}
+            <li class="skill-item">
+              <strong>{{ skill.skill }}</strong>
+              <p class="skill-reason">{{ 'Why it matters'|t }}: {{ skill.reason }}</p>
+              <p class="skill-action">{{ 'How to learn'|t }}: {{ skill.action }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </section>
+
+  {# Section 4: Evolution Path #}
+  <section class="report-section evolution-path">
+    <h2>{{ 'Your Evolution Path'|t }}</h2>
+
+    <div class="path-header">
+      <h3 class="path-name">{{ report.evolution_path.path }}</h3>
+      <div class="path-transition">
+        <div class="from-state">
+          <span class="label">{{ 'From'|t }}:</span>
+          <span class="value">{{ report.evolution_path.from }}</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="to-state">
+          <span class="label">{{ 'To'|t }}:</span>
+          <span class="value">{{ report.evolution_path.to }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="path-description">
+      <p>{{ report.evolution_path.description }}</p>
+    </div>
+
+    <div class="path-details">
+      <div class="positioning">
+        <h4>{{ 'Why You Are Well-Positioned'|t }}</h4>
+        <ul>
+          {% for point in report.evolution_path.positioning %}
+            <li>{{ point }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="obstacles">
+        <h4>{{ 'Potential Obstacles'|t }}</h4>
+        <ul>
+          {% for obstacle in report.evolution_path.obstacles %}
+            <li>{{ obstacle }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="actions">
+        <h4>{{ 'Next Steps'|t }}</h4>
+        <ul>
+          {% for action in report.evolution_path.actions %}
+            <li>{{ action }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {# Section 5: Value Proposition #}
+  <section class="report-section value-proposition">
+    <h2>{{ 'Your AI-Era Value Proposition'|t }}</h2>
+
+    <div class="value-summary">
+      <p class="summary-text">{{ report.value_proposition.summary }}</p>
+    </div>
+
+    <div class="value-components">
+      {% if report.value_proposition.irreplaceable_skills %}
+        <div class="value-component">
+          <h4>{{ 'Your Irreplaceable Skills'|t }}</h4>
+          <ul>
+            {% for item in report.value_proposition.irreplaceable_skills %}
+              <li><strong>{{ item.skill }}</strong> for {{ item.task }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if report.value_proposition.ai_multipliers %}
+        <div class="value-component">
+          <h4>{{ 'Your AI Multipliers'|t }}</h4>
+          <ul>
+            {% for skill in report.value_proposition.ai_multipliers %}
+              <li>{{ skill }}</li>
+            {% endfor %}
+          </ul>
+          <p class="component-note">{{ 'These skills make AI more effective in your hands.'|t }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# Section 6: Action Plan #}
+  <section class="report-section action-plan">
+    <h2>{{ 'Your Action Plan'|t }}</h2>
+
+    <div class="timeline">
+      <div class="timeline-item immediate">
+        <h3>{{ 'Immediate (This Week)'|t }}</h3>
+        <ul>
+          {% for action in report.action_plan.immediate %}
+            <li>{{ action }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="timeline-item thirty-day">
+        <h3>{{ '30-Day Plan'|t }}</h3>
+        <ul>
+          {% for action in report.action_plan.thirty_day %}
+            <li>{{ action }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="timeline-item ninety-day">
+        <h3>{{ '90-Day Goals'|t }}</h3>
+        <ul>
+          {% for action in report.action_plan.ninety_day %}
+            <li>{{ action }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="timeline-item six-month">
+        <h3>{{ '6-12 Month Strategy'|t }}</h3>
+        <ul>
+          {% for action in report.action_plan.six_month %}
+            <li>{{ action }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {# Section 7: Learning Path #}
+  <section class="report-section learning-path">
+    <h2>{{ 'Your Learning Path'|t }}</h2>
+
+    <div class="learning-approach">
+      <h3>{{ 'Recommended Approach'|t }}</h3>
+      <p>{{ report.learning_path.recommended_approach }}</p>
+    </div>
+
+    <div class="learning-timeline">
+      <h3>{{ 'Learning Timeline'|t }}</h3>
+      {% for period, details in report.learning_path.timeline %}
+        <div class="timeline-period">
+          <h4>{{ details.focus }}</h4>
+          <ul>
+            {% for activity in details.activities %}
+              <li>{{ activity }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="barrier-strategies">
+      <h3>{{ 'Overcoming Your Biggest Barrier'|t }}</h3>
+      <p><strong>{{ 'Your barrier'|t }}:</strong> {{ report.learning_path.learning_profile.biggest_barrier|replace({'_': ' '})|capitalize }}</p>
+      <ul>
+        {% for strategy in report.learning_path.barrier_strategies %}
+          <li>{{ strategy }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <div class="report-footer">
+    <p>{{ 'This analysis is based on your assessment responses as of'|t }} {{ report.generated_at|date('F j, Y') }}. {{ 'Reassess every 6 months as AI capabilities and your role evolve.'|t }}</p>
+    <div class="report-actions">
+      <a href="/dashboard" class="button">{{ 'Back to Dashboard'|t }}</a>
+    </div>
+  </div>
+</div>

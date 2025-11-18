@@ -18,12 +18,22 @@
     {% endif %}
   </div>
 
-  <h2>Modules</h2>
+  {% if analysis_available %}
+    <h2>Your Results</h2>
+
+    <div class="analysis-callout">
+      <h3>{{ 'Role Impact Analysis'|t }}</h3>
+      <p>{{ 'Based on your completed assessments, we have generated a personalized analysis of how AI will impact your role and what you should do about it.'|t }}</p>
+      <a href="/analysis/role-impact" class="button button-primary">{{ 'View Your Analysis'|t }}</a>
+    </div>
+  {% endif %}
+
+  <h2>Learning About You</h2>
 
   <div class="dashboard-progress">
     <div class="progress-info">
       <span class="progress-text">{{ 'Your Progress'|t }}</span>
-      <span class="progress-count">{{ completed_modules }} / {{ total_modules }} {{ 'modules completed'|t }}</span>
+      <span class="progress-count">{{ completed_modules }} / {{ total_modules }} {{ 'sections completed'|t }}</span>
     </div>
     <div class="progress-bar">
       <div class="progress-bar-fill" style="width: {{ progress_percentage }}%"></div>
@@ -31,7 +41,10 @@
     <span class="progress-percentage">{{ progress_percentage }}%</span>
   </div>
 
+
   <div class="dashboard-modules">
     {{ modules_view }}
   </div>
+
+
 </div>

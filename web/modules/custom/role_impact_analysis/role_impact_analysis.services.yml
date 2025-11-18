@@ -1,0 +1,4 @@
+services:
+  role_impact_analysis.analysis_service:
+    class: Drupal\role_impact_analysis\RoleImpactAnalysis
+    arguments: ['@entity_type.manager', '@current_user', '@webform_client_manager.manager']

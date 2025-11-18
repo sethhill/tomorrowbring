@@ -5,6 +5,7 @@ namespace Drupal\webform_client_manager\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\webform_client_manager\WebformClientManager;
+use Drupal\role_impact_analysis\RoleImpactAnalysis;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
@@ -28,16 +29,26 @@ class DashboardController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
+   * The role impact analysis service.
+   *
+   * @var \Drupal\role_impact_analysis\RoleImpactAnalysis
+   */
+  protected $analysisService;
+
+  /**
    * Constructs a DashboardController object.
    *
    * @param \Drupal\webform_client_manager\WebformClientManager $client_manager
    *   The webform client manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\role_impact_analysis\RoleImpactAnalysis $analysis_service
+   *   The role impact analysis service.
    */
-  public function __construct(WebformClientManager $client_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(WebformClientManager $client_manager, EntityTypeManagerInterface $entity_type_manager, RoleImpactAnalysis $analysis_service) {
     $this->clientManager = $client_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->analysisService = $analysis_service;
   }
 
   /**
@@ -46,7 +57,8 @@ class DashboardController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('webform_client_manager.manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('role_impact_analysis.analysis_service')
     );
   }
 
@@ -105,6 +117,9 @@ class DashboardController extends ControllerBase {
 
     $progress_percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
 
+    // Check if role impact analysis is available
+    $analysis_available = $this->analysisService->hasMinimumData();
+
     // Build the view with enabled module NIDs as arguments.
     $view = \Drupal\views\Views::getView('client_modules');
     $view->setDisplay('block_1');
@@ -118,6 +133,7 @@ class DashboardController extends ControllerBase {
       '#completed_modules' => $completed,
       '#progress_percentage' => $progress_percentage,
       '#modules_view' => $view_render,
+      '#analysis_available' => $analysis_available,
       '#attached' => [
         'library' => [
           'webform_client_manager/dashboard',

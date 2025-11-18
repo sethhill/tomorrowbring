@@ -109,6 +109,7 @@ function webform_client_manager_theme($existing, $type, $theme, $path) {
         'total_modules' => 0,
         'completed_modules' => 0,
         'progress_percentage' => 0,
+        'analysis_available' => FALSE,
       ],
     ],
     'webform_module_completion' => [
