@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_client_manager\Commands;
+namespace Drupal\client_webform\Commands;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;

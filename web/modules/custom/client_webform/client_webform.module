@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains webform_client_manager.module.
+ * Contains client_webform.module.
  */
 
 use Drupal\Core\Access\AccessResult;
@@ -16,7 +16,7 @@ use Drupal\node\NodeInterface;
 /**
  * Implements hook_node_access().
  */
-function webform_client_manager_node_access(NodeInterface $node, $operation, AccountInterface $account) {
+function client_webform_node_access(NodeInterface $node, $operation, AccountInterface $account) {
   // Only control access for Module nodes.
   if ($node->bundle() !== 'module') {
     return AccessResult::neutral();
@@ -32,8 +32,8 @@ function webform_client_manager_node_access(NodeInterface $node, $operation, Acc
     return AccessResult::neutral();
   }
 
-  /** @var \Drupal\webform_client_manager\WebformClientManager $manager */
-  $manager = \Drupal::service('webform_client_manager.manager');
+  /** @var \Drupal\client_webform\WebformClientManager $manager */
+  $manager = \Drupal::service('client_webform.manager');
 
   // Check if user has access to this module.
   if ($manager->userHasAccessToModule($node->id())) {
@@ -47,7 +47,7 @@ function webform_client_manager_node_access(NodeInterface $node, $operation, Acc
 /**
  * Implements hook_webform_access().
  */
-function webform_client_manager_webform_access(WebformInterface $webform, $operation, AccountInterface $account) {
+function client_webform_webform_access(WebformInterface $webform, $operation, AccountInterface $account) {
   // Only control access for 'create' operation (submitting the form).
   if ($operation !== 'create') {
     return AccessResult::neutral();
@@ -58,8 +58,8 @@ function webform_client_manager_webform_access(WebformInterface $webform, $opera
     return AccessResult::neutral();
   }
 
-  /** @var \Drupal\webform_client_manager\WebformClientManager $manager */
-  $manager = \Drupal::service('webform_client_manager.manager');
+  /** @var \Drupal\client_webform\WebformClientManager $manager */
+  $manager = \Drupal::service('client_webform.manager');
 
   // Check if user has access to this webform (via Module nodes).
   if ($manager->userHasAccessToWebform($webform->id())) {
@@ -73,7 +73,7 @@ function webform_client_manager_webform_access(WebformInterface $webform, $opera
 /**
  * Implements hook_user_insert().
  */
-function webform_client_manager_user_insert(UserInterface $account) {
+function client_webform_user_insert(UserInterface $account) {
   // Assign member role to new users (except uid 1).
   if ($account->id() != 1) {
     $account->addRole('member');
@@ -82,29 +82,13 @@ function webform_client_manager_user_insert(UserInterface $account) {
 }
 
 /**
- * Implements hook_user_login().
- */
-function webform_client_manager_user_login(UserInterface $account) {
-  // Set destination for members to dashboard after login.
-  if ($account->hasRole('member') && !$account->hasRole('administrator')) {
-    // Store the redirect in the session for the event subscriber.
-    $request_stack = \Drupal::service('request_stack');
-    $request = $request_stack->getCurrentRequest();
-    if ($request && !$request->query->has('destination')) {
-      $request->query->set('destination', '/dashboard');
-    }
-  }
-}
-
-/**
  * Implements hook_theme().
  */
-function webform_client_manager_theme($existing, $type, $theme, $path) {
+function client_webform_theme($existing, $type, $theme, $path) {
   return [
     'webform_module_completion' => [
       'variables' => [
         'module_title' => NULL,
-        'dashboard_url' => NULL,
         'next_module_url' => NULL,
         'has_next_module' => FALSE,
       ],
@@ -115,7 +99,7 @@ function webform_client_manager_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_views_data_alter().
  */
-function webform_client_manager_views_data_alter(array &$data) {
+function client_webform_views_data_alter(array &$data) {
   // Add custom sort handler for module completion status.
   $data['node_field_data']['module_completion_sort'] = [
     'title' => t('Module Completion Status'),
@@ -131,7 +115,7 @@ function webform_client_manager_views_data_alter(array &$data) {
 /**
  * Implements template_preprocess_node().
  */
-function webform_client_manager_preprocess_node(&$variables) {
+function client_webform_preprocess_node(&$variables) {
   $node = $variables['node'];
   $view_mode = $variables['view_mode'];
 

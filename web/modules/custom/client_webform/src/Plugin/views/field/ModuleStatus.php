@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_client_manager\Plugin\views\field;
+namespace Drupal\client_webform\Plugin\views\field;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;

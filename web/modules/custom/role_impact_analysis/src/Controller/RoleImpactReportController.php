@@ -48,7 +48,7 @@ class RoleImpactReportController extends ControllerBase {
     // Check if user has completed minimum required modules
     if (!$this->analysisService->hasMinimumData()) {
       $this->messenger()->addWarning($this->t('You need to complete at least the Task Analysis and Skills Gap modules before viewing your Role Impact Analysis.'));
-      return $this->redirect('webform_client_manager.dashboard');
+      return $this->redirect('client_dashboard.dashboard');
     }
 
     // Generate the report
@@ -56,7 +56,7 @@ class RoleImpactReportController extends ControllerBase {
 
     if (!$report) {
       $this->messenger()->addError($this->t('Unable to generate your analysis report. Please ensure you have completed the required assessment modules.'));
-      return $this->redirect('webform_client_manager.dashboard');
+      return $this->redirect('client_dashboard.dashboard');
     }
 
     return [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_client_manager;
+namespace Drupal\client_webform;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;

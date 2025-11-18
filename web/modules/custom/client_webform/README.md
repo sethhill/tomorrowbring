@@ -1,4 +1,4 @@
-# Webform Client Manager
+# Client Webform
 
 This module provides client-specific webform access control and automated flow between webform modules.
 
@@ -14,7 +14,7 @@ This module provides client-specific webform access control and automated flow b
 
 1. Enable the module:
    ```bash
-   ddev drush en webform_client_manager -y
+   ddev drush en client_webform -y
    ```
 
 2. The module will automatically create a `field_client` field on the User entity.
@@ -81,7 +81,7 @@ You can also add handlers manually via the UI:
 
 ### Services
 
-- **webform_client_manager.manager**: Main service for managing client-webform relationships
+- **client_webform.manager**: Main service for managing client-webform relationships
   - `getCurrentUserClient()`: Get the current user's client
   - `userHasAccessToWebform($webform_id)`: Check if user can access a webform
   - `getNextWebform($current_webform_id)`: Get the next webform in sequence
@@ -102,16 +102,12 @@ You can also add handlers manually via the UI:
 2. Create a test user and assign them to the client
 3. Log in as the test user
 4. Verify:
-   - Redirected to `/dashboard` after login
-   - Dashboard shows progress bar and module cards
    - Can access modules 1, 2, and 10
    - Cannot access other modules (access denied)
    - After completing module 1, automatically redirected to module 2
-   - Dashboard shows module 1 as completed with a checkmark
    - After completing module 2, automatically redirected to module 10
    - Clicking "Review" on completed modules shows previous submission
    - After completing module 10, redirected to completion URL or confirmation page
-   - Dashboard shows 100% completion
 
 ## Permissions
 

@@ -1,7 +1,7 @@
-webform_client_manager.module_completion:
+client_webform.module_completion:
   path: '/module/completion/{webform_submission}'
   defaults:
-    _controller: '\Drupal\webform_client_manager\Controller\ModuleCompletionController::view'
+    _controller: '\Drupal\client_webform\Controller\ModuleCompletionController::view'
     _title: ''
   requirements:
     _user_is_logged_in: 'TRUE'

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webform_client_manager\Plugin\views\sort;
+namespace Drupal\client_webform\Plugin\views\sort;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;

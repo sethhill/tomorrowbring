@@ -4,7 +4,7 @@ namespace Drupal\role_impact_analysis;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\webform_client_manager\WebformClientManager;
+use Drupal\client_webform\WebformClientManager;
 
 /**
  * Role Impact Analysis Service.
@@ -31,7 +31,7 @@ class RoleImpactAnalysis {
   /**
    * The webform client manager service.
    *
-   * @var \Drupal\webform_client_manager\WebformClientManager
+   * @var \Drupal\client_webform\WebformClientManager
    */
   protected $clientManager;
 
@@ -42,7 +42,7 @@ class RoleImpactAnalysis {
    *   The entity type manager.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
-   * @param \Drupal\webform_client_manager\WebformClientManager $client_manager
+   * @param \Drupal\client_webform\WebformClientManager $client_manager
    *   The webform client manager service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, WebformClientManager $client_manager) {
@@ -74,7 +74,7 @@ class RoleImpactAnalysis {
       ->condition('completed', 0, '>')
       ->sort('changed', 'DESC')
       ->range(0, 1)
-      ->accessCheck(TRUE);
+      ->accessCheck(FALSE);
 
     $sids = $query->execute();
 

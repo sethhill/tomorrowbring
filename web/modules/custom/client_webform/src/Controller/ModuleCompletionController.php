@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\webform_client_manager\Controller;
+namespace Drupal\client_webform\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\webform_client_manager\WebformClientManager;
+use Drupal\client_webform\WebformClientManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\webform\Entity\WebformSubmission;
@@ -18,7 +18,7 @@ class ModuleCompletionController extends ControllerBase {
   /**
    * The webform client manager.
    *
-   * @var \Drupal\webform_client_manager\WebformClientManager
+   * @var \Drupal\client_webform\WebformClientManager
    */
   protected $clientManager;
 
@@ -32,7 +32,7 @@ class ModuleCompletionController extends ControllerBase {
   /**
    * Constructs a ModuleCompletionController object.
    *
-   * @param \Drupal\webform_client_manager\WebformClientManager $client_manager
+   * @param \Drupal\client_webform\WebformClientManager $client_manager
    *   The webform client manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
@@ -47,7 +47,7 @@ class ModuleCompletionController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('webform_client_manager.manager'),
+      $container->get('client_webform.manager'),
       $container->get('entity_type.manager')
     );
   }
@@ -86,8 +86,7 @@ class ModuleCompletionController extends ControllerBase {
     $next_webform_id = $this->clientManager->getNextWebform($webform_id);
     $has_next_module = !empty($next_webform_id);
 
-    // Build URLs for the buttons.
-    $dashboard_url = Url::fromRoute('client_dashboard.dashboard');
+    // Build URL for the next module button.
     $next_module_url = NULL;
 
     if ($has_next_module) {
@@ -101,14 +100,8 @@ class ModuleCompletionController extends ControllerBase {
     return [
       '#theme' => 'webform_module_completion',
       '#module_title' => $module_title,
-      '#dashboard_url' => $dashboard_url,
       '#next_module_url' => $next_module_url,
       '#has_next_module' => $has_next_module,
-      '#attached' => [
-        'library' => [
-          'webform_client_manager/completion',
-        ],
-      ],
     ];
   }
 

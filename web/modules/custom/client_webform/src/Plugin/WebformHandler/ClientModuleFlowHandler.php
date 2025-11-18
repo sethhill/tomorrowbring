@@ -1,12 +1,12 @@
 <?php
 
-namespace Drupal\webform_client_manager\Plugin\WebformHandler;
+namespace Drupal\client_webform\Plugin\WebformHandler;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\WebformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\webform_client_manager\WebformClientManager;
+use Drupal\client_webform\WebformClientManager;
 use Drupal\Core\Url;
 
 /**
@@ -26,7 +26,7 @@ class ClientModuleFlowHandler extends WebformHandlerBase {
   /**
    * The webform client manager.
    *
-   * @var \Drupal\webform_client_manager\WebformClientManager
+   * @var \Drupal\client_webform\WebformClientManager
    */
   protected $clientManager;
 
@@ -35,7 +35,7 @@ class ClientModuleFlowHandler extends WebformHandlerBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->clientManager = $container->get('webform_client_manager.manager');
+    $instance->clientManager = $container->get('client_webform.manager');
     return $instance;
   }
 
@@ -44,7 +44,7 @@ class ClientModuleFlowHandler extends WebformHandlerBase {
    */
   public function confirmForm(array &$form, FormStateInterface $form_state, WebformSubmissionInterface $webform_submission) {
     // Redirect to our custom module completion page.
-    $url = Url::fromRoute('webform_client_manager.module_completion', [
+    $url = Url::fromRoute('client_webform.module_completion', [
       'webform_submission' => $webform_submission->id(),
     ]);
     $form_state->setRedirectUrl($url);

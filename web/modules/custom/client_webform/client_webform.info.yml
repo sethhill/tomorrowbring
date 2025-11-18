@@ -1,6 +1,6 @@
-name: Webform Client Manager
+name: Client Webform
 type: module
-description: 'Manages client-specific webform module access and flow'
+description: 'Manages client-specific webform access control and module flow'
 core_version_requirement: ^11
 package: Custom
 dependencies:

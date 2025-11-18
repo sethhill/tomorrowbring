@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the webform_client_manager module.
+ * Install, update and uninstall functions for the client_webform module.
  */
 
 use Drupal\field\Entity\FieldStorageConfig;
@@ -12,7 +12,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_install().
  */
-function webform_client_manager_install() {
+function client_webform_install() {
   // Ensure the member role exists.
   if (!Role::load('member')) {
     $role = Role::create([
@@ -48,7 +48,7 @@ function webform_client_manager_install() {
       'entity_type' => 'user',
       'type' => 'entity_reference',
       'settings' => [
-        'target_type' => 'client',
+        'target_type' => 'node',
       ],
       'cardinality' => 1,
     ])->save();
@@ -64,9 +64,14 @@ function webform_client_manager_install() {
       'description' => 'The client this user belongs to.',
       'required' => FALSE,
       'settings' => [
-        'handler' => 'default',
+        'handler' => 'default:node',
         'handler_settings' => [
-          'target_bundles' => NULL,
+          'target_bundles' => ['client' => 'client'],
+          'sort' => [
+            'field' => 'title',
+            'direction' => 'ASC',
+          ],
+          'auto_create' => FALSE,
         ],
       ],
     ])->save();
@@ -109,7 +114,7 @@ function webform_client_manager_install() {
 /**
  * Implements hook_uninstall().
  */
-function webform_client_manager_uninstall() {
+function client_webform_uninstall() {
   // Delete field config.
   if ($field = FieldConfig::loadByName('user', 'user', 'field_client')) {
     $field->delete();

@@ -1,0 +1,6 @@
+services:
+  client_webform.commands:
+    class: \Drupal\client_webform\Commands\WebformClientManagerCommands
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: drush.command }

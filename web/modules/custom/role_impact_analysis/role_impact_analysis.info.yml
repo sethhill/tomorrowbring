@@ -7,4 +7,4 @@ dependencies:
   - drupal:user
   - drupal:views
   - webform:webform
-  - webform_client_manager:webform_client_manager
+  - client_webform:client_webform

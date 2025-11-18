@@ -1,4 +1,0 @@
-services:
-  webform_client_manager.manager:
-    class: Drupal\webform_client_manager\WebformClientManager
-    arguments: ['@current_user', '@entity_type.manager']
