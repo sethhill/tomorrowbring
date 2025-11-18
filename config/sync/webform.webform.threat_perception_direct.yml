@@ -61,10 +61,10 @@ elements: |-
       '#title': 'Which parts of your job do you think AI could realistically do within 2-5 years?'
       '#options':
         less_25: 'Less than 25% of my tasks'
-        range_25_50: 'About 25-50% of my tasks'
-        range_50_75: 'About 50-75% of my tasks'
+        range_25_50: 'About 25–50% of my tasks'
+        range_50_75: 'About 50–75% of my tasks'
         more_75: 'More than 75% of my tasks'
-        unsure: "Unsure / Don't know"
+        unsure: "Unsure / Don’t know"
       '#required': true
   4:
     '#type': webform_wizard_page
@@ -75,12 +75,12 @@ elements: |-
       '#description': 'Rank your top 3'
       '#options':
         reskilling: 'Commitment to reskilling/upskilling employees'
-        clear_communication: "Clear communication about AI's role"
+        clear_communication: "Clear communication about AI’s role"
         transparency: 'Transparency about job changes'
         tool_not_replacement: 'Seeing AI as a tool, not a replacement'
         learning_time: 'Guaranteed time for learning'
         acknowledgment: 'Leadership acknowledging concerns'
-        transition_plan: "Knowing there's a plan for transitions"
+        transition_plan: "Knowing there’s a plan for transitions"
         career_paths: 'Career path options that include AI skills'
         other: Other
       '#multiple': 3
@@ -100,9 +100,9 @@ elements: |-
       '#title': 'Have you had a conversation with your manager about AI and your role?'
       '#options':
         yes_helpful: 'Yes, and it was helpful'
-        yes_not_helpful: "Yes, but it didn't address my concerns"
-        no_want_to: "No, but I'd like to"
-        no_not_ready: "No, and I'm not ready to"
+        yes_not_helpful: "Yes, but it didn’t address my concerns"
+        no_want_to: "No, but I’d like to"
+        no_not_ready: "No, and I’m not ready to"
         not_applicable: 'Not applicable'
       '#required': true
 css: ''

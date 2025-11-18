@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=favorite,home,search,settings");
+
 @font-face {
   font-family: "FitVariable";
   src: url("../fonts/FitVariable-VF.woff2") format("woff2");
@@ -29,6 +31,7 @@
   --color-green-light: #c7c37e;
   --color-gold-light: rgba(244, 161, 39, 0.3);
   --color-gray-medium: #666;
+  --color-gray-light: #f0f0f0;
 }
 
 body {
@@ -152,17 +155,58 @@ fieldset {
   margin: 0;
 }
 
+fieldset + fieldset {
+  margin-top: 1em;
+}
+
 legend {
   font-size: 1.25em;
   font-weight: bold;
   margin-bottom: 0.5em;
 }
 
+textarea {
+  border: 2px solid var(--color-deep-green);
+  font-size: 1.25em;
+  color: var(--color-deep-green);
+  width: 100%;
+  border-start-start-radius: 0.5em;
+  border-end-end-radius: 0.5em;
+  padding: 0.5em;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="password"],
+input[type="date"] {
+  border: 2px solid var(--color-deep-green);
+  font-size: 1.25em;
+  color: var(--color-deep-green);
+  width: 100%;
+  border-start-start-radius: 0.5em;
+  border-end-end-radius: 0.5em;
+  padding: 0.5em;
+}
+
 .webform-type-range-slider > label,
-.webform-type-webform-likert > label {
+.webform-type-webform-likert > label,
+.webform-type-textarea > label {
   font-size: 1.25em;
   font-weight: bold;
   margin-bottom: 0.5em;
+}
+
+.webform-likert-table td {
+  padding: 0.25em 0.5em;
+  vertical-align: top;
+}
+
+.webform-likert-table tr:nth-child(even) {
+  background-color: var(--color-gold-light);
 }
 
 button,
@@ -390,8 +434,8 @@ label {
 }
 .rangeslider__track,
 .rangeslider [data-track] {
-  background-color: var(--color-white);
-  height: 3px;
+  background-color: var(--color-gray-light);
+  height: 9px;
 }
 
 header {
@@ -502,4 +546,20 @@ footer {
 
 legend + .fieldset-wrapper:has(.description) {
   margin-top: -0.5em;
+}
+
+input[type="submit"].webform-button--next {
+  padding-right: 2.5em;
+  background-image: url('../images/arrow_forward_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg');
+  background-repeat: no-repeat;
+  background-position: right 0.75em center;
+  background-size: 1.5em 1.5em;
+}
+
+input[type="submit"].webform-button--previous {
+  padding-left: 2.5em;
+  background-image: url('../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg');
+  background-repeat: no-repeat;
+  background-position: left 0.75em center;
+  background-size: 1.5em 1.5em;
 }

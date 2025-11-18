@@ -20,9 +20,9 @@ elements: |-
       '#type': radios
       '#title': 'How quickly is AI changing your industry/field?'
       '#options':
-        very_slowly: 'Very slowly - barely noticeable'
-        gradually: 'Gradually - but not urgent'
         rapidly: 'Rapidly - hard to keep up'
+        gradually: 'Gradually - but not urgent'
+        very_slowly: 'Very slowly - barely noticeable'
         unsure: "Unsure / Don't know"
       '#required': true
   2:
@@ -32,11 +32,11 @@ elements: |-
       '#type': radios
       '#title': 'I feel equipped to adapt as AI tools evolve'
       '#options':
-        1: 'Strongly disagree'
-        2: Disagree
-        3: Neutral
-        4: Agree
         5: 'Strongly agree'
+        4: Agree
+        3: Neutral
+        2: Disagree
+        1: 'Strongly disagree'
       '#required': true
   3:
     '#type': webform_wizard_page
@@ -65,10 +65,10 @@ elements: |-
         training: 'Hands-on training and practice'
         examples: 'Seeing real examples in my role'
         communication: 'Clear communication from leadership'
-        strategy: "Knowing the company's AI strategy"
+        strategy: "Knowing the company’s AI strategy"
         time: 'Time to experiment without pressure'
         peers: 'Talking with peers about it'
-        stability: "Understanding what won't change"
+        stability: "Understanding what won’t change"
         other: Other
       '#multiple': 3
       '#required': true

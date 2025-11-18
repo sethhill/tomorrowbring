@@ -62,7 +62,7 @@ elements: |-
     m9_q3_competitive_advantage:
       '#type': textarea
       '#title': 'What competitive advantage could AI give you personally in your role?'
-      '#description': 'Example: "I could analyze customer data 10x faster and spot trends earlier"'
+      '#description': 'Example: “I could analyze customer data 10x faster and spot trends earlier”'
       '#rows': 3
       '#maxlength': 300
   4:
@@ -70,7 +70,7 @@ elements: |-
     '#title': '4'
     m9_q4_human_skills:
       '#type': checkboxes
-      '#title': "What unique human skills do you bring that AI can't replicate?"
+      '#title': "What unique human skills do you bring that AI can’t replicate?"
       '#description': 'Check all that apply'
       '#options':
         relationships: 'Building deep relationships'

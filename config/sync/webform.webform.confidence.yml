@@ -20,31 +20,31 @@ elements: |-
       '#type': radios
       '#title': 'Anxiety: How anxious do you feel about AI at work?'
       '#options':
-        1: 'Not anxious'
-        2: 'Slightly anxious'
-        3: 'Moderately anxious'
-        4: 'Very anxious'
         5: 'Extremely anxious'
+        4: 'Very anxious'
+        3: 'Moderately anxious'
+        2: 'Slightly anxious'
+        1: 'Not anxious'
       '#required': true
     m7_q1_excitement:
       '#type': radios
       '#title': 'Excitement: How excited are you about AI at work?'
       '#options':
-        1: 'Not excited'
-        2: 'Slightly excited'
-        3: 'Moderately excited'
-        4: 'Very excited'
         5: 'Extremely excited'
+        4: 'Very excited'
+        3: 'Moderately excited'
+        2: 'Slightly excited'
+        1: 'Not excited'
       '#required': true
     m7_q1_confidence:
       '#type': radios
       '#title': 'Confidence: How confident do you feel about working with AI?'
       '#options':
-        1: 'Not confident'
-        2: 'Slightly confident'
-        3: 'Moderately confident'
-        4: 'Very confident'
         5: 'Extremely confident'
+        4: 'Very confident'
+        3: 'Moderately confident'
+        2: 'Slightly confident'
+        1: 'Not confident'
       '#required': true
   2:
     '#type': webform_wizard_page
@@ -67,11 +67,11 @@ elements: |-
       '#type': radios
       '#title': 'I feel supported by leadership on AI transformation'
       '#options':
-        1: 'Strongly disagree'
-        2: Disagree
-        3: Neutral
-        4: Agree
         5: 'Strongly agree'
+        4: Agree
+        3: Neutral
+        2: Disagree
+        1: 'Strongly disagree'
       '#required': true
   4:
     '#type': webform_wizard_page
@@ -80,11 +80,11 @@ elements: |-
       '#type': radios
       '#title': 'I trust that my company will handle AI implementation thoughtfully'
       '#options':
-        1: 'Strongly disagree'
-        2: Disagree
-        3: Neutral
-        4: Agree
         5: 'Strongly agree'
+        4: Agree
+        3: Neutral
+        2: Disagree
+        1: 'Strongly disagree'
       '#required': true
   5:
     '#type': webform_wizard_page

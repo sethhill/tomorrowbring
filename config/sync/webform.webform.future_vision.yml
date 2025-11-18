@@ -69,7 +69,7 @@ elements: |-
         somewhat: 'Somewhat concerned'
         not_concerned: 'Not concerned'
         not_applicable: 'Not applicable (early in career)'
-        havent_thought: "Haven't thought about it"
+        havent_thought: "Haven’t thought about it"
       '#required': true
   4:
     '#type': webform_wizard_page
@@ -88,15 +88,16 @@ elements: |-
     '#type': webform_wizard_page
     '#title': '5'
     m14_q5_threat_opportunity:
-      '#type': range
+      '#type': range_slider
       '#title': 'Do you see AI as a threat or opportunity for your career?'
+      '#description': '<div class="range"><span class="range-min">Major threat</span> <span class="range-max">Major opportunity</span></div>'
+      '#description_display': before
+      '#required': true
       '#min': 1
-      '#max': 10
-      '#step': 1
+      '#max': 9
       '#range__output': true
       '#min_text': 'Major threat (1)'
-      '#max_text': 'Major opportunity (10)'
-      '#required': true
+      '#max_text': 'Major opportunity (9)'
   6:
     '#type': webform_wizard_page
     '#title': '6'
