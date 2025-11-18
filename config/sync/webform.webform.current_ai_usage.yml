@@ -56,19 +56,19 @@ elements: |-
       '#type': radios
       '#title': 'How comfortable are you using AI tools?'
       '#options':
-        1: 'Very uncomfortable'
-        2: 'Somewhat uncomfortable'
-        3: Neutral
-        4: 'Somewhat comfortable'
         5: 'Very comfortable'
+        4: 'Somewhat comfortable'
+        3: Neutral
+        2: 'Somewhat uncomfortable'
+        1: 'Very uncomfortable'
       '#required': true
   4:
     '#type': webform_wizard_page
     '#title': '4'
     m1_q4_biggest_win:
       '#type': textarea
-      '#title': "What's your biggest win using AI so far?"
-      '#description': 'We want to know what''s working! Example: "Drafting emails 10x faster" or "Finally understanding complex data"'
+      '#title': "What’s your biggest win using AI so far?"
+      '#description': 'We want to know what’s working! Example: “Drafting emails 10x faster” or “Finally understanding complex data”'
       '#rows': 3
       '#maxlength': 200
   5:
@@ -76,7 +76,7 @@ elements: |-
     '#title': '5'
     m1_q5_frustrations:
       '#type': textarea
-      '#title': "What's been most frustrating about AI tools?"
+      '#title': "What’s been most frustrating about AI tools?"
       '#rows': 3
       '#maxlength': 200
 css: ''

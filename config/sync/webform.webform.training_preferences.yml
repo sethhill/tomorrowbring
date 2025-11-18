@@ -19,9 +19,8 @@ elements: |-
     m6_q1_learning_style_rank:
       '#type': webform_likert
       '#title': 'Rank your preferred learning styles'
-      '#description': 'Drag to reorder your top 3'
       '#questions':
-        video: 'Video tutorials (YouTube-style, 5-15 min)'
+        video: 'Video tutorials (YouTube-style, 5–15 min)'
         labs: 'Hands-on labs / sandboxes'
         live: 'Live instructor-led sessions'
         peer: 'Peer learning circles / study groups'
@@ -32,9 +31,9 @@ elements: |-
         case: 'Case studies from my industry'
         certification: 'Certification programs'
       '#answers':
-        1: '1st choice'
-        2: '2nd choice'
-        3: '3rd choice'
+        1: 'Least preferred'
+        2: 'Neutral'
+        3: 'Highly preferred'
   2:
     '#type': webform_wizard_page
     '#title': '2'
@@ -55,7 +54,7 @@ elements: |-
       '#title': 'What format works best for your schedule?'
       '#description': 'Check all that work'
       '#options':
-        daily_micro: 'Daily 10-15 min micro-sessions'
+        daily_micro: 'Daily 10–15 min micro-sessions'
         weekly_hour: 'Weekly 1-hour blocks'
         monthly_half: 'Monthly half-day deep dives'
         quarterly_boot: 'Quarterly intensive boot camps'
@@ -71,7 +70,7 @@ elements: |-
         real_work: 'Real work projects (learning by doing)'
         sandbox: 'Safe sandbox environments (practice without consequences)'
         mix: 'Mix of both'
-        no_practice: "I don't need practice, just documentation"
+        no_practice: "I don’t need practice, just documentation"
       '#required': true
   5:
     '#type': webform_wizard_page
@@ -89,7 +88,7 @@ elements: |-
         competitive: 'Staying competitive in job market'
         curiosity: 'Personal curiosity / growth'
         bonus: 'Bonus or compensation tied to it'
-        already_motivated: "Nothing - I'm already motivated"
+        already_motivated: "Nothing - I’m already motivated"
       '#multiple': 3
       '#required': true
   6:
@@ -102,10 +101,10 @@ elements: |-
       '#options':
         too_busy: 'Too busy with regular work'
         no_support: 'No support from manager'
-        not_relevant: "Training isn't relevant to my role"
+        not_relevant: "Training isn’t relevant to my role"
         learn_by_doing: 'I learn better by doing than formal training'
         technical: 'Technical barriers (no access, tools, etc.)'
-        no_value: "Don't see the value / ROI"
+        no_value: "Don’t see the value / ROI"
         already_competent: 'Already feel competent'
         other: Other
     m6_q6_other:

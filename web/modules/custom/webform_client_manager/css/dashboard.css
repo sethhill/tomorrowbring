@@ -46,7 +46,7 @@
 }
 
 .progress-bar {
-  height: 8px;
+  height: 9px;
   background: #e5e7eb;
   border-radius: 8px;
   overflow: hidden;
@@ -55,7 +55,7 @@
 
 .progress-bar-fill {
   height: 100%;
-  background: var(--color-green);
+  background: linear-gradient(to right, var(--color-gold), var(--color-orange));
   transition: width 0.3s ease;
   border-radius: 9999px;
 }
@@ -65,6 +65,7 @@
   text-align: right;
   font-weight: 600;
   font-size: 1.125rem;
+  color: var(--color-orange);
 }
 
 .module-card {
@@ -100,6 +101,7 @@
 
 .module-card__title {
   font-size: 1.25em;
+  font-weight: normal;
 }
 
 .module-card__duration {

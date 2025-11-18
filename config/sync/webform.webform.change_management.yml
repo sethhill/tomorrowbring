@@ -21,7 +21,7 @@ elements: |-
       '#title': 'How would you describe your general attitude toward workplace change?'
       '#options':
         early_adopter: 'Early adopter - I love trying new things first'
-        open: "Open - I'll try new things once proven"
+        open: "Open - I’ll try new things once proven"
         cautious: 'Cautious - I need to see benefits first'
         resistant: 'Resistant - I prefer established ways'
         depends: 'Depends on the change'
@@ -79,7 +79,7 @@ elements: |-
         meaningful: 'I have more time for meaningful work'
         productive: 'I feel more productive'
         secure: 'My job is more secure (AI makes me better)'
-        learning: "I'm learning valuable new skills"
+        learning: "I’m learning valuable new skills"
         competitive: 'Company is more competitive'
         balance: 'Work-life balance improves'
         excited: "I'm excited to come to work"
