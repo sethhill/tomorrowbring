@@ -1,0 +1,11 @@
+name: Client Dashboard
+type: module
+description: 'Provides a member dashboard for client module progress tracking'
+core_version_requirement: ^11
+package: Custom
+dependencies:
+  - drupal:user
+  - drupal:views
+  - webform:webform
+  - webform_client_manager:webform_client_manager
+  - role_impact_analysis:role_impact_analysis

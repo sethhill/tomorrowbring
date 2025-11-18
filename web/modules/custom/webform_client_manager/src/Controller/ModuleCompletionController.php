@@ -87,7 +87,7 @@ class ModuleCompletionController extends ControllerBase {
     $has_next_module = !empty($next_webform_id);
 
     // Build URLs for the buttons.
-    $dashboard_url = Url::fromRoute('webform_client_manager.dashboard');
+    $dashboard_url = Url::fromRoute('client_dashboard.dashboard');
     $next_module_url = NULL;
 
     if ($has_next_module) {
@@ -106,7 +106,7 @@ class ModuleCompletionController extends ControllerBase {
       '#has_next_module' => $has_next_module,
       '#attached' => [
         'library' => [
-          'webform_client_manager/dashboard',
+          'webform_client_manager/completion',
         ],
       ],
     ];

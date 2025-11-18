@@ -1,11 +1,3 @@
-webform_client_manager.dashboard:
-  path: '/dashboard'
-  defaults:
-    _controller: '\Drupal\webform_client_manager\Controller\DashboardController::view'
-    _title: 'Your Dashboard'
-  requirements:
-    _user_is_logged_in: 'TRUE'
-
 webform_client_manager.module_completion:
   path: '/module/completion/{webform_submission}'
   defaults:

@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains client_dashboard.module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function client_dashboard_theme($existing, $type, $theme, $path) {
+  return [
+    'client_dashboard' => [
+      'variables' => [
+        'client_name' => NULL,
+        'modules' => [],
+        'modules_view' => NULL,
+        'total_modules' => 0,
+        'completed_modules' => 0,
+        'progress_percentage' => 0,
+        'analysis_available' => FALSE,
+      ],
+    ],
+  ];
+}
