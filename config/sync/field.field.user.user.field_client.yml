@@ -1,4 +1,4 @@
-uuid: d94e7009-17fb-4c21-8dba-04a4712ae605
+uuid: 5301cd4e-0278-4fc1-9e11-fefe626cd105
 langcode: en
 status: true
 dependencies:
@@ -12,7 +12,7 @@ field_name: field_client
 entity_type: user
 bundle: user
 label: Client
-description: ''
+description: 'The client this user belongs to.'
 required: false
 translatable: true
 default_value: {  }
@@ -22,4 +22,8 @@ settings:
   handler_settings:
     target_bundles:
       client: client
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
 field_type: entity_reference

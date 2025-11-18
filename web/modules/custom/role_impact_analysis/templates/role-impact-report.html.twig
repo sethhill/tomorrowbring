@@ -18,11 +18,6 @@
 {{ attach_library('role_impact_analysis/role_impact_report') }}
 
 <div class="role-impact-report">
-  <div class="report-header">
-    <h1>{{ 'Your Role Impact Analysis'|t }}</h1>
-    <p class="report-date">{{ 'Generated'|t }}: {{ report.generated_at|date('F j, Y') }}</p>
-  </div>
-
   {# Section 1: Current State #}
   <section class="report-section current-state">
     <h2>{{ 'Your Role Today'|t }}</h2>
@@ -93,14 +88,14 @@
 
       {% if report.displacement_risk.task_breakdown.help %}
         <div class="task-category high-automation">
-          <h4 class="category-title">{{ 'Tasks AI Can Help With (You marked "Help me")'|t }}</h4>
+          <h4 class="category-title">{{ 'Tasks AI Can Help With (You said “Help me”)'|t }}</h4>
           <ul class="task-list">
             {% for task in report.displacement_risk.task_breakdown.help %}
               <li class="task-item automation-{{ task.automation_potential }}">
                 <span class="task-name">{{ task.label }}</span>
                 <span class="automation-badge">
                   {% if task.automation_potential == 'immediate' %}
-                    {{ 'AI can do this NOW'|t }}
+                    {{ 'AI can do this now'|t }}
                   {% elseif task.automation_potential == 'high' %}
                     {{ 'AI-assisted'|t }}
                   {% else %}
@@ -115,7 +110,8 @@
 
       {% if report.displacement_risk.task_breakdown.keep %}
         <div class="task-category low-automation">
-          <h4 class="category-title">{{ 'Your Defensible Tasks (You marked "Keep it")'|t }}</h4>
+          <h4 class="category-title">{{ 'Your Defensible Tasks (You said “Keep it”)'|t }}</h4>
+          <p class="category-note">{{ 'These tasks require your unique judgment, relationships, or expertise. Double down on these.'|t }}</p>
           <ul class="task-list">
             {% for task in report.displacement_risk.task_breakdown.keep %}
               <li class="task-item">
@@ -124,13 +120,13 @@
               </li>
             {% endfor %}
           </ul>
-          <p class="category-note">{{ 'These tasks require your unique judgment, relationships, or expertise. Double down on these.'|t }}</p>
         </div>
       {% endif %}
 
       {% if report.displacement_risk.task_breakdown.unsure %}
         <div class="task-category medium-automation">
-          <h4 class="category-title">{{ 'Tasks to Explore (You marked "Unsure")'|t }}</h4>
+          <h4 class="category-title">{{ 'Tasks to Explore (You said “Unsure”)'|t }}</h4>
+          <p class="category-note">{{ 'Experiment with AI on these tasks. Learn the boundaries between AI assistance and human judgment.'|t }}</p>
           <ul class="task-list">
             {% for task in report.displacement_risk.task_breakdown.unsure %}
               <li class="task-item">
@@ -138,7 +134,6 @@
               </li>
             {% endfor %}
           </ul>
-          <p class="category-note">{{ 'Experiment with AI on these tasks. Learn the boundaries between AI assistance and human judgment.'|t }}</p>
         </div>
       {% endif %}
     </div>

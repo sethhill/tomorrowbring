@@ -27,11 +27,15 @@
   --color-orange: rgba(229, 119, 30, 1);
   --color-white: rgba(255, 255, 255, 1);
   --color-black: rgba(0, 0, 0, 1);
-  --color-green-light: rgba(163, 167, 72, 0.5);
-  --color-green-light: #c7c37e;
-  --color-gold-light: rgba(244, 161, 39, 0.3);
+  --color-green-light: rgb(199, 195, 126);
+  --color-gold-light: rgba(244, 161, 39, 0.1);
   --color-gray-medium: #666;
   --color-gray-light: #f0f0f0;
+
+  --color-indicator-green: rgb(107, 167, 72);
+  --color-indicator-orange: rgba(229, 119, 30, 1);
+  --color-indicator-red: rgb(200, 39, 34);
+  --color-indicator-yellow: rgb(207, 187, 5);
 }
 
 body {
@@ -562,4 +566,18 @@ input[type="submit"].webform-button--previous {
   background-repeat: no-repeat;
   background-position: left 0.75em center;
   background-size: 1.5em 1.5em;
+}
+
+h2 {
+  color: var(--color-deep-green);
+  text-align: center;
+}
+h3 {
+  color: var(--color-deep-green);
+  font-size: 1.5em;
+  text-align: center;
+}
+h4 {
+  font-size: 1.25em;
+  color: var(--color-deep-green);
 }

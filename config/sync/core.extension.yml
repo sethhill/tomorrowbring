@@ -3,6 +3,8 @@ _core:
 module:
   block: 0
   block_content: 0
+  client_dashboard: 0
+  client_webform: 0
   dblog: 0
   dynamic_page_cache: 0
   field: 0
@@ -19,6 +21,7 @@ module:
   path: 0
   path_alias: 0
   range_slider: 0
+  role_impact_analysis: 0
   system: 0
   taxonomy: 0
   text: 0
@@ -26,7 +29,6 @@ module:
   user: 0
   views_ui: 0
   webform: 0
-  webform_client_manager: 0
   webform_ui: 0
   pathauto: 1
   views: 10
