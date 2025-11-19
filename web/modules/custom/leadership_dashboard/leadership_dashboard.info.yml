@@ -1,0 +1,11 @@
+name: 'Leadership Dashboard'
+type: module
+description: 'Provides aggregated analytics and insights for organizational leaders'
+core_version_requirement: ^11
+package: 'Tomorrow Bring'
+dependencies:
+  - drupal:user
+  - drupal:node
+  - drupal:webform
+  - client_webform
+  - role_impact_analysis

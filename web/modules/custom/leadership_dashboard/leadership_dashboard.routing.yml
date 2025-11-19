@@ -1,0 +1,7 @@
+leadership_dashboard.dashboard:
+  path: '/leadership/dashboard'
+  defaults:
+    _controller: '\Drupal\leadership_dashboard\Controller\LeadershipDashboardController::dashboard'
+    _title: 'Leadership Dashboard'
+  requirements:
+    _permission: 'view leadership dashboard'

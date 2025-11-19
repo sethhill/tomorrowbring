@@ -1,0 +1,4 @@
+services:
+  leadership_dashboard.analytics:
+    class: Drupal\leadership_dashboard\LeadershipAnalyticsService
+    arguments: ['@entity_type.manager', '@database', '@client_webform.manager', '@role_impact_analysis.analysis_service']

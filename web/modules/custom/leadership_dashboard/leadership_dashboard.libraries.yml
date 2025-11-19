@@ -1,0 +1,16 @@
+chartjs:
+  version: 4.4.1
+  js:
+    https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js: { type: external, minified: true }
+
+leadership_dashboard:
+  version: VERSION
+  css:
+    theme:
+      css/leadership-dashboard.css: {}
+  js:
+    js/leadership-dashboard.js: {}
+  dependencies:
+    - leadership_dashboard/chartjs
+    - core/drupal
+    - core/drupalSettings

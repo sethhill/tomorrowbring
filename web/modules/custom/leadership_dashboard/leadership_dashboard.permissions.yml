@@ -1,0 +1,4 @@
+view leadership dashboard:
+  title: 'View Leadership Dashboard'
+  description: 'Access the leadership analytics dashboard with aggregated team data'
+  restrict access: true

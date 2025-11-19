@@ -13,6 +13,7 @@ module:
   filter: 0
   gin_toolbar: 0
   image: 0
+  leadership_dashboard: 0
   link: 0
   media: 0
   mysql: 0

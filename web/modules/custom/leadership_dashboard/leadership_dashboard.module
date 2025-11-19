@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Leadership Dashboard module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function leadership_dashboard_theme($existing, $type, $theme, $path) {
+  return [
+    'leadership_dashboard' => [
+      'variables' => [
+        'client_name' => NULL,
+        'context_label' => NULL,
+        'departments' => [],
+        'current_department' => NULL,
+        'total_users' => 0,
+        'risk_data' => [],
+        'readiness_data' => [],
+        'culture_data' => [],
+        'quick_wins' => [],
+        'risk_areas' => [],
+        'heat_map_data' => [],
+        'roi_scenarios' => [],
+      ],
+      'template' => 'leadership-dashboard',
+    ],
+  ];
+}

@@ -1,0 +1,20 @@
+uuid: 00000000-0000-0000-0000-000000000002
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_department
+  module:
+    - user
+id: user.user.field_department
+field_name: field_department
+entity_type: user
+bundle: user
+label: Department
+description: 'The department or team this user belongs to.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

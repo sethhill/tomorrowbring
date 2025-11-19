@@ -1,0 +1,328 @@
+{#
+/**
+ * @file
+ * Leadership Dashboard template.
+ *
+ * Available variables:
+ * - client_name: The client organization name.
+ * - context_label: Current filter context (department or "All Departments").
+ * - departments: Array of departments with user counts.
+ * - current_department: Currently selected department filter.
+ * - total_users: Total number of users in current view.
+ * - risk_data: Aggregated risk metrics.
+ * - readiness_data: Aggregated readiness metrics.
+ * - culture_data: Culture indicator metrics.
+ * - quick_wins: Quick wins identification data.
+ * - risk_areas: Risk areas identification data.
+ * - heat_map_data: Department heat map data.
+ * - roi_scenarios: ROI projection scenarios.
+ */
+#}
+
+<div class="leadership-dashboard">
+
+  {# Header #}
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1>Leadership Dashboard</h1>
+      <p class="client-name">{{ client_name }}</p>
+    </div>
+
+    {# Department Filter #}
+    <div class="department-filter">
+      <label for="dept-select">Filter by Department:</label>
+      <select id="dept-select" onchange="window.location.href = '/leadership/dashboard?department=' + this.value">
+        <option value="all" {% if current_department == 'all' %}selected{% endif %}>All Departments</option>
+        {% for dept_name, dept_info in departments %}
+          <option value="{{ dept_name }}" {% if current_department == dept_name %}selected{% endif %}>
+            {{ dept_name }} ({{ dept_info.user_count }} users)
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  {# Context Bar #}
+  <div class="context-bar">
+    <span class="context-label">Viewing: <strong>{{ context_label }}</strong></span>
+    <span class="user-count">{{ total_users }} users analyzed</span>
+  </div>
+
+  {# Key Metrics Overview #}
+  <div class="metrics-overview">
+    <div class="metric-card risk-overview">
+      <h3>Overall Risk</h3>
+      <div class="metric-value risk-{{ risk_data.risk_distribution.high > risk_data.risk_distribution.low ? 'high' : (risk_data.risk_distribution.medium > risk_data.risk_distribution.low ? 'medium' : 'low') }}">
+        {{ risk_data.avg_risk_score }}
+      </div>
+      <div class="metric-label">Average Risk Score</div>
+      <div class="metric-detail">
+        {{ risk_data.high_risk_percentage }}% high risk users
+      </div>
+    </div>
+
+    <div class="metric-card readiness-overview">
+      <h3>Readiness</h3>
+      <div class="metric-value">
+        {{ readiness_data.avg_skill_level }}/5
+      </div>
+      <div class="metric-label">Average Skill Level</div>
+      <div class="metric-detail">
+        {{ readiness_data.tool_access_percentage }}% have tool access
+      </div>
+    </div>
+
+    <div class="metric-card culture-overview">
+      <h3>Culture Health</h3>
+      <div class="metric-value confidence-{{ readiness_data.avg_confidence >= 4 ? 'high' : (readiness_data.avg_confidence >= 3 ? 'medium' : 'low') }}">
+        {{ readiness_data.avg_confidence }}/5
+      </div>
+      <div class="metric-label">Average Confidence</div>
+      <div class="metric-detail">
+        {{ culture_data.change_fatigue_score }}% change fatigue
+      </div>
+    </div>
+
+    <div class="metric-card quick-wins-overview">
+      <h3>Quick Wins</h3>
+      <div class="metric-value wins-count">
+        {{ quick_wins.count }}
+      </div>
+      <div class="metric-label">High Potential Users</div>
+      <div class="metric-detail">
+        {{ quick_wins.percentage }}% of total
+      </div>
+    </div>
+  </div>
+
+  {# Heat Map Section #}
+  <div class="dashboard-section heat-map-section">
+    <h2>Department Heat Map</h2>
+    <p class="section-description">Readiness metrics across departments (minimum 3 users required)</p>
+
+    {% if heat_map_data is empty %}
+      <div class="empty-state">
+        <p>Not enough data to display heat map. Departments need at least 3 users.</p>
+      </div>
+    {% else %}
+      <div class="heat-map-container">
+        <canvas id="heatMapChart"></canvas>
+      </div>
+
+      <div class="heat-map-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th>Users</th>
+              <th>Risk Score</th>
+              <th>Risk Level</th>
+              <th>Skill Level</th>
+              <th>Confidence</th>
+              <th>Anxiety</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dept_data in heat_map_data %}
+              <tr class="risk-{{ dept_data.risk_level }}">
+                <td><strong>{{ dept_data.department }}</strong></td>
+                <td>{{ dept_data.user_count }}</td>
+                <td class="risk-score">{{ dept_data.risk_score }}</td>
+                <td><span class="badge badge-{{ dept_data.risk_level }}">{{ dept_data.risk_level|upper }}</span></td>
+                <td>{{ dept_data.skill_level }}/5</td>
+                <td>{{ dept_data.confidence }}/5</td>
+                <td>{{ dept_data.anxiety }}/5</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+
+  {# Quick Wins & Risk Areas #}
+  <div class="dashboard-row">
+    <div class="dashboard-section quick-wins-section">
+      <h2>Quick Wins</h2>
+      <p class="section-description">High potential + high readiness = immediate adoption opportunities</p>
+
+      <div class="wins-stats">
+        <div class="stat-large">
+          <span class="stat-number">{{ quick_wins.count }}</span>
+          <span class="stat-label">Users Ready</span>
+        </div>
+        <div class="stat-percentage">{{ quick_wins.percentage }}%</div>
+      </div>
+
+      <div class="criteria-breakdown">
+        <h4>Criteria Breakdown</h4>
+        <ul>
+          <li>
+            <span class="criterion-label">High AI Usage:</span>
+            <span class="criterion-value">{{ quick_wins.criteria.high_usage }} users</span>
+          </li>
+          <li>
+            <span class="criterion-label">Low Anxiety:</span>
+            <span class="criterion-value">{{ quick_wins.criteria.low_anxiety }} users</span>
+          </li>
+          <li>
+            <span class="criterion-label">High Confidence:</span>
+            <span class="criterion-value">{{ quick_wins.criteria.high_confidence }} users</span>
+          </li>
+          <li>
+            <span class="criterion-label">Has Tool Access:</span>
+            <span class="criterion-value">{{ quick_wins.criteria.has_tools }} users</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dashboard-section risk-areas-section">
+      <h2>Risk Areas</h2>
+      <p class="section-description">High displacement + low readiness = urgent intervention needed</p>
+
+      <div class="risk-stats">
+        <div class="stat-large risk-warning">
+          <span class="stat-number">{{ risk_areas.count }}</span>
+          <span class="stat-label">High Risk Users</span>
+        </div>
+        <div class="stat-percentage">{{ risk_areas.percentage }}%</div>
+      </div>
+
+      <div class="risk-detail">
+        <p><strong>Average Task Displacement:</strong> {{ risk_areas.avg_displacement }}%</p>
+        <p class="help-text">These users need immediate support and training interventions.</p>
+      </div>
+    </div>
+  </div>
+
+  {# Culture Indicators #}
+  <div class="dashboard-section culture-section">
+    <h2>Culture Indicators</h2>
+    <p class="section-description">Psychological readiness and organizational health metrics</p>
+
+    <div class="culture-grid">
+      <div class="culture-metric">
+        <h4>Fear Levels</h4>
+        <div class="gauge-container">
+          <canvas id="anxietyGauge"></canvas>
+        </div>
+        <div class="culture-stats">
+          <div class="stat-row">
+            <span>Avg Anxiety:</span>
+            <span class="stat-value anxiety-{{ culture_data.avg_anxiety >= 4 ? 'high' : (culture_data.avg_anxiety >= 3 ? 'medium' : 'low') }}">
+              {{ culture_data.avg_anxiety }}/5
+            </span>
+          </div>
+          <div class="stat-row">
+            <span>Overwhelmed:</span>
+            <span class="stat-value">{{ culture_data.overwhelmed_percentage }}%</span>
+          </div>
+          <div class="stat-row">
+            <span>Worried:</span>
+            <span class="stat-value">{{ culture_data.worried_percentage }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="culture-metric">
+        <h4>Trust in Leadership</h4>
+        <div class="gauge-container">
+          <canvas id="trustGauge"></canvas>
+        </div>
+        <div class="culture-stats">
+          <div class="stat-row">
+            <span>Trust Score:</span>
+            <span class="stat-value trust-{{ culture_data.avg_trust_in_leadership >= 4 ? 'high' : (culture_data.avg_trust_in_leadership >= 3 ? 'medium' : 'low') }}">
+              {{ culture_data.avg_trust_in_leadership }}/5
+            </span>
+          </div>
+          <div class="stat-row">
+            <span>Confidence:</span>
+            <span class="stat-value">{{ culture_data.avg_confidence }}/5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="culture-metric">
+        <h4>Change Fatigue</h4>
+        <div class="gauge-container">
+          <canvas id="fatigueGauge"></canvas>
+        </div>
+        <div class="culture-stats">
+          <div class="stat-row">
+            <span>Fatigue Score:</span>
+            <span class="stat-value fatigue-{{ culture_data.change_fatigue_score >= 60 ? 'high' : (culture_data.change_fatigue_score >= 30 ? 'medium' : 'low') }}">
+              {{ culture_data.change_fatigue_score }}%
+            </span>
+          </div>
+          <div class="stat-row">
+            <span>Excitement:</span>
+            <span class="stat-value">{{ culture_data.avg_excitement }}/5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="culture-metric sentiment-distribution">
+        <h4>Overall Sentiment</h4>
+        <div class="chart-container">
+          <canvas id="sentimentChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# ROI Projections #}
+  <div class="dashboard-section roi-section">
+    <h2>ROI Projections</h2>
+    <p class="section-description">Projected value based on different adoption scenarios</p>
+
+    <div class="roi-calculator">
+      <div class="adoption-slider">
+        <label for="adoptionRate">Adoption Rate: <span id="adoptionRateDisplay">50</span>%</label>
+        <input type="range" id="adoptionRate" min="0" max="100" value="50" step="5">
+      </div>
+
+      <div class="roi-metrics" id="roiMetrics">
+        <div class="roi-metric">
+          <span class="roi-label">Weekly Hours Saved</span>
+          <span class="roi-value" id="weeklyHours">{{ roi_scenarios[50].weekly_hours_saved }}</span>
+        </div>
+        <div class="roi-metric">
+          <span class="roi-label">Annual Hours Saved</span>
+          <span class="roi-value" id="annualHours">{{ roi_scenarios[50].annual_hours_saved|number_format }}</span>
+        </div>
+        <div class="roi-metric highlight">
+          <span class="roi-label">Annual Value</span>
+          <span class="roi-value" id="annualValue">${{ roi_scenarios[50].annual_value|number_format }}</span>
+        </div>
+        <div class="roi-metric">
+          <span class="roi-label">Per User (Weekly)</span>
+          <span class="roi-value" id="perUserSavings">{{ roi_scenarios[50].per_user_weekly_savings }}h</span>
+        </div>
+      </div>
+
+      <div class="roi-chart-container">
+        <canvas id="roiChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  {# Distribution Charts #}
+  <div class="dashboard-row">
+    <div class="dashboard-section chart-section">
+      <h2>Risk Distribution</h2>
+      <div class="chart-container">
+        <canvas id="riskDistributionChart"></canvas>
+      </div>
+    </div>
+
+    <div class="dashboard-section chart-section">
+      <h2>Tool Access</h2>
+      <div class="chart-container">
+        <canvas id="toolAccessChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
