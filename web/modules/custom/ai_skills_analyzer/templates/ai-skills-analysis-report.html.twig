@@ -1,0 +1,318 @@
+{#
+/**
+ * @file
+ * Template for AI Skills Analysis Report.
+ *
+ * Available variables:
+ * - report: Complete skills analysis report data
+ */
+#}
+
+<div class="ai-skills-analysis-report">
+  <div class="report-header">
+    <h1><span class="ai-badge">{{ 'AI-Powered'|t }}</span> {{ 'Skills Development Analysis'|t }}</h1>
+  </div>
+
+  {# Skill Trajectory Section #}
+  {% if report.skill_trajectory %}
+    <section class="report-section skill-trajectory">
+      <h2>{{ 'Your Skill Trajectory'|t }}</h2>
+
+      {% if report.skill_trajectory.current_strengths %}
+        <div class="current-strengths">
+          <h3>{{ 'Current Strengths'|t }}</h3>
+          <div class="strength-grid">
+            {% for strength in report.skill_trajectory.current_strengths %}
+              <div class="strength-card">
+                <h4>{{ strength.skill }}</h4>
+                <p class="value"><strong>{{ 'Value:'|t }}</strong> {{ strength.why_valuable }}</p>
+                <p class="leverage"><strong>{{ 'Leverage:'|t }}</strong> {{ strength.leverage_opportunities }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if report.skill_trajectory.critical_gaps %}
+        <div class="critical-gaps">
+          <h3>{{ 'Critical Skill Gaps'|t }}</h3>
+          <div class="gap-list">
+            {% for gap in report.skill_trajectory.critical_gaps %}
+              <div class="gap-item difficulty-{{ gap.acquisition_difficulty }}">
+                <h4>{{ gap.skill }}</h4>
+                <p class="critical"><strong>{{ 'Why Critical:'|t }}</strong> {{ gap.why_critical }}</p>
+                <p class="impact"><strong>{{ 'Without This:'|t }}</strong> {{ gap.impact_without }}</p>
+                <span class="difficulty-badge">{{ gap.acquisition_difficulty|capitalize }} {{ 'to learn'|t }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if report.skill_trajectory.emerging_opportunities %}
+        <div class="emerging-opportunities">
+          <h3>{{ 'Emerging Opportunities'|t }}</h3>
+          <ul>
+            {% for opportunity in report.skill_trajectory.emerging_opportunities %}
+              <li>
+                <strong>{{ opportunity.skill }}:</strong> {{ opportunity.why_emerging }}
+                <em>({{ opportunity.time_to_relevance }})</em>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  {# Personalized Learning Path #}
+  {% if report.personalized_learning_path %}
+    <section class="report-section learning-path">
+      <h2>{{ 'Your Personalized Learning Path'|t }}</h2>
+
+      {% if report.personalized_learning_path.learning_style_assessment %}
+        <div class="learning-style">
+          <h3>{{ 'Learning Style Assessment'|t }}</h3>
+          <p>{{ report.personalized_learning_path.learning_style_assessment }}</p>
+        </div>
+      {% endif %}
+
+      {% if report.personalized_learning_path.immediate_actions %}
+        <div class="immediate-actions">
+          <h3>{{ 'Start This Week'|t }}</h3>
+          <div class="action-cards">
+            {% for action in report.personalized_learning_path.immediate_actions %}
+              <div class="action-card">
+                <h4>{{ action.skill }}</h4>
+                <p class="action"><strong>{{ 'Action:'|t }}</strong> {{ action.action }}</p>
+                <p class="time"><strong>{{ 'Time:'|t }}</strong> {{ action.time_required }}</p>
+                <p class="outcome"><strong>{{ 'Expected Outcome:'|t }}</strong> {{ action.expected_outcome }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if report.personalized_learning_path.thirty_day_sprint %}
+        <div class="thirty-day-sprint">
+          <h3>{{ '30-Day Skill Sprint'|t }}</h3>
+          <p><strong>{{ 'Focus:'|t }}</strong> {{ report.personalized_learning_path.thirty_day_sprint.focus_skill }}</p>
+
+          {% if report.personalized_learning_path.thirty_day_sprint.week_by_week %}
+            <div class="week-timeline">
+              {% for week in report.personalized_learning_path.thirty_day_sprint.week_by_week %}
+                <div class="week-item">
+                  <h4>{{ 'Week'|t }} {{ week.week }}</h4>
+                  <ul>
+                    {% for activity in week.activities %}
+                      <li>{{ activity }}</li>
+                    {% endfor %}
+                  </ul>
+                  <p class="milestone"><strong>{{ 'Milestone:'|t }}</strong> {{ week.milestone }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if report.personalized_learning_path.thirty_day_sprint.success_metrics %}
+            <div class="success-metrics">
+              <h4>{{ 'Measure Your Progress'|t }}</h4>
+              <ul>
+                {% for metric in report.personalized_learning_path.thirty_day_sprint.success_metrics %}
+                  <li>{{ metric }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if report.personalized_learning_path.ninety_day_mastery %}
+        <div class="ninety-day-mastery">
+          <h3>{{ '90-Day Mastery Plan'|t }}</h3>
+
+          {% if report.personalized_learning_path.ninety_day_mastery.target_competencies %}
+            <div class="target-competencies">
+              <h4>{{ 'Target Competencies'|t }}</h4>
+              <ul>
+                {% for competency in report.personalized_learning_path.ninety_day_mastery.target_competencies %}
+                  <li>{{ competency }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if report.personalized_learning_path.ninety_day_mastery.project_based_learning %}
+            <div class="project-learning">
+              <h4>{{ 'Portfolio Projects'|t }}</h4>
+              {% for project in report.personalized_learning_path.ninety_day_mastery.project_based_learning %}
+                <div class="project-card">
+                  <h5>{{ project.project }}</h5>
+                  <p><strong>{{ 'Skills:'|t }}</strong> {{ project.skills_practiced|join(', ') }}</p>
+                  <p><strong>{{ 'Portfolio Value:'|t }}</strong> {{ project.portfolio_value }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  {# Learning Resources #}
+  {% if report.learning_resources %}
+    <section class="report-section learning-resources">
+      <h2>{{ 'Recommended Learning Resources'|t }}</h2>
+
+      {% if report.learning_resources.recommended_platforms %}
+        <div class="platforms">
+          <h3>{{ 'Platforms for You'|t }}</h3>
+          {% for platform in report.learning_resources.recommended_platforms %}
+            <div class="platform-card">
+              <h4>{{ platform.platform }}</h4>
+              <p>{{ platform.why_recommended }}</p>
+              {% if platform.specific_courses %}
+                <ul>
+                  {% for course in platform.specific_courses %}
+                    <li>{{ course }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if report.learning_resources.practice_projects %}
+        <div class="practice-projects">
+          <h3>{{ 'Practice Projects'|t }}</h3>
+          {% for project in report.learning_resources.practice_projects %}
+            <div class="project-suggestion difficulty-{{ project.difficulty }}">
+              <h4>{{ project.project }}</h4>
+              <p><strong>{{ 'Skills:'|t }}</strong> {{ project.skills_developed|join(', ') }}</p>
+              <p><strong>{{ 'Time:'|t }}</strong> {{ project.time_estimate }}</p>
+              <span class="difficulty-badge">{{ project.difficulty|capitalize }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if report.learning_resources.community_resources %}
+        <div class="community-resources">
+          <h3>{{ 'Community & Resources'|t }}</h3>
+          <ul>
+            {% for resource in report.learning_resources.community_resources %}
+              <li>
+                <strong>{{ resource.resource }}:</strong> {{ resource.value }}
+                <br><em>{{ 'First step:'|t }} {{ resource.how_to_engage }}</em>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  {# Skill Synergies #}
+  {% if report.skill_synergies %}
+    <section class="report-section skill-synergies">
+      <h2>{{ 'Skill Synergies & Multipliers'|t }}</h2>
+
+      {% if report.skill_synergies.powerful_combinations %}
+        <div class="combinations">
+          <h3>{{ 'Powerful Skill Combinations'|t }}</h3>
+          {% for combo in report.skill_synergies.powerful_combinations %}
+            <div class="combo-card">
+              <h4>{{ combo.skills|join(' + ') }}</h4>
+              <p><strong>{{ 'Why Powerful:'|t }}</strong> {{ combo.why_powerful }}</p>
+              <p><strong>{{ 'Application:'|t }}</strong> {{ combo.application }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if report.skill_synergies.ai_augmentation_opportunities %}
+        <div class="ai-augmentation">
+          <h3>{{ 'AI Augmentation Opportunities'|t }}</h3>
+          {% for aug in report.skill_synergies.ai_augmentation_opportunities %}
+            <div class="augmentation-card">
+              <h4>{{ aug.current_skill }} × {{ aug.ai_tool }}</h4>
+              <p>{{ aug.multiplier_effect }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  {# Barrier Strategies #}
+  {% if report.barrier_strategies %}
+    <section class="report-section barrier-strategies">
+      <h2>{{ 'Overcoming Your Barriers'|t }}</h2>
+
+      {% if report.barrier_strategies.identified_barriers %}
+        <p><strong>{{ 'Your barriers:'|t }}</strong> {{ report.barrier_strategies.identified_barriers|join(', ') }}</p>
+      {% endif %}
+
+      {% if report.barrier_strategies.overcoming_strategies %}
+        {% for strategy in report.barrier_strategies.overcoming_strategies %}
+          <div class="strategy-item">
+            <h4>{{ strategy.barrier }}</h4>
+            <ul>
+              {% for strat in strategy.strategies %}
+                <li>{{ strat }}</li>
+              {% endfor %}
+            </ul>
+            <p class="mindset"><strong>{{ 'Mindset Shift:'|t }}</strong> {{ strategy.mindset_shift }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </section>
+  {% endif %}
+
+  {# Motivational Insights #}
+  {% if report.motivational_insights %}
+    <section class="report-section motivational-insights">
+      <h2>{{ 'Your Unique Advantages'|t }}</h2>
+
+      {% if report.motivational_insights.unique_advantages %}
+        <div class="advantages">
+          <h3>{{ 'What Sets You Apart'|t }}</h3>
+          <ul>
+            {% for advantage in report.motivational_insights.unique_advantages %}
+              <li>{{ advantage }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if report.motivational_insights.quick_wins %}
+        <div class="quick-wins">
+          <h3>{{ 'Quick Wins to Build Momentum'|t }}</h3>
+          <ul>
+            {% for win in report.motivational_insights.quick_wins %}
+              <li>{{ win }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if report.motivational_insights.long_term_vision %}
+        <div class="long-term-vision">
+          <h3>{{ 'Your Future Vision'|t }}</h3>
+          <p>{{ report.motivational_insights.long_term_vision }}</p>
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  {# Actions #}
+  <div class="report-footer">
+    <div class="report-actions">
+      <form method="post" action="/analysis/skills/regenerate">
+        <button type="submit" class="button button--secondary">{{ 'Regenerate Analysis'|t }}</button>
+      </form>
+      <a href="/dashboard" class="button">{{ 'Back to Dashboard'|t }}</a>
+    </div>
+  </div>
+</div>

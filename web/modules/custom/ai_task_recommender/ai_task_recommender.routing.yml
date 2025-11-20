@@ -1,0 +1,16 @@
+ai_task_recommender.report:
+  path: '/analysis/task-recommendations'
+  defaults:
+    _controller: '\Drupal\ai_task_recommender\Controller\AiTaskRecommenderController::viewReport'
+    _title: 'AI Task Automation Recommendations'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_task_recommender.regenerate:
+  path: '/analysis/task-recommendations/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_task_recommender\Controller\AiTaskRecommenderController::regenerateAnalysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'

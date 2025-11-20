@@ -1,0 +1,16 @@
+ai_industry_insights.report:
+  path: '/analysis/industry-insights'
+  defaults:
+    _controller: '\Drupal\ai_industry_insights\Controller\AiIndustryInsightsController::viewReport'
+    _title: 'AI Industry Insights'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_industry_insights.regenerate:
+  path: '/analysis/industry-insights/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_industry_insights\Controller\AiIndustryInsightsController::regenerateAnalysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'

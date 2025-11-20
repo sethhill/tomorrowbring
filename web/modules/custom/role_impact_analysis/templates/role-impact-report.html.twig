@@ -345,6 +345,137 @@
     </div>
   </section>
 
+  {# AI-Powered Insights Section #}
+  {% if report.ai_insights %}
+    <section class="report-section ai-insights">
+      <h2>
+        <span class="ai-badge">{{ 'AI-Powered'|t }}</span>
+        {{ 'Personalized Insights'|t }}
+      </h2>
+
+      {# Personalized Narrative #}
+      {% if report.ai_insights.personalized_narrative %}
+        <div class="ai-narrative">
+          <div class="narrative-content">
+            {{ report.ai_insights.personalized_narrative|nl2br }}
+          </div>
+        </div>
+      {% endif %}
+
+      {# Hidden Opportunities #}
+      {% if report.ai_insights.hidden_opportunities %}
+        <div class="hidden-opportunities">
+          <h3>{{ 'Hidden Opportunities You Might Miss'|t }}</h3>
+          <ul class="opportunity-list">
+            {% for opportunity in report.ai_insights.hidden_opportunities %}
+              <li class="opportunity-item">{{ opportunity }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {# Tool Recommendations #}
+      {% if report.ai_insights.tool_recommendations %}
+        <div class="tool-recommendations">
+          <h3>{{ 'Recommended AI Tools for Your Tasks'|t }}</h3>
+          <div class="tool-grid">
+            {% for tool in report.ai_insights.tool_recommendations %}
+              <div class="tool-card">
+                <h4 class="tool-name">{{ tool.tool }}</h4>
+                <div class="tool-task">{{ 'For: '|t }}{{ tool.task }}</div>
+                <div class="tool-why">{{ tool.why }}</div>
+                <div class="tool-start">
+                  <strong>{{ 'Getting started: '|t }}</strong>{{ tool.getting_started }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {# Skill Development Roadmap #}
+      {% if report.ai_insights.skill_development_roadmap %}
+        <div class="skill-roadmap">
+          <h3>{{ 'Your Skill Development Roadmap'|t }}</h3>
+
+          <div class="roadmap-focus">
+            <h4>{{ 'Immediate Focus (Start Today)'|t }}</h4>
+            <p>{{ report.ai_insights.skill_development_roadmap.immediate_focus }}</p>
+          </div>
+
+          <div class="roadmap-timeline">
+            <div class="roadmap-milestone">
+              <h4>{{ '30-Day Goal'|t }}</h4>
+              <p>{{ report.ai_insights.skill_development_roadmap.thirty_day_goal }}</p>
+            </div>
+
+            <div class="roadmap-milestone">
+              <h4>{{ '90-Day Goal'|t }}</h4>
+              <p>{{ report.ai_insights.skill_development_roadmap.ninety_day_goal }}</p>
+            </div>
+          </div>
+
+          <div class="roadmap-approach">
+            <h4>{{ 'Learning Approach'|t }}</h4>
+            <p>{{ report.ai_insights.skill_development_roadmap.learning_approach }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+      {# Industry Context #}
+      {% if report.ai_insights.industry_context %}
+        <div class="industry-context">
+          <h3>{{ 'Industry Context & Trends'|t }}</h3>
+
+          <div class="context-item">
+            <h4>{{ 'How Your Role is Evolving'|t }}</h4>
+            <p>{{ report.ai_insights.industry_context.role_evolution }}</p>
+          </div>
+
+          <div class="context-item">
+            <h4>{{ 'Your Competitive Advantage'|t }}</h4>
+            <p>{{ report.ai_insights.industry_context.competitive_advantage }}</p>
+          </div>
+
+          <div class="context-item">
+            <h4>{{ 'Trends to Monitor'|t }}</h4>
+            <p>{{ report.ai_insights.industry_context.watch_out_for }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+      {# Confidence Boosters #}
+      {% if report.ai_insights.confidence_boosters %}
+        <div class="confidence-boosters">
+          <h3>{{ 'Reasons to Be Optimistic'|t }}</h3>
+          <ul class="confidence-list">
+            {% for booster in report.ai_insights.confidence_boosters %}
+              <li class="confidence-item">{{ booster }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {# Regenerate Button #}
+      <div class="ai-actions">
+        <form method="post" action="/analysis/role-impact/regenerate">
+          <button type="submit" class="button button--secondary">{{ 'Regenerate AI Analysis'|t }}</button>
+        </form>
+      </div>
+    </section>
+  {% else %}
+    {# Show message if AI insights failed to generate #}
+    <section class="report-section ai-insights-error">
+      <h2>{{ 'AI-Powered Insights'|t }}</h2>
+      <div class="error-message">
+        <p>{{ 'AI analysis is temporarily unavailable. The core analysis above provides your complete role impact assessment.'|t }}</p>
+        <form method="post" action="/analysis/role-impact/regenerate">
+          <button type="submit" class="button button--secondary">{{ 'Try Generating AI Insights'|t }}</button>
+        </form>
+      </div>
+    </section>
+  {% endif %}
+
   <div class="report-footer">
     <div class="report-actions">
       <a href="/dashboard" class="button">{{ 'Back to Dashboard'|t }}</a>

@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * AI Task Recommender module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ai_task_recommender_theme($existing, $type, $theme, $path) {
+  return [
+    'ai_task_recommender_report' => [
+      'variables' => ['report' => NULL],
+      'template' => 'ai-task-recommender-report',
+    ],
+  ];
+}

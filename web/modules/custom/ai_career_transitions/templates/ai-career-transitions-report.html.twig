@@ -1,0 +1,67 @@
+{# AI Career Transitions Report #}
+<div class="ai-career-transitions-report">
+  <h1><span class="ai-badge">{{ 'AI-Powered'|t }}</span> {{ 'Career Transition Opportunities'|t }}</h1>
+
+  {% if report.transition_readiness %}
+    <section class="readiness">
+      <h2>{{ 'Your Transition Readiness'|t }}</h2>
+      <div class="score">{{ 'Score:'|t }} {{ report.transition_readiness.overall_score }}/10</div>
+      <p>{{ report.transition_readiness.summary }}</p>
+      <div class="strengths"><strong>{{ 'Strengths:'|t }}</strong> {{ report.transition_readiness.key_strengths|join(', ') }}</div>
+      <div class="gaps"><strong>{{ 'Gaps:'|t }}</strong> {{ report.transition_readiness.key_gaps|join(', ') }}</div>
+    </section>
+  {% endif %}
+
+  {% if report.viable_transitions %}
+    <section class="transitions">
+      <h2>{{ 'Viable Career Transitions'|t }}</h2>
+      {% for transition in report.viable_transitions %}
+        <div class="transition-card">
+          <h3>{{ transition.target_role }} <span class="fit-score">({{ 'Fit:'|t }} {{ transition.fit_score }}/10)</span></h3>
+          <p>{{ transition.why_viable }}</p>
+          <p><strong>{{ 'Transferable:'|t }}</strong> {{ transition.transferable_skills|join(', ') }}</p>
+          <div class="skills-needed">
+            <h4>{{ 'Skills to Acquire'|t }}</h4>
+            {% for skill in transition.skills_to_acquire %}
+              <div class="skill priority-{{ skill.priority }}">
+                {{ skill.skill }} ({{ skill.time_to_learn }})
+              </div>
+            {% endfor %}
+          </div>
+          <p><strong>{{ 'Timeline:'|t }}</strong> {{ transition.timeline }}</p>
+          <div class="first-steps">
+            <h4>{{ 'First Steps'|t }}</h4>
+            <ol>{% for step in transition.first_steps %}<li>{{ step }}</li>{% endfor %}</ol>
+          </div>
+        </div>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  {% if report.ai_advantage %}
+    <section class="ai-advantage">
+      <h2>{{ 'AI Advantage'|t }}</h2>
+      <p>{{ report.ai_advantage.how_ai_helps }}</p>
+      <p><strong>{{ 'AI Skills Needed:'|t }}</strong> {{ report.ai_advantage.ai_skills_needed|join(', ') }}</p>
+    </section>
+  {% endif %}
+
+  {% if report.action_plan %}
+    <section class="action-plan">
+      <h2>{{ 'Your Action Plan'|t }}</h2>
+      <div class="timeline">
+        <div class="phase"><h4>{{ 'This Week'|t }}</h4><p>{{ report.action_plan.immediate }}</p></div>
+        <div class="phase"><h4>{{ 'Months 1-3'|t }}</h4><p>{{ report.action_plan.month_1_3 }}</p></div>
+        <div class="phase"><h4>{{ 'Months 4-6'|t }}</h4><p>{{ report.action_plan.month_4_6 }}</p></div>
+        <div class="phase"><h4>{{ 'Beyond'|t }}</h4><p>{{ report.action_plan.beyond }}</p></div>
+      </div>
+    </section>
+  {% endif %}
+
+  <div class="report-footer">
+    <form method="post" action="/analysis/career-transitions/regenerate">
+      <button type="submit" class="button button--secondary">{{ 'Regenerate'|t }}</button>
+    </form>
+    <a href="/dashboard" class="button">{{ 'Dashboard'|t }}</a>
+  </div>
+</div>

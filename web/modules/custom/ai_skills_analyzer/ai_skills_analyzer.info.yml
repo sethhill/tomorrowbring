@@ -1,11 +1,10 @@
-name: 'Role Impact Analysis'
+name: 'AI Skills Analyzer'
 type: module
-description: 'Provides AI role impact analysis and reporting functionality for webform submissions.'
+description: 'Provides AI-powered skill gap analysis with personalized learning paths.'
 core_version_requirement: ^11
 package: Custom
 dependencies:
   - drupal:user
-  - drupal:views
   - webform:webform
   - client_webform:client_webform
   - ai:ai

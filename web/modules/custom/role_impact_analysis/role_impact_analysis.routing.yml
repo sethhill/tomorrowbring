@@ -5,3 +5,12 @@ role_impact_analysis.report:
     _title_callback: '\Drupal\role_impact_analysis\Controller\RoleImpactReportController::getTitle'
   requirements:
     _user_is_logged_in: 'TRUE'
+
+role_impact_analysis.regenerate:
+  path: '/analysis/role-impact/regenerate'
+  defaults:
+    _controller: '\Drupal\role_impact_analysis\Controller\RoleImpactReportController::regenerateAiAnalysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'

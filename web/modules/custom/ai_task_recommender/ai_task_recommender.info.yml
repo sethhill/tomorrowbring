@@ -1,11 +1,10 @@
-name: 'Role Impact Analysis'
+name: 'AI Task Recommender'
 type: module
-description: 'Provides AI role impact analysis and reporting functionality for webform submissions.'
+description: 'Provides AI-powered task automation recommendations with specific tools and workflows.'
 core_version_requirement: ^11
 package: Custom
 dependencies:
   - drupal:user
-  - drupal:views
   - webform:webform
   - client_webform:client_webform
   - ai:ai

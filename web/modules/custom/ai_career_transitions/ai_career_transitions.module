@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * AI Career Transitions module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ai_career_transitions_theme($existing, $type, $theme, $path) {
+  return [
+    'ai_career_transitions_report' => [
+      'variables' => ['report' => NULL],
+      'template' => 'ai-career-transitions-report',
+    ],
+  ];
+}

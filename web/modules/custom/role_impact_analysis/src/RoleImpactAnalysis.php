@@ -5,6 +5,7 @@ namespace Drupal\role_impact_analysis;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\client_webform\WebformClientManager;
+use Drupal\role_impact_analysis\Service\AiAnalysisService;
 
 /**
  * Role Impact Analysis Service.
@@ -36,6 +37,13 @@ class RoleImpactAnalysis {
   protected $clientManager;
 
   /**
+   * The AI analysis service.
+   *
+   * @var \Drupal\role_impact_analysis\Service\AiAnalysisService
+   */
+  protected $aiService;
+
+  /**
    * Constructs a RoleImpactAnalysis object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -44,11 +52,14 @@ class RoleImpactAnalysis {
    *   The current user.
    * @param \Drupal\client_webform\WebformClientManager $client_manager
    *   The webform client manager service.
+   * @param \Drupal\role_impact_analysis\Service\AiAnalysisService $ai_service
+   *   The AI analysis service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, WebformClientManager $client_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountProxyInterface $current_user, WebformClientManager $client_manager, AiAnalysisService $ai_service) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
     $this->clientManager = $client_manager;
+    $this->aiService = $ai_service;
   }
 
   /**
@@ -907,7 +918,8 @@ class RoleImpactAnalysis {
     // Section 7: Learning Path
     $learning_path = $this->generateLearningPath($skills_data, $skill_trajectory);
 
-    return [
+    // Build rule-based report data.
+    $report = [
       'current_state' => [
         'role_category' => $role_category,
         'role_other' => $role_other,
@@ -933,6 +945,19 @@ class RoleImpactAnalysis {
       'learning_path' => $learning_path,
       'generated_at' => time(),
     ];
+
+    // Generate AI-powered insights.
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+    $ai_insights = $this->aiService->generateAiInsights($report, $submissions, $uid);
+
+    // Add AI insights to report if available.
+    if ($ai_insights !== NULL) {
+      $report['ai_insights'] = $ai_insights;
+    }
+
+    return $report;
   }
 
   /**

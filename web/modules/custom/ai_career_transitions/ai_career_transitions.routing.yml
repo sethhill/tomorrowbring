@@ -1,0 +1,16 @@
+ai_career_transitions.report:
+  path: '/analysis/career-transitions'
+  defaults:
+    _controller: '\Drupal\ai_career_transitions\Controller\AiCareerTransitionsController::viewReport'
+    _title: 'AI Career Transition Opportunities'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_career_transitions.regenerate:
+  path: '/analysis/career-transitions/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_career_transitions\Controller\AiCareerTransitionsController::regenerateAnalysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'
