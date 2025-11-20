@@ -1,0 +1,13 @@
+uuid: 00000000-0000-0000-0000-000000000005
+langcode: en
+status: true
+dependencies: {  }
+id: leader
+label: Leader
+weight: 3
+is_admin: false
+permissions:
+  - 'access content'
+  - 'access user profiles'
+  - 'view leadership dashboard'
+  - 'view own webform submission'
