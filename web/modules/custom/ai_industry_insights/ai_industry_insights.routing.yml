@@ -2,7 +2,7 @@ ai_industry_insights.report:
   path: '/analysis/industry-insights'
   defaults:
     _controller: '\Drupal\ai_industry_insights\Controller\AiIndustryInsightsController::viewReport'
-    _title: 'AI Industry Insights'
+    _title: 'Industry Insights'
   requirements:
     _user_is_logged_in: 'TRUE'
 

@@ -47,17 +47,51 @@
   {% if report.competitive_positioning %}
     <section class="report-section competitive">
       <h2>{{ 'Competitive Positioning'|t }}</h2>
-      <div><strong>{{ 'Differentiators:'|t }}</strong> {{ report.competitive_positioning.differentiators|join(', ') }}</div>
-      <div><strong>{{ 'In-Demand Skills:'|t }}</strong> {{ report.competitive_positioning.in_demand_skills|join(', ') }}</div>
-      <div><strong>{{ 'Red Flags:'|t }}</strong> {{ report.competitive_positioning.red_flags|join(', ') }}</div>
+      <div class="report-lists competitive-positioning-list">
+        <div class="report-list"><h3>{{ 'Differentiators'|t }}</h3>
+        <ul>
+          {% for differentiator in report.competitive_positioning.differentiators %}
+            <li>{{ differentiator }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+        <div class="report-list"><h3>{{ 'In-Demand Skills'|t }}</h3>
+        <ul>
+          {% for in_demand_skill in report.competitive_positioning.in_demand_skills %}
+            <li>{{ in_demand_skill }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+        <div class="report-list"><h3>{{ 'Red Flags'|t }}</h3>
+        <ul>
+          {% for red_flag in report.competitive_positioning.red_flags %}
+            <li>{{ red_flag }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
     </section>
   {% endif %}
 
   {% if report.emerging_trends %}
     <section class="report-section trends">
       <h2>{{ 'Emerging Trends'|t }}</h2>
-      <div><strong>{{ 'Technologies:'|t }}</strong> {{ report.emerging_trends.technologies|join(', ') }}</div>
-      <div><strong>{{ 'Methodologies:'|t }}</strong> {{ report.emerging_trends.methodologies|join(', ') }}</div>
+      <div class="report-lists emerging-trends-list">
+        <div class="report-list"><h3>{{ 'Technologies'|t }}</h3>
+        <ul>
+          {% for technology in report.emerging_trends.technologies %}
+            <li>{{ technology }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+        <div class="report-list"><h3>{{ 'Methodologies'|t }}</h3>
+        <ul>
+          {% for methodology in report.emerging_trends.methodologies %}
+            <li>{{ methodology }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
       <p><strong>{{ 'Timeline:'|t }}</strong> {{ report.emerging_trends.impact_timeline }}</p>
     </section>
   {% endif %}
@@ -65,9 +99,23 @@
   {% if report.strategic_recommendations %}
     <section class="report-section recommendations">
       <h2>{{ 'Strategic Recommendations'|t }}</h2>
-      <div class="immediate"><h4>{{ 'Immediate Actions'|t }}</h4><ul>{% for action in report.strategic_recommendations.immediate_actions %}<li>{{ action }}</li>{% endfor %}</ul></div>
-      <div class="six-month"><h4>{{ '6-Month Focus'|t }}</h4><p>{{ report.strategic_recommendations.six_month_focus }}</p></div>
-      <div class="long-term"><h4>{{ 'Long-Term Positioning'|t }}</h4><p>{{ report.strategic_recommendations.long_term_positioning }}</p></div>
+      <div class="report-lists strategic-recommendations-list">
+        <div class="report-list"><h3>{{ 'Immediate Actions'|t }}</h3>
+        <ul>
+          {% for action in report.strategic_recommendations.immediate_actions %}
+            <li>{{ action }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
+      <div class="report-columns">
+        <div class="report-column"><h3>{{ '6-Month Focus'|t }}</h3>
+        <p>{{ report.strategic_recommendations.six_month_focus }}</p>
+        </div>
+        <div class="report-column"><h3>{{ 'Long-Term Positioning'|t }}</h3>
+        <p>{{ report.strategic_recommendations.long_term_positioning }}</p>
+        </div>
+      </div>
     </section>
   {% endif %}
 

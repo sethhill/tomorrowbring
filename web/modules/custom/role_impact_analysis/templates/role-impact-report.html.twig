@@ -78,9 +78,17 @@
     <h2>{{ 'Your Displacement Risk'|t }}</h2>
 
     <div class="risk-header">
-      <div class="risk-score risk-score-{{ report.displacement_risk.risk_level }}">
-        <div class="score-label">{{ 'Risk Score'|t }}</div>
-        <div class="score-number">{{ report.displacement_risk.risk_score }}</div>
+      <div class="gauge-wrapper">
+        <div class="gauge gauge-large gauge-risk-{{ report.displacement_risk.risk_level }}"
+             data-score="{{ report.displacement_risk.risk_score }}"
+             style="--score: {{ report.displacement_risk.risk_score }}">
+          <div class="gauge-fill"></div>
+          <div class="gauge-inner">
+            <span class="gauge-value">{{ report.displacement_risk.risk_score }}</span>
+            <span class="gauge-max">/100</span>
+          </div>
+        </div>
+        <div class="gauge-label">{{ 'Risk Score'|t }}</div>
       </div>
       <div class="urgency-level">
         <div class="urgency-label">{{ 'Urgency'|t }}</div>
