@@ -14,3 +14,4 @@ default_providers:
   chat_with_tools:
     provider_id: anthropic
     model_id: claude-opus-4-1-latest
+default_vdb_provider: ''

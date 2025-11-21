@@ -1,0 +1,25 @@
+uuid: 524b9cbf-a0a3-4d3c-89e3-e46cd99e5a4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+  theme:
+    - tbring
+id: tbring_useraccountmenu
+theme: tbring
+region: header
+weight: 0
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

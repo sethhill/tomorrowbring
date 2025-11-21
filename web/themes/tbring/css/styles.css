@@ -15,8 +15,20 @@
 
 @font-face {
   font-family: "Banter Grotesk";
+  src: url("../fonts/BanterGrotesk-Italic.woff2") format("woff2");
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Banter Grotesk";
   src: url("../fonts/BanterGrotesk-Black.woff2") format("woff2");
-  font-weight: bold;
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "Banter Grotesk";
+  src: url("../fonts/BanterGrotesk-Semibold.woff2") format("woff2");
+  font-weight: 600;
 }
 
 :root {
@@ -555,7 +567,7 @@ legend + .fieldset-wrapper:has(.description) {
 
 input[type="submit"].webform-button--next {
   padding-right: 2.5em;
-  background-image: url('../images/arrow_forward_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg');
+  background-image: url("../images/arrow_forward_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
   background-repeat: no-repeat;
   background-position: right 0.75em center;
   background-size: 1.5em 1.5em;
@@ -563,7 +575,7 @@ input[type="submit"].webform-button--next {
 
 input[type="submit"].webform-button--previous {
   padding-left: 2.5em;
-  background-image: url('../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg');
+  background-image: url("../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
   background-repeat: no-repeat;
   background-position: left 0.75em center;
   background-size: 1.5em 1.5em;
@@ -571,14 +583,18 @@ input[type="submit"].webform-button--previous {
 
 h2 {
   color: var(--color-deep-green);
+  font-weight: 900;
   text-align: center;
+  margin-bottom: 0.75em;
 }
 h3 {
   color: var(--color-deep-green);
   font-size: 1.5em;
   text-align: center;
+  font-weight: 900;
 }
 h4 {
   font-size: 1.25em;
   color: var(--color-deep-green);
+  font-weight: 600;
 }

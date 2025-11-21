@@ -1,28 +1,51 @@
 {# AI Industry Insights Report #}
 <div class="ai-industry-insights-report">
-  <h1><span class="ai-badge">{{ 'AI-Powered'|t }}</span> {{ 'Industry Insights'|t }}</h1>
 
   {% if report.industry_overview %}
-    <section class="overview">
+    <section class="report-section overview">
       <h2>{{ 'Industry Overview'|t }}</h2>
-      <p>{{ report.industry_overview.current_state }}</p>
+      <p class="report-intro">{{ report.industry_overview.current_state }}</p>
       <p><strong>{{ 'Transformation Pace:'|t }}</strong> {{ report.industry_overview.transformation_pace|capitalize }}</p>
-      <p><strong>{{ 'Key Drivers:'|t }}</strong> {{ report.industry_overview.key_drivers|join(', ') }}</p>
+
+      <div class="report-lists key-drivers-list">
+        <div class="report-list"><h3>{{ 'Key Drivers'|t }}</h3>
+        <ul>
+          {% for driver in report.industry_overview.key_drivers %}
+            <li>{{ driver }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
     </section>
   {% endif %}
 
   {% if report.role_evolution %}
-    <section class="role-evolution">
+    <section class="report-section role-evolution">
       <h2>{{ 'How Your Role is Evolving'|t }}</h2>
-      <p>{{ report.role_evolution.how_changing }}</p>
-      <div><strong>{{ 'Being Automated:'|t }}</strong> {{ report.role_evolution.tasks_being_automated|join(', ') }}</div>
-      <div><strong>{{ 'New Responsibilities:'|t }}</strong> {{ report.role_evolution.new_responsibilities|join(', ') }}</div>
+      <p class="report-intro">{{ report.role_evolution.how_changing }}</p>
+
+      <div class="report-lists role-evolution-list">
+        <div class="report-list"><h3>{{ 'Being Automated'|t }}</h3>
+        <ul>
+          {% for task in report.role_evolution.tasks_being_automated %}
+            <li>{{ task }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+        <div class="report-list"><h3>{{ 'New Responsibilities'|t }}</h3>
+        <ul>
+          {% for responsibility in report.role_evolution.new_responsibilities %}
+            <li>{{ responsibility }}</li>
+          {% endfor %}
+        </ul>
+        </div>
+      </div>
       <p><strong>{{ 'Timeline:'|t }}</strong> {{ report.role_evolution.timeline }}</p>
     </section>
   {% endif %}
 
   {% if report.competitive_positioning %}
-    <section class="competitive">
+    <section class="report-section competitive">
       <h2>{{ 'Competitive Positioning'|t }}</h2>
       <div><strong>{{ 'Differentiators:'|t }}</strong> {{ report.competitive_positioning.differentiators|join(', ') }}</div>
       <div><strong>{{ 'In-Demand Skills:'|t }}</strong> {{ report.competitive_positioning.in_demand_skills|join(', ') }}</div>
@@ -31,7 +54,7 @@
   {% endif %}
 
   {% if report.emerging_trends %}
-    <section class="trends">
+    <section class="report-section trends">
       <h2>{{ 'Emerging Trends'|t }}</h2>
       <div><strong>{{ 'Technologies:'|t }}</strong> {{ report.emerging_trends.technologies|join(', ') }}</div>
       <div><strong>{{ 'Methodologies:'|t }}</strong> {{ report.emerging_trends.methodologies|join(', ') }}</div>
@@ -40,7 +63,7 @@
   {% endif %}
 
   {% if report.strategic_recommendations %}
-    <section class="recommendations">
+    <section class="report-section recommendations">
       <h2>{{ 'Strategic Recommendations'|t }}</h2>
       <div class="immediate"><h4>{{ 'Immediate Actions'|t }}</h4><ul>{% for action in report.strategic_recommendations.immediate_actions %}<li>{{ action }}</li>{% endfor %}</ul></div>
       <div class="six-month"><h4>{{ '6-Month Focus'|t }}</h4><p>{{ report.strategic_recommendations.six_month_focus }}</p></div>
@@ -48,7 +71,7 @@
     </section>
   {% endif %}
 
-  <div class="report-footer">
+  <div class="report-actions">
     <form method="post" action="/analysis/industry-insights/regenerate"><button type="submit" class="button button--secondary">{{ 'Regenerate'|t }}</button></form>
     <a href="/dashboard" class="button">{{ 'Dashboard'|t }}</a>
   </div>

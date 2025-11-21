@@ -2,7 +2,7 @@ ai_career_transitions.report:
   path: '/analysis/career-transitions'
   defaults:
     _controller: '\Drupal\ai_career_transitions\Controller\AiCareerTransitionsController::viewReport'
-    _title: 'AI Career Transition Opportunities'
+    _title: 'Career Transition Opportunities'
   requirements:
     _user_is_logged_in: 'TRUE'
 

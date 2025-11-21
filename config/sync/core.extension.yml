@@ -2,11 +2,16 @@ _core:
   default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
   ai: 0
+  ai_career_transitions: 0
+  ai_industry_insights: 0
   ai_provider_anthropic: 0
+  ai_skills_analyzer: 0
+  ai_task_recommender: 0
   block: 0
   block_content: 0
   client_dashboard: 0
   client_webform: 0
+  dashboard_leadership: 0
   dblog: 0
   dynamic_page_cache: 0
   field: 0

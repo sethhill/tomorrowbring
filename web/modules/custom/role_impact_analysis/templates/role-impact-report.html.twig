@@ -60,7 +60,7 @@
           {% endif %}
         </div>
       </div>
-      <div class="task-interpretation">
+      <div class="report-intro">
       <p>
         {% if report.current_state.task_profile.help_me_percentage > 60 %}
           {{ 'You have identified many tasks where AI could help. This is an opportunity to multiply your productivity.'|t }}
@@ -87,6 +87,15 @@
         <div class="urgency-value">{{ report.displacement_risk.urgency|capitalize }}</div>
       </div>
     </div>
+
+    {# Personalized Narrative #}
+    {% if report.ai_insights.personalized_narrative %}
+      <div class="report-intro risk-narrative">
+        <p>
+          {{ report.ai_insights.personalized_narrative|nl2br }}
+        </p>
+      </div>
+    {% endif %}
 
     <div class="task-breakdown">
       <h3>{{ 'Task-by-Task Analysis'|t }}</h3>
@@ -347,32 +356,17 @@
 
   {# AI-Powered Insights Section #}
   {% if report.ai_insights %}
-    <section class="report-section ai-insights">
-      <h2>
-        <span class="ai-badge">{{ 'AI-Powered'|t }}</span>
-        {{ 'Personalized Insights'|t }}
-      </h2>
 
-      {# Personalized Narrative #}
-      {% if report.ai_insights.personalized_narrative %}
-        <div class="ai-narrative">
-          <div class="narrative-content">
-            {{ report.ai_insights.personalized_narrative|nl2br }}
-          </div>
-        </div>
-      {% endif %}
+    <section class="report-section hidden-opportunities">
+      <h3>{{ 'Hidden Opportunities You Might Miss'|t }}</h3>
+      <ul class="opportunity-list">
+        {% for opportunity in report.ai_insights.hidden_opportunities %}
+          <li class="opportunity-item">{{ opportunity }}</li>
+        {% endfor %}
+      </ul>
+    </section>
 
-      {# Hidden Opportunities #}
-      {% if report.ai_insights.hidden_opportunities %}
-        <div class="hidden-opportunities">
-          <h3>{{ 'Hidden Opportunities You Might Miss'|t }}</h3>
-          <ul class="opportunity-list">
-            {% for opportunity in report.ai_insights.hidden_opportunities %}
-              <li class="opportunity-item">{{ opportunity }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
+    <section class="report-section tool-recommendations">
 
       {# Tool Recommendations #}
       {% if report.ai_insights.tool_recommendations %}
@@ -392,6 +386,10 @@
           </div>
         </div>
       {% endif %}
+
+    </section>
+
+    <section class="report-section skill-development-roadmap">
 
       {# Skill Development Roadmap #}
       {% if report.ai_insights.skill_development_roadmap %}
@@ -422,6 +420,10 @@
         </div>
       {% endif %}
 
+      </section>
+
+      <section class="report-section industry-context">
+
       {# Industry Context #}
       {% if report.ai_insights.industry_context %}
         <div class="industry-context">
@@ -444,6 +446,10 @@
         </div>
       {% endif %}
 
+      </section>
+
+      <section class="report-section confidence-boosters">
+
       {# Confidence Boosters #}
       {% if report.ai_insights.confidence_boosters %}
         <div class="confidence-boosters">
@@ -455,6 +461,8 @@
           </ul>
         </div>
       {% endif %}
+
+      </section>
 
       {# Regenerate Button #}
       <div class="ai-actions">
