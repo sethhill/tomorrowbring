@@ -1,0 +1,202 @@
+/**
+ * Speedometer gauge for transformation pace
+ */
+
+.transformation-pace-gauge {
+  width: 200px;
+  height: 140px;
+  position: relative;
+  margin: 20px auto;
+}
+
+.speedometer {
+  width: 200px;
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Arc with colored segments using conic gradient */
+.speedometer-arc {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: conic-gradient(
+    from 270deg,
+    var(--color-indicator-green) 0deg 60deg,
+    var(--color-indicator-orange) 60deg 120deg,
+    var(--color-indicator-red) 120deg 180deg,
+    transparent 180deg
+  );
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent 0,
+    transparent 70px,
+    black 70px,
+    black 90px,
+    transparent 90px
+  );
+  mask: radial-gradient(
+    circle,
+    transparent 0,
+    transparent 70px,
+    black 70px,
+    black 90px,
+    transparent 90px
+  );
+}
+
+/* Segments wrapper - not needed with conic gradient but keeping for structure */
+.speedometer-segments {
+  display: none;
+}
+
+/* Center dot */
+.speedometer-center {
+  width: 18px;
+  height: 18px;
+  background: #333;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  border: 2px solid #fff;
+  display: none;
+}
+
+/* Needle */
+.speedometer-needle {
+  width: 3px;
+  height: 75px;
+  background: var(--color-deep-green);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-90deg);
+  transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  z-index: 2;
+  border-radius: 1.5px 1.5px 0 0;
+}
+
+/* Needle tip */
+.speedometer-needle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid var(--color-deep-green);
+}
+
+/* Needle positions for each pace */
+/* With conic gradient from 270deg: green is left (0-60deg), orange is bottom (60-120deg), red is right (120-180deg) */
+/* Slow: green section, point to middle at 30deg from starting position = -60deg in transform space */
+.speedometer-needle.slow {
+  transform: translateX(-50%) rotate(-60deg);
+}
+
+/* Moderate: orange section, point to middle at 90deg from starting position = 0deg in transform space */
+.speedometer-needle.moderate {
+  transform: translateX(-50%) rotate(0deg);
+}
+
+/* Rapid: red section, point to middle at 150deg from starting position = 60deg in transform space */
+.speedometer-needle.rapid {
+  transform: translateX(-50%) rotate(60deg);
+}
+
+/* Label */
+.speedometer-label {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-transform: capitalize;
+}
+
+/* Tick marks */
+.speedometer-ticks {
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.speedometer-tick {
+  width: 2px;
+  height: 12px;
+  background: rgba(0,0,0,0.4);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform-origin: bottom center;
+  border-radius: 1px;
+}
+
+/* Ticks at segment boundaries */
+/* Starting from left (270deg conic = -90deg transform), then 0deg boundaries at 60deg intervals */
+.speedometer-tick.tick-1 {
+  transform: translateX(-50%) rotate(-90deg);
+}
+
+.speedometer-tick.tick-2 {
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.speedometer-tick.tick-3 {
+  transform: translateX(-50%) rotate(90deg);
+}
+
+/* Tick labels */
+.speedometer-tick-labels {
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 12px;
+  color: #555;
+  font-weight: 600;
+  z-index: 1;
+  display: none;
+}
+
+.speedometer-tick-label {
+  position: absolute;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+.speedometer-tick-label.slow {
+  bottom: 35px;
+  left: 8px;
+  color: #4caf50;
+}
+
+.speedometer-tick-label.moderate {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ff9800;
+}
+
+.speedometer-tick-label.rapid {
+  bottom: 35px;
+  right: 8px;
+  color: #f44336;
+}

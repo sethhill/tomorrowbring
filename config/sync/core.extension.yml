@@ -5,6 +5,7 @@ module:
   ai_career_transitions: 0
   ai_industry_insights: 0
   ai_provider_anthropic: 0
+  ai_role_impact: 0
   ai_skills_analyzer: 0
   ai_task_recommender: 0
   block: 0
@@ -14,6 +15,7 @@ module:
   dashboard_leadership: 0
   dblog: 0
   dynamic_page_cache: 0
+  entity: 0
   field: 0
   field_ui: 0
   file: 0
@@ -23,13 +25,15 @@ module:
   key: 0
   link: 0
   media: 0
+  menu_link_content: 0
+  menu_ui: 0
   mysql: 0
   node: 0
   page_cache: 0
   path: 0
   path_alias: 0
+  profile: 0
   range_slider: 0
-  role_impact_analysis: 0
   system: 0
   taxonomy: 0
   text: 0

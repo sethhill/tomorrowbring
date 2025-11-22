@@ -10,8 +10,8 @@ dependencies:
     - tbring
 id: tbring_useraccountmenu
 theme: tbring
-region: header
-weight: 0
+region: primary_menu
+weight: -3
 provider: null
 plugin: 'system_menu_block:account'
 settings:

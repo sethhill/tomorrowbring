@@ -1,0 +1,45 @@
+.layout-container header + .region--id- {
+  text-align: center;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 5em;
+  overflow: hidden;
+  margin-bottom: 2em;
+  background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
+
+  nav {
+    display: inline-block;
+
+    ul {
+      li {
+        display: inline-block;
+        padding: 0.5em;
+
+        ul {
+          display: none;
+        }
+      }
+    }
+  }
+
+  button,
+  a {
+    display: block;
+    font-size: 1.25em;
+    padding: 0.25em 1em;
+    border-radius: 5em;
+    background: transparent;
+    font-weight: 600;
+    color: var(--color-white);
+
+    &.is-active {
+    }
+  }
+
+  li:has(.is-active) button,
+  li:has(.is-active) a {
+    background-color: var(--color-white);
+    color: var(--color-deep-green);
+  }
+}

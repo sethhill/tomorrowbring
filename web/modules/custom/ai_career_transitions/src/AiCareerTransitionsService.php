@@ -153,7 +153,7 @@ Respond with JSON (limit to 3-4 viable transitions):
 
 {
   "transition_readiness": {
-    "overall_score": "1-10",
+    "overall_score": "1-100",
     "summary": "1-2 sentences about their readiness to pivot",
     "key_strengths": ["strength 1", "strength 2"],
     "key_gaps": ["gap 1", "gap 2"]

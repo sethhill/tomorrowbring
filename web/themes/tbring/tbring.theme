@@ -49,3 +49,15 @@ function tbring_preprocess_field(array &$variables): void {
     $variables['attributes']['class'][] = 'field--label-' . $variables['label_display'];
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for block.html.twig.
+ */
+function tbring_preprocess_block(array &$variables): void {
+  $variables['attributes']['class'][] = 'block--type-' . $variables['configuration']['provider'];
+}
+
+function tbring_preprocess_region(array &$variables): void {
+  $variables['attributes']['class'][] = 'region--id-';
+  $variables['attributes']['class'][] = 'region--label-';
+}

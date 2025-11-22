@@ -5,9 +5,25 @@
     <section class="report-section overview">
       <h2>{{ 'Industry Overview'|t }}</h2>
       <p class="report-intro">{{ report.industry_overview.current_state }}</p>
-      <p><strong>{{ 'Transformation Pace:'|t }}</strong> {{ report.industry_overview.transformation_pace|capitalize }}</p>
 
-      <div class="report-lists key-drivers-list">
+      <div class="report-columns key-drivers-list">
+        <div class="report-column transformation-pace">
+          <h3>{{ 'Transformation Pace'|t }}</h3>
+          <div class="transformation-pace-gauge">
+            <div class="speedometer">
+              <div class="speedometer-arc"></div>
+              <div class="speedometer-segments">
+                <div class="speedometer-segment slow"></div>
+                <div class="speedometer-segment moderate"></div>
+                <div class="speedometer-segment rapid"></div>
+              </div>
+              <div class="speedometer-needle {{ report.industry_overview.transformation_pace }}"></div>
+            </div>
+            <div class="speedometer-label {{ report.industry_overview.transformation_pace }}">
+              {{ report.industry_overview.transformation_pace|capitalize }}
+            </div>
+          </div>
+        </div>
         <div class="report-list"><h3>{{ 'Key Drivers'|t }}</h3>
         <ul>
           {% for driver in report.industry_overview.key_drivers %}
@@ -40,14 +56,16 @@
         </ul>
         </div>
       </div>
-      <p><strong>{{ 'Timeline:'|t }}</strong> {{ report.role_evolution.timeline }}</p>
+      <div class="report-column">
+      <h3>{{ 'Timeline'|t }}</h3><p>{{ report.role_evolution.timeline }}</p>
+      </div>
     </section>
   {% endif %}
 
   {% if report.competitive_positioning %}
     <section class="report-section competitive">
       <h2>{{ 'Competitive Positioning'|t }}</h2>
-      <div class="report-lists competitive-positioning-list">
+      <div class="report-lists columns-narrow competitive-positioning-list">
         <div class="report-list"><h3>{{ 'Differentiators'|t }}</h3>
         <ul>
           {% for differentiator in report.competitive_positioning.differentiators %}
@@ -92,7 +110,10 @@
         </ul>
         </div>
       </div>
-      <p><strong>{{ 'Timeline:'|t }}</strong> {{ report.emerging_trends.impact_timeline }}</p>
+      <div class="report-column">
+      <h3>{{ 'Timeline'|t }}</h3>
+      <p>{{ report.emerging_trends.impact_timeline }}</p>
+      </div>
     </section>
   {% endif %}
 

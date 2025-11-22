@@ -9,7 +9,7 @@ _core:
 id: tbring_page_title
 theme: tbring
 region: content
-weight: 0
+weight: -1
 provider: null
 plugin: page_title_block
 settings:

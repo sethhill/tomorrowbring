@@ -34,6 +34,11 @@ class AiIndustryInsightsController extends ControllerBase {
     return [
       '#theme' => 'ai_industry_insights_report',
       '#report' => $report,
+      '#attached' => [
+        'library' => [
+          'ai_industry_insights/speedometer',
+        ],
+      ],
       '#cache' => ['contexts' => ['user'], 'tags' => ['webform_submission_list']],
     ];
   }

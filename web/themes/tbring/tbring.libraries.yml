@@ -8,4 +8,5 @@ global:
     theme:
       css/styles.css: {}
       css/reports.css: {}
+      css/menu.css: {}
       css/theme/print.css: { media: print }

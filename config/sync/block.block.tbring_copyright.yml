@@ -11,7 +11,7 @@ dependencies:
 id: tbring_copyright
 theme: tbring
 region: footer
-weight: 0
+weight: -4
 provider: null
 plugin: 'block_content:8b88d4aa-bf22-462f-8093-1c83d88cdba5'
 settings:

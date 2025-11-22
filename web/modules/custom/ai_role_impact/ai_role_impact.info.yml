@@ -1,0 +1,10 @@
+name: 'AI Role Impact'
+type: module
+description: 'Provides AI-powered role impact analysis and displacement risk assessment.'
+core_version_requirement: ^11
+package: Custom
+dependencies:
+  - drupal:user
+  - webform:webform
+  - client_webform:client_webform
+  - ai:ai

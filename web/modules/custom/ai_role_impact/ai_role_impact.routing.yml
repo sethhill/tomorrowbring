@@ -1,0 +1,16 @@
+ai_role_impact.report:
+  path: '/analysis/role-impact'
+  defaults:
+    _controller: '\Drupal\ai_role_impact\Controller\RoleImpactReportController::viewReport'
+    _title: 'Your Role Impact Analysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_role_impact.regenerate:
+  path: '/analysis/role-impact/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_role_impact\Controller\RoleImpactReportController::regenerateAnalysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'

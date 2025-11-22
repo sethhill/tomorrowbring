@@ -5,11 +5,11 @@
     <section class="report-section readiness">
       <h2>{{ 'Transition Readiness'|t }}</h2>
       <div class="gauge-wrapper">
-        {% set readiness_class = report.transition_readiness.overall_score >= 7 ? 'gauge-risk-low' : (report.transition_readiness.overall_score >= 4 ? 'gauge-risk-medium' : 'gauge-risk-high') %}
-        <div class="gauge {{ readiness_class }}" data-score="{{ report.transition_readiness.overall_score * 10 }}" style="--score: {{ report.transition_readiness.overall_score * 10 }}">
+        {% set readiness_class = report.transition_readiness.overall_score|number_format(0) >= 70  ? 'gauge-risk-low' : (report.transition_readiness.overall_score|number_format(0) >= 40 ? 'gauge-risk-medium' : 'gauge-risk-high') %}
+        <div class="gauge {{ readiness_class }}" data-score="{{ report.transition_readiness.overall_score|number_format(0) }}" style="--score: {{ report.transition_readiness.overall_score|number_format(0) }}">
           <div class="gauge-fill"></div>
           <div class="gauge-inner">
-            <span class="gauge-value">{{ report.transition_readiness.overall_score * 10 }}</span>
+            <span class="gauge-value">{{ report.transition_readiness.overall_score|number_format(0) }}</span>
             <span class="gauge-max">/100</span>
           </div>
         </div>
@@ -45,7 +45,7 @@
             <h3>{{ transition.target_role }}</h3>
             <div class="rating-container">
               <div class="circle-rating">
-                {% set score = transition.fit_score %}
+                {% set score = transition.fit_score|number_format(0) %}
                 {% for i in 1..5 %}
                   {% if score >= i * 2 %}
                     <span class="circle circle-full"></span>

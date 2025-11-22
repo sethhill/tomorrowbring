@@ -1,0 +1,4 @@
+services:
+  ai_role_impact.analysis_service:
+    class: Drupal\ai_role_impact\AiRoleImpactService
+    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']
