@@ -18,7 +18,7 @@
 
 .report-section {
   margin-bottom: 1.5em;
-  padding: 2em 2em 3em 2em;
+  padding: 2em 3em 3em 3em;
   background: var(--color-white);
   border-start-start-radius: 2em;
   border-end-end-radius: 2em;
@@ -184,7 +184,6 @@
   gap: 3em;
   padding: 0 1.5em;
   text-align: center;
-  margin-bottom: 2em;
 }
 
 .risk-badge {
@@ -681,6 +680,7 @@ h3 + .timeline-period {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 1em;
 }
 
 .gauge-label {

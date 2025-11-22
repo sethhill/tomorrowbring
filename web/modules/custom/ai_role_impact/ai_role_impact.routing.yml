@@ -2,7 +2,7 @@ ai_role_impact.report:
   path: '/analysis/role-impact'
   defaults:
     _controller: '\Drupal\ai_role_impact\Controller\RoleImpactReportController::viewReport'
-    _title: 'Your Role Impact Analysis'
+    _title: 'Evolution of Your Role'
   requirements:
     _user_is_logged_in: 'TRUE'
 
