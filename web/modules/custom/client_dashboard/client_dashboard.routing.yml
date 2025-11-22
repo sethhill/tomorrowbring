@@ -2,6 +2,6 @@ client_dashboard.dashboard:
   path: '/dashboard'
   defaults:
     _controller: '\Drupal\client_dashboard\Controller\DashboardController::view'
-    _title: 'Your Dashboard'
+    _title: 'Welcome!'
   requirements:
     _user_is_logged_in: 'TRUE'

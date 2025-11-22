@@ -9,10 +9,6 @@
 #}
 
 <div class="ai-skills-analysis-report">
-  <div class="report-header">
-    <h1><span class="ai-badge">{{ 'AI-Powered'|t }}</span> {{ 'Skills Development Analysis'|t }}</h1>
-  </div>
-
   {# Skill Trajectory Section #}
   {% if report.skill_trajectory %}
     <section class="report-section skill-trajectory">
@@ -72,13 +68,14 @@
 
       {% if report.personalized_learning_path.learning_style_assessment %}
         <div class="learning-style">
-          <h3>{{ 'Learning Style Assessment'|t }}</h3>
-          <p>{{ report.personalized_learning_path.learning_style_assessment }}</p>
+          <p class="report-intro">{{ report.personalized_learning_path.learning_style_assessment }}</p>
         </div>
       {% endif %}
 
+      <div class="learning-periods">
+
       {% if report.personalized_learning_path.immediate_actions %}
-        <div class="immediate-actions">
+        <div class="learning-period immediate-actions">
           <h3>{{ 'Start This Week'|t }}</h3>
           <div class="action-cards">
             {% for action in report.personalized_learning_path.immediate_actions %}
@@ -91,10 +88,10 @@
             {% endfor %}
           </div>
         </div>
-      {% endif %}
+      {% endif %}jk
 
       {% if report.personalized_learning_path.thirty_day_sprint %}
-        <div class="thirty-day-sprint">
+        <div class="learning-period thirty-day-sprint">
           <h3>{{ '30-Day Skill Sprint'|t }}</h3>
           <p><strong>{{ 'Focus:'|t }}</strong> {{ report.personalized_learning_path.thirty_day_sprint.focus_skill }}</p>
 
@@ -128,7 +125,7 @@
       {% endif %}
 
       {% if report.personalized_learning_path.ninety_day_mastery %}
-        <div class="ninety-day-mastery">
+        <div class="learning-period ninety-day-mastery">
           <h3>{{ '90-Day Mastery Plan'|t }}</h3>
 
           {% if report.personalized_learning_path.ninety_day_mastery.target_competencies %}
@@ -156,6 +153,7 @@
           {% endif %}
         </div>
       {% endif %}
+      </div>
     </section>
   {% endif %}
 

@@ -2,7 +2,7 @@ client_webform.module_completion:
   path: '/module/completion/{webform_submission}'
   defaults:
     _controller: '\Drupal\client_webform\Controller\ModuleCompletionController::view'
-    _title: ''
+    _title: 'Section Complete!'
   requirements:
     _user_is_logged_in: 'TRUE'
     webform_submission: \d+

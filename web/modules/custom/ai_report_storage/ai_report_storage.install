@@ -1,0 +1,198 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the AI Report Storage module.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+function ai_report_storage_schema() {
+  $schema['ai_report'] = [
+    'description' => 'Stores AI-generated reports with versioning.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: Unique report ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'description' => 'Unique UUID for the report.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'type' => [
+        'description' => 'The type of report.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'The user ID of the report owner.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'report_data' => [
+        'description' => 'The complete report data in JSON format.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'version' => [
+        'description' => 'The version number of this report.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+      ],
+      'status' => [
+        'description' => 'The status of the report (published, archived, draft).',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => 'published',
+      ],
+      'generated_at' => [
+        'description' => 'The Unix timestamp when the report was generated.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'generation_time' => [
+        'description' => 'The time taken to generate the report in seconds.',
+        'type' => 'numeric',
+        'precision' => 10,
+        'scale' => 3,
+      ],
+      'model_used' => [
+        'description' => 'The AI model used to generate the report.',
+        'type' => 'varchar',
+        'length' => 128,
+      ],
+      'source_data_hash' => [
+        'description' => 'MD5 hash of the source webform submission data.',
+        'type' => 'varchar',
+        'length' => 32,
+      ],
+      'source_submissions' => [
+        'description' => 'JSON array of webform submission IDs used.',
+        'type' => 'text',
+        'size' => 'normal',
+      ],
+      'changed' => [
+        'description' => 'The Unix timestamp when the report was last changed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'uid_type' => ['uid', 'type'],
+      'uid_type_version' => ['uid', 'type', 'version'],
+      'uid_type_status' => ['uid', 'type', 'status'],
+      'status' => ['status'],
+      'generated_at' => ['generated_at'],
+      'type' => ['type'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Migrate existing cached reports to entity storage.
+ */
+function ai_report_storage_update_9001() {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $cache = \Drupal::cache();
+  $connection = Database::getConnection();
+
+  // Report types and their corresponding cache ID patterns.
+  $report_types = [
+    'role_impact' => 'ai_role_impact:report:',
+    'career_transitions' => 'ai_career_transitions:report:',
+    'industry_insights' => 'ai_industry_insights:report:',
+    'skills' => 'ai_skills_analyzer:report:',
+    'task_recommendations' => 'ai_task_recommender:report:',
+    'hybrid_analysis' => 'role_impact_analysis:ai_insights:',
+  ];
+
+  $migrated_count = 0;
+  $storage = $entity_type_manager->getStorage('ai_report');
+
+  foreach ($report_types as $type => $cache_prefix) {
+    // Query cache table for all entries matching this pattern.
+    $query = $connection->select('cache_default', 'c')
+      ->fields('c', ['cid', 'data'])
+      ->condition('cid', $cache_prefix . '%', 'LIKE');
+    $results = $query->execute();
+
+    foreach ($results as $row) {
+      // Extract user ID from cache ID.
+      $uid = str_replace($cache_prefix, '', $row->cid);
+
+      if (!is_numeric($uid)) {
+        continue;
+      }
+
+      // Unserialize cached data.
+      $cached_data = unserialize($row->data);
+      if (!is_array($cached_data)) {
+        continue;
+      }
+
+      // Check if entity already exists for this user/type.
+      $existing = $storage->loadByProperties([
+        'uid' => $uid,
+        'type' => $type,
+        'version' => 1,
+      ]);
+
+      if (!empty($existing)) {
+        // Already migrated.
+        continue;
+      }
+
+      // Create new entity from cached data.
+      $entity = $storage->create([
+        'type' => $type,
+        'uid' => $uid,
+        'report_data' => $cached_data,
+        'version' => 1,
+        'status' => 'published',
+        'generated_at' => $cached_data['generated_at'] ?? time(),
+        'generation_time' => $cached_data['generation_time'] ?? NULL,
+        'model_used' => 'claude-sonnet-4-5-20250929',
+        'source_data_hash' => '',
+        'source_submissions' => [],
+      ]);
+
+      try {
+        $entity->save();
+        $migrated_count++;
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('ai_report_storage')->error('Failed to migrate cached report for user @uid, type @type: @message', [
+          '@uid' => $uid,
+          '@type' => $type,
+          '@message' => $e->getMessage(),
+        ]);
+      }
+    }
+  }
+
+  return t('Migrated @count cached reports to entity storage.', ['@count' => $migrated_count]);
+}

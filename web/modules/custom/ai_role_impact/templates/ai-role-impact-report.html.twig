@@ -124,7 +124,7 @@
 
 		<div class="report-lists path-details">
 			<div class="report-list positioning">
-				<h3>{{ 'Why You Are Well-Positioned'|t }}</h3>
+				<h3>{{ 'Your Value Proposition'|t }}</h3>
 				<ul>
 					{% for item in report.evolution_path.positioning_points|default(report.evolution_path.positioning) %}
 						<li>{{ item.point|default(item) }}</li>
@@ -155,7 +155,7 @@
 	</section>
 
 	{# Section 5: Value Proposition #}
-	<section class="report-section value-proposition">
+	{# <section class="report-section value-proposition">
 <h2>{{ 'Your Skill Evolution'|t }}</h2>
 
 		<p class="report-intro">{{ report.value_proposition.summary }}</p>
@@ -193,7 +193,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-{% endif %}
+{% endif %} #}
 
 
 		{# <div class="value-components">

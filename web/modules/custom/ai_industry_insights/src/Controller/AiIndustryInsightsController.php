@@ -45,7 +45,8 @@ class AiIndustryInsightsController extends ControllerBase {
 
   public function regenerateAnalysis() {
     $this->analysisService->clearCache($this->currentUser()->id());
-    $this->messenger()->addStatus($this->t('Industry insights are being regenerated...'));
+    $this->analysisService->generateReport(NULL, TRUE);
+    $this->messenger()->addStatus($this->t('Industry insights have been regenerated.'));
     return new RedirectResponse('/analysis/industry-insights');
   }
 

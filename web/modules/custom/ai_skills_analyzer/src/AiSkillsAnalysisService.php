@@ -2,241 +2,42 @@
 
 namespace Drupal\ai_skills_analyzer;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\client_webform\WebformClientManager;
-use Drupal\ai\AiProviderPluginManager;
-use Drupal\ai\OperationType\Chat\ChatInput;
-use Drupal\ai\OperationType\Chat\ChatMessage;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\ai_report_storage\AiReportServiceBase;
 
 /**
  * Service for AI-powered skills analysis.
  */
-class AiSkillsAnalysisService {
+class AiSkillsAnalysisService extends AiReportServiceBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * {@inheritdoc}
    */
-  protected $entityTypeManager;
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The webform client manager service.
-   *
-   * @var \Drupal\client_webform\WebformClientManager
-   */
-  protected $clientManager;
-
-  /**
-   * The AI provider plugin manager.
-   *
-   * @var \Drupal\ai\AiProviderPluginManager
-   */
-  protected $aiProvider;
-
-  /**
-   * The logger service.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
-   * The cache backend.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
-   * Constructs an AiSkillsAnalysisService object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The current user.
-   * @param \Drupal\client_webform\WebformClientManager $client_manager
-   *   The webform client manager service.
-   * @param \Drupal\ai\AiProviderPluginManager $ai_provider
-   *   The AI provider plugin manager.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   The logger factory.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The cache backend.
-   */
-  public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    AccountProxyInterface $current_user,
-    WebformClientManager $client_manager,
-    AiProviderPluginManager $ai_provider,
-    LoggerChannelFactoryInterface $logger_factory,
-    CacheBackendInterface $cache
-  ) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentUser = $current_user;
-    $this->clientManager = $client_manager;
-    $this->aiProvider = $ai_provider;
-    $this->logger = $logger_factory->get('ai_skills_analyzer');
-    $this->cache = $cache;
+  protected function getReportType(): string {
+    return 'skills';
   }
 
   /**
-   * Get submission data for a specific webform and user.
-   *
-   * @param string $webform_id
-   *   The webform ID.
-   * @param int $uid
-   *   The user ID (optional, defaults to current user).
-   *
-   * @return array|null
-   *   The submission data array or NULL if not found.
+   * {@inheritdoc}
    */
-  public function getSubmissionData($webform_id, $uid = NULL) {
-    if ($uid === NULL) {
-      $uid = $this->currentUser->id();
-    }
-
-    $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
-    $query = $submission_storage->getQuery()
-      ->condition('webform_id', $webform_id)
-      ->condition('uid', $uid)
-      ->condition('completed', 0, '>')
-      ->sort('changed', 'DESC')
-      ->range(0, 1)
-      ->accessCheck(FALSE);
-
-    $sids = $query->execute();
-
-    if (empty($sids)) {
-      return NULL;
-    }
-
-    $submission = $submission_storage->load(reset($sids));
-    if ($submission) {
-      return $submission->getData();
-    }
-    return NULL;
+  protected function getModuleName(): string {
+    return 'ai_skills_analyzer';
   }
 
   /**
-   * Check if user has minimum required data for analysis.
-   *
-   * @param int $uid
-   *   The user ID (optional).
-   *
-   * @return bool
-   *   TRUE if minimum data exists.
+   * {@inheritdoc}
    */
-  public function hasMinimumData($uid = NULL) {
-    if ($uid === NULL) {
-      $uid = $this->currentUser->id();
-    }
-
-    // Requires skills_gap and task_analysis webforms.
-    $skills_data = $this->getSubmissionData('skills_gap', $uid);
-    $task_data = $this->getSubmissionData('task_analysis', $uid);
-
-    return !empty($skills_data) && !empty($task_data);
+  protected function getRequiredWebforms(): array {
+    return ['skills_gap', 'task_analysis'];
   }
 
   /**
-   * Generate AI-powered skills analysis report.
-   *
-   * @param int $uid
-   *   The user ID (optional).
-   *
-   * @return array|null
-   *   Skills analysis report or NULL on failure.
+   * {@inheritdoc}
    */
-  public function generateReport($uid = NULL) {
-    if (!$this->hasMinimumData($uid)) {
-      return NULL;
-    }
+  protected function buildPrompt(array $submission_data): string {
+    // Extract key data points from the submission data.
+    $task_data = $submission_data['task_analysis']['data'] ?? [];
+    $skills_data = $submission_data['skills_gap']['data'] ?? [];
 
-    if ($uid === NULL) {
-      $uid = $this->currentUser->id();
-    }
-
-    // Check cache first.
-    $cid = "ai_skills_analyzer:report:{$uid}";
-    if ($cache = $this->cache->get($cid)) {
-      $this->logger->info('Returning cached skills analysis for user @uid', ['@uid' => $uid]);
-      return $cache->data;
-    }
-
-    // Get submission data.
-    $skills_data = $this->getSubmissionData('skills_gap', $uid);
-    $task_data = $this->getSubmissionData('task_analysis', $uid);
-
-    // Generate AI analysis.
-    $start_time = microtime(TRUE);
-
-    try {
-      $prompt = $this->buildPrompt($skills_data, $task_data);
-      $response = $this->callAnthropicApi($prompt);
-
-      if ($response === NULL) {
-        return NULL;
-      }
-
-      $report = $this->parseResponse($response);
-
-      if ($report === NULL) {
-        return NULL;
-      }
-
-      // Log successful generation.
-      $duration = round(microtime(TRUE) - $start_time, 2);
-      $this->logger->info('Generated skills analysis for user @uid in @duration seconds', [
-        '@uid' => $uid,
-        '@duration' => $duration,
-      ]);
-
-      // Add metadata.
-      $report['generated_at'] = time();
-      $report['uid'] = $uid;
-
-      // Cache indefinitely.
-      $this->cache->set($cid, $report, CacheBackendInterface::CACHE_PERMANENT, [
-        "user:{$uid}",
-        'webform_submission_list',
-        "ai_skills_analysis:{$uid}",
-      ]);
-
-      return $report;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to generate skills analysis for user @uid: @error', [
-        '@uid' => $uid,
-        '@error' => $e->getMessage(),
-      ]);
-      return NULL;
-    }
-  }
-
-  /**
-   * Build the prompt for AI skills analysis.
-   *
-   * @param array $skills_data
-   *   Skills gap submission data.
-   * @param array $task_data
-   *   Task analysis submission data.
-   *
-   * @return string
-   *   The formatted prompt.
-   */
-  protected function buildPrompt(array $skills_data, array $task_data) {
-    // Extract key data points for a focused prompt
     $role = $task_data['m2_q1_role_category'] ?? 'unknown';
     $current_skills = $skills_data['m5_q2_current_skills'] ?? [];
     $desired_skills = $skills_data['m5_q3_desired_skills'] ?? [];
@@ -292,108 +93,28 @@ PROMPT;
   }
 
   /**
-   * Call the Anthropic API.
-   *
-   * @param string $prompt
-   *   The prompt to send.
-   *
-   * @return string|null
-   *   The AI response text or NULL on failure.
+   * {@inheritdoc}
    */
-  protected function callAnthropicApi(string $prompt): ?string {
-    try {
-      $provider = $this->aiProvider->createInstance('anthropic');
+  protected function validateResponse(array $response): bool {
+    $required_fields = [
+      'skill_trajectory',
+      'personalized_learning_path',
+      'learning_resources',
+      'skill_synergies',
+      'barrier_strategies',
+      'motivational_insights',
+    ];
 
-      $system_prompt = 'You are an expert career development coach specializing in AI skills. Provide specific, actionable, and empowering guidance. Always respond with valid JSON.';
-
-      $messages = new ChatInput([
-        new ChatMessage('user', $prompt),
-      ]);
-      $messages->setSystemPrompt($system_prompt);
-
-      $response = $provider->chat(
-        $messages,
-        'claude-sonnet-4-5-20250929',
-        ['ai-skills-analyzer', 'skills-analysis']
-      );
-
-      return $response->getNormalized()->getText();
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Anthropic API call failed: @error', [
-        '@error' => $e->getMessage(),
-      ]);
-      return NULL;
-    }
-  }
-
-  /**
-   * Parse AI response into structured data.
-   *
-   * @param string $response
-   *   The raw AI response.
-   *
-   * @return array|null
-   *   Parsed report array or NULL if parsing fails.
-   */
-  protected function parseResponse(string $response): ?array {
-    try {
-      $json_string = $response;
-
-      // Remove markdown code blocks if present.
-      if (preg_match('/```json\s*(.*?)\s*```/s', $response, $matches)) {
-        $json_string = $matches[1];
+    foreach ($required_fields as $field) {
+      if (!isset($response[$field])) {
+        $this->logger->error('AI response missing required field: @field', [
+          '@field' => $field,
+        ]);
+        return FALSE;
       }
-      elseif (preg_match('/```\s*(.*?)\s*```/s', $response, $matches)) {
-        $json_string = $matches[1];
-      }
-
-      $report = json_decode($json_string, TRUE);
-
-      if ($report === NULL) {
-        $this->logger->error('Failed to parse AI response as JSON');
-        return NULL;
-      }
-
-      // Validate required fields.
-      $required_fields = [
-        'skill_trajectory',
-        'personalized_learning_path',
-        'learning_resources',
-        'skill_synergies',
-        'barrier_strategies',
-        'motivational_insights',
-      ];
-
-      foreach ($required_fields as $field) {
-        if (!isset($report[$field])) {
-          $this->logger->error('AI response missing required field: @field', [
-            '@field' => $field,
-          ]);
-          return NULL;
-        }
-      }
-
-      return $report;
     }
-    catch (\Exception $e) {
-      $this->logger->error('Error parsing AI response: @error', [
-        '@error' => $e->getMessage(),
-      ]);
-      return NULL;
-    }
-  }
 
-  /**
-   * Clear cached analysis for a user.
-   *
-   * @param int $uid
-   *   The user ID.
-   */
-  public function clearCache(int $uid): void {
-    $cid = "ai_skills_analyzer:report:{$uid}";
-    $this->cache->delete($cid);
-    $this->logger->info('Cleared skills analysis cache for user @uid', ['@uid' => $uid]);
+    return TRUE;
   }
 
 }

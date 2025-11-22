@@ -364,19 +364,45 @@ label {
 .webform-progress-tracker {
   margin: 0;
   margin-bottom: 1em;
+
+  .progress-step:last-child {
+    display: none;
+  }
 }
 
 .progress-marker:before {
   content: "";
+  width: 100%;
+  border-radius: 0;
+  height: 9px;
 }
 
 .progress-step .progress-marker::before {
   background-color: var(--color-white);
 }
 
+.progress-step.is-active .progress-marker:before {
+  border-start-end-radius: 1em;
+  border-end-end-radius: 1em;
+}
+
+.progress-step:first-child {
+  .progress-marker:before {
+    border-start-start-radius: 1em;
+    border-end-start-radius: 1em;
+  }
+}
+
+.progress-step:nth-last-child(2) {
+  .progress-marker:before {
+    border-start-end-radius: 1em;
+    border-end-end-radius: 1em;
+  }
+}
+
 .progress-marker:after {
   background-color: white;
-  background-color: transparent;
+  display: none;
 }
 
 .webform-progress-tracker .progress-step .progress-marker::after {
@@ -387,6 +413,7 @@ label {
 
 .progress-step.is-active .progress-marker::before {
   background-color: var(--color-orange);
+  background:linear-gradient(to right, var(--color-gold), var(--color-orange));
 }
 
 .webform-progress-tracker .progress-step.is-complete .progress-marker::before {
@@ -587,6 +614,7 @@ footer {
 }
 .webform-submission-form > .form-wrapper.form-actions {
   background-color: transparent;
+  text-align: center;
 }
 
 .webform-element-description {
@@ -598,6 +626,7 @@ legend + .fieldset-wrapper:has(.description) {
   margin-top: -0.5em;
 }
 
+.button--next,
 input[type="submit"].webform-button--next {
   padding-right: 2.5em;
   background-image: url("../images/arrow_forward_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
@@ -606,12 +635,17 @@ input[type="submit"].webform-button--next {
   background-size: 1.5em 1.5em;
 }
 
+.button--return,
 input[type="submit"].webform-button--previous {
   padding-left: 2.5em;
   background-image: url("../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
   background-repeat: no-repeat;
   background-position: left 0.75em center;
   background-size: 1.5em 1.5em;
+}
+
+.button--return {
+  background-image: url("../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
 }
 
 h2 {
@@ -630,4 +664,16 @@ h4 {
   font-size: 1.25em;
   color: var(--color-deep-green);
   font-weight: 600;
+}
+
+
+.module-completion__header {
+  background-color: var(--color-white);
+  padding: 2em 3em;
+  border-start-start-radius: 1em;
+  border-end-end-radius: 1em;
+}
+
+.module-completion {
+  text-align: center;
 }

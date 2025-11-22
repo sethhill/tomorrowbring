@@ -9,3 +9,4 @@ dependencies:
   - webform:webform
   - client_webform:client_webform
   - ai:ai
+  - ai_report_storage:ai_report_storage

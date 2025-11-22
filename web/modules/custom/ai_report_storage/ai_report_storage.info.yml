@@ -1,0 +1,8 @@
+name: 'AI Report Storage'
+type: module
+description: 'Unified persistent storage for all AI-generated reports with versioning and history tracking.'
+core_version_requirement: ^10 || ^11
+package: 'Custom'
+dependencies:
+  - drupal:user
+  - drupal:system

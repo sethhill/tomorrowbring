@@ -1,0 +1,8 @@
+services:
+  ai_report_storage.manager:
+    class: Drupal\ai_report_storage\AiReportManager
+    arguments:
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@logger.factory'
+      - '@module_handler'

@@ -5,6 +5,7 @@ module:
   ai_career_transitions: 0
   ai_industry_insights: 0
   ai_provider_anthropic: 0
+  ai_report_storage: 0
   ai_role_impact: 0
   ai_skills_analyzer: 0
   ai_task_recommender: 0

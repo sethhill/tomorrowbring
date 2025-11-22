@@ -2,144 +2,42 @@
 
 namespace Drupal\ai_role_impact;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\client_webform\WebformClientManager;
-use Drupal\ai\AiProviderPluginManager;
-use Drupal\ai\OperationType\Chat\ChatInput;
-use Drupal\ai\OperationType\Chat\ChatMessage;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\ai_report_storage\AiReportServiceBase;
 
 /**
  * Service for AI-powered role impact analysis.
  */
-class AiRoleImpactService {
+class AiRoleImpactService extends AiReportServiceBase {
 
-  protected $entityTypeManager;
-  protected $currentUser;
-  protected $clientManager;
-  protected $aiProvider;
-  protected $logger;
-  protected $cache;
-
-  public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    AccountProxyInterface $current_user,
-    WebformClientManager $client_manager,
-    AiProviderPluginManager $ai_provider,
-    LoggerChannelFactoryInterface $logger_factory,
-    CacheBackendInterface $cache
-  ) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentUser = $current_user;
-    $this->clientManager = $client_manager;
-    $this->aiProvider = $ai_provider;
-    $this->logger = $logger_factory->get('ai_role_impact');
-    $this->cache = $cache;
+  /**
+   * {@inheritdoc}
+   */
+  protected function getReportType(): string {
+    return 'role_impact';
   }
 
-  public function getSubmissionData($webform_id, $uid = NULL) {
-    if ($uid === NULL) {
-      $uid = $this->currentUser->id();
-    }
-
-    $submission_storage = $this->entityTypeManager->getStorage('webform_submission');
-    $query = $submission_storage->getQuery()
-      ->condition('webform_id', $webform_id)
-      ->condition('uid', $uid)
-      ->condition('completed', 0, '>')
-      ->sort('changed', 'DESC')
-      ->range(0, 1)
-      ->accessCheck(FALSE);
-
-    $sids = $query->execute();
-
-    if (empty($sids)) {
-      return NULL;
-    }
-
-    $submission = $submission_storage->load(reset($sids));
-    if ($submission) {
-      return $submission->getData();
-    }
-    return NULL;
+  /**
+   * {@inheritdoc}
+   */
+  protected function getModuleName(): string {
+    return 'ai_role_impact';
   }
 
-  public function hasMinimumData($uid = NULL) {
-    if ($uid === NULL) {
-      $uid = $this->currentUser->id();
-    }
-
-    $task_data = $this->getSubmissionData('task_analysis', $uid);
-    $skills_data = $this->getSubmissionData('skills_gap', $uid);
-
-    return !empty($task_data) && !empty($skills_data);
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRequiredWebforms(): array {
+    return ['task_analysis', 'skills_gap'];
   }
 
-  public function generateReport($uid = NULL, $retry = TRUE) {
-    if (!$this->hasMinimumData($uid)) {
-      return NULL;
-    }
-
-    if ($uid === NULL) {
-      $uid = $this->currentUser->id();
-    }
-
-    $cid = "ai_role_impact:report:{$uid}";
-    if ($cache = $this->cache->get($cid)) {
-      $this->logger->info('Returning cached role impact for user @uid', ['@uid' => $uid]);
-      return $cache->data;
-    }
-
-    $task_data = $this->getSubmissionData('task_analysis', $uid);
-    $skills_data = $this->getSubmissionData('skills_gap', $uid);
-    $ai_usage_data = $this->getSubmissionData('current_ai_usage', $uid);
-
-    $start_time = microtime(TRUE);
-
-    try {
-      $prompt = $this->buildPrompt($task_data, $skills_data, $ai_usage_data);
-      $response = $this->callAnthropicApi($prompt, $retry);
-
-      if ($response === NULL) {
-        return ['error' => 'API_TIMEOUT', 'message' => 'The AI service timed out. This analysis requires complex processing. Please try again in a moment.'];
-      }
-
-      $report = $this->parseResponse($response);
-
-      if ($report === NULL) {
-        return ['error' => 'PARSE_ERROR', 'message' => 'Unable to parse AI response. Please try regenerating the analysis.'];
-      }
-
-      $duration = round(microtime(TRUE) - $start_time, 2);
-      $this->logger->info('Generated role impact for user @uid in @duration seconds', [
-        '@uid' => $uid,
-        '@duration' => $duration,
-      ]);
-
-      $report['generated_at'] = time();
-      $report['uid'] = $uid;
-      $report['generation_time'] = $duration;
-
-      $this->cache->set($cid, $report, CacheBackendInterface::CACHE_PERMANENT, [
-        "user:{$uid}",
-        'webform_submission_list',
-        "ai_role_impact:{$uid}",
-      ]);
-
-      return $report;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to generate role impact for user @uid: @error', [
-        '@uid' => $uid,
-        '@error' => $e->getMessage(),
-      ]);
-      return ['error' => 'EXCEPTION', 'message' => 'An unexpected error occurred. Please try again later.', 'details' => $e->getMessage()];
-    }
-  }
-
-  protected function buildPrompt(array $task_data, array $skills_data, ?array $ai_usage_data) {
+  /**
+   * {@inheritdoc}
+   */
+  protected function buildPrompt(array $submission_data): string {
+    // Extract task analysis data.
+    $task_data = $submission_data['task_analysis']['data'] ?? [];
+    $skills_data = $submission_data['skills_gap']['data'] ?? [];
+    $ai_usage_data = $submission_data['current_ai_usage']['data'] ?? [];
     // Extract role information
     $role_category = $task_data['m2_q1_role_category'] ?? 'unknown';
     $role_other = $task_data['m2_q1_other'] ?? '';
@@ -306,107 +204,160 @@ PROMPT;
     ];
   }
 
-  protected function callAnthropicApi(string $prompt, $retry = TRUE): ?string {
-    $max_attempts = $retry ? 2 : 1;
-    $attempt = 0;
+  /**
+   * {@inheritdoc}
+   */
+  protected function validateResponse(array $response): bool {
+    $required_fields = [
+      'current_state',
+      'displacement_risk',
+      'skill_evolution',
+      'evolution_path',
+      'value_proposition',
+      'action_plan',
+      'learning_path',
+      'ai_insights',
+    ];
 
-    while ($attempt < $max_attempts) {
-      $attempt++;
-
-      try {
-        $this->logger->info('Calling Anthropic API (attempt @attempt of @max) with 600s timeout', [
-          '@attempt' => $attempt,
-          '@max' => $max_attempts,
-        ]);
-
-        // Set execution timeout to allow for long API calls.
-        set_time_limit(630);
-
-        $provider = $this->aiProvider->createInstance('anthropic', ['timeout' => 600]);
-
-        $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
-
-        $messages = new ChatInput([
-          new ChatMessage('user', $prompt),
-        ]);
-        $messages->setSystemPrompt($system_prompt);
-
-        $response = $provider->chat(
-          $messages,
-          'claude-sonnet-4-5-20250929'
-        );
-
-        $this->logger->info('API call successful on attempt @attempt', ['@attempt' => $attempt]);
-        return $response->getNormalized()->getText();
-      }
-      catch (\Exception $e) {
-        $is_timeout = strpos($e->getMessage(), 'timeout') !== FALSE || strpos($e->getMessage(), 'timed out') !== FALSE;
-
-        if ($is_timeout && $attempt < $max_attempts) {
-          $this->logger->warning('API timeout on attempt @attempt, retrying...', ['@attempt' => $attempt]);
-          sleep(2); // Wait 2 seconds before retry
-          continue;
-        }
-
-        $this->logger->error('Anthropic API call failed after @attempt attempts: @error', [
-          '@attempt' => $attempt,
-          '@error' => $e->getMessage(),
-        ]);
-        return NULL;
+    foreach ($required_fields as $field) {
+      if (!isset($response[$field])) {
+        $this->logger->error('AI response missing required field: @field', ['@field' => $field]);
+        return FALSE;
       }
     }
 
-    return NULL;
+    return TRUE;
   }
 
-  protected function parseResponse(string $response): ?array {
+  /**
+   * Override to collect optional current_ai_usage data if available.
+   */
+  public function generateReport($uid = NULL, bool $force_regenerate = FALSE, bool $retry = TRUE) {
+    // Check minimum data first.
+    if (!$this->hasMinimumData($uid)) {
+      return NULL;
+    }
+
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Check cache first (unless forcing regenerate).
+    if (!$force_regenerate) {
+      $cached = $this->getCachedReport($uid);
+      if ($cached !== NULL) {
+        return $cached;
+      }
+
+      // Check for existing entity.
+      $latest_entity = $this->loadLatestReport($uid);
+      if ($latest_entity) {
+        $report_data = $latest_entity->getReportData();
+        $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+        $report_data['uid'] = $uid;
+        $report_data['generation_time'] = $latest_entity->getGenerationTime();
+        $report_data['version'] = $latest_entity->getVersion();
+
+        // Populate cache from entity.
+        $this->setCachedReport($uid, $report_data);
+        return $report_data;
+      }
+    }
+
+    // Collect submission data (required + optional).
+    $submission_data = [];
+    $submission_ids = [];
+
+    // Required webforms.
+    foreach ($this->getRequiredWebforms() as $webform_id) {
+      $result = $this->getSubmissionData($webform_id, $uid);
+      if ($result) {
+        $submission_data[$webform_id] = $result;
+        $submission_ids[] = $result['sid'];
+      }
+    }
+
+    // Optional: current_ai_usage.
+    $ai_usage_result = $this->getSubmissionData('current_ai_usage', $uid);
+    if ($ai_usage_result) {
+      $submission_data['current_ai_usage'] = $ai_usage_result;
+      $submission_ids[] = $ai_usage_result['sid'];
+    }
+
+    // Check if we should regenerate based on source data hash.
+    if (!$force_regenerate && $latest_entity = $this->loadLatestReport($uid)) {
+      $current_hash = $this->getSourceDataHash($submission_data);
+      if ($latest_entity->getSourceDataHash() === $current_hash) {
+        // Source data unchanged - return cached/entity version.
+        $report_data = $latest_entity->getReportData();
+        $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+        $report_data['uid'] = $uid;
+        $report_data['generation_time'] = $latest_entity->getGenerationTime();
+        $report_data['version'] = $latest_entity->getVersion();
+        $this->setCachedReport($uid, $report_data);
+        return $report_data;
+      }
+    }
+
+    // Generate new report via AI.
+    $start_time = microtime(TRUE);
+
     try {
-      $json_string = $response;
+      $prompt = $this->buildPrompt($submission_data);
+      $response = $this->callAnthropicApi($prompt, $retry);
 
-      if (preg_match('/```json\s*(.*?)\s*```/s', $response, $matches)) {
-        $json_string = $matches[1];
-      }
-      elseif (preg_match('/```\s*(.*?)\s*```/s', $response, $matches)) {
-        $json_string = $matches[1];
+      if ($response === NULL) {
+        return [
+          'error' => 'API_TIMEOUT',
+          'message' => 'The AI service timed out. This analysis requires complex processing. Please try again in a moment.',
+        ];
       }
 
-      $report = json_decode($json_string, TRUE);
+      $report = $this->parseResponse($response);
 
       if ($report === NULL) {
-        $this->logger->error('Failed to parse AI response as JSON');
-        return NULL;
+        return [
+          'error' => 'PARSE_ERROR',
+          'message' => 'Unable to parse AI response. Please try regenerating the analysis.',
+        ];
       }
 
-      $required_fields = [
-        'current_state',
-        'displacement_risk',
-        'skill_evolution',
-        'evolution_path',
-        'value_proposition',
-        'action_plan',
-        'learning_path',
-        'ai_insights',
-      ];
+      $duration = round(microtime(TRUE) - $start_time, 2);
 
-      foreach ($required_fields as $field) {
-        if (!isset($report[$field])) {
-          $this->logger->error('AI response missing required field: @field', ['@field' => $field]);
-          return NULL;
-        }
-      }
+      $report['generated_at'] = time();
+      $report['uid'] = $uid;
+      $report['generation_time'] = $duration;
+
+      // Save as entity with versioning.
+      $source_hash = $this->getSourceDataHash($submission_data);
+      $entity = $this->saveReport($uid, $report, $duration, $submission_ids, $source_hash);
+      $report['version'] = $entity->getVersion();
+
+      // Archive old versions (keep last 5).
+      $this->archiveOldReports($uid, 5);
+
+      // Update cache.
+      $this->setCachedReport($uid, $report);
+
+      $this->logger->info('Generated report for user @uid in @duration seconds (version @version)', [
+        '@uid' => $uid,
+        '@duration' => $duration,
+        '@version' => $entity->getVersion(),
+      ]);
 
       return $report;
     }
     catch (\Exception $e) {
-      $this->logger->error('Error parsing AI response: @error', ['@error' => $e->getMessage()]);
-      return NULL;
+      $this->logger->error('Failed to generate report for user @uid: @error', [
+        '@uid' => $uid,
+        '@error' => $e->getMessage(),
+      ]);
+      return [
+        'error' => 'EXCEPTION',
+        'message' => 'An unexpected error occurred. Please try again later.',
+        'details' => $e->getMessage(),
+      ];
     }
-  }
-
-  public function clearCache(int $uid): void {
-    $cid = "ai_role_impact:report:{$uid}";
-    $this->cache->delete($cid);
-    $this->logger->info('Cleared role impact cache for user @uid', ['@uid' => $uid]);
   }
 
 }

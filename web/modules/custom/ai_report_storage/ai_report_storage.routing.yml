@@ -1,0 +1,46 @@
+ai_report_storage.history:
+  path: '/user/reports/history/{report_type}'
+  defaults:
+    _controller: '\Drupal\ai_report_storage\Controller\ReportHistoryController::viewHistory'
+    _title: 'Report History'
+  requirements:
+    _permission: 'view own ai reports'
+    _user_is_logged_in: 'TRUE'
+
+ai_report_storage.view_version:
+  path: '/user/reports/{report_type}/version/{version}'
+  defaults:
+    _controller: '\Drupal\ai_report_storage\Controller\ReportHistoryController::viewVersion'
+    _title: 'Report Version'
+  requirements:
+    _permission: 'view own ai reports'
+    _user_is_logged_in: 'TRUE'
+
+ai_report_storage.compare_versions:
+  path: '/user/reports/{report_type}/compare/{version1}/{version2}'
+  defaults:
+    _controller: '\Drupal\ai_report_storage\Controller\ReportHistoryController::compareVersions'
+    _title: 'Compare Report Versions'
+  requirements:
+    _permission: 'view own ai reports'
+    _user_is_logged_in: 'TRUE'
+
+ai_report_storage.admin_overview:
+  path: '/admin/reports/ai-reports'
+  defaults:
+    _controller: '\Drupal\ai_report_storage\Controller\ReportAdminController::overview'
+    _title: 'AI Reports Overview'
+  requirements:
+    _permission: 'administer ai reports'
+
+entity.ai_report.delete_form:
+  path: '/admin/reports/ai-reports/{ai_report}/delete'
+  defaults:
+    _entity_form: 'ai_report.delete'
+    _title: 'Delete AI Report'
+  requirements:
+    _permission: 'administer ai reports'
+  options:
+    parameters:
+      ai_report:
+        type: 'entity:ai_report'

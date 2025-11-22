@@ -2,171 +2,77 @@
 
 namespace Drupal\role_impact_analysis\Service;
 
-use Drupal\ai\AiProviderPluginManager;
-use Drupal\ai\OperationType\Chat\ChatInput;
-use Drupal\ai\OperationType\Chat\ChatMessage;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\ai_report_storage\AiReportServiceBase;
 
 /**
  * Service for generating AI-powered analysis insights.
+ *
+ * This is the AI portion of the hybrid role_impact_analysis module.
+ * It extends the base class to provide AI insights that complement
+ * the rule-based analysis in RoleImpactAnalysis.
  */
-class AiAnalysisService {
+class AiAnalysisService extends AiReportServiceBase {
 
   /**
-   * The AI provider plugin manager.
-   *
-   * @var \Drupal\ai\AiProviderPluginManager
+   * {@inheritdoc}
    */
-  protected $aiProvider;
-
-  /**
-   * The logger service.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
-   * The cache backend.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
-   * Constructs an AiAnalysisService object.
-   *
-   * @param \Drupal\ai\AiProviderPluginManager $ai_provider
-   *   The AI provider plugin manager.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   The logger factory.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The cache backend.
-   */
-  public function __construct(
-    AiProviderPluginManager $ai_provider,
-    LoggerChannelFactoryInterface $logger_factory,
-    CacheBackendInterface $cache
-  ) {
-    $this->aiProvider = $ai_provider;
-    $this->logger = $logger_factory->get('role_impact_analysis');
-    $this->cache = $cache;
+  protected function getReportType(): string {
+    return 'hybrid_analysis';
   }
 
   /**
-   * Generate AI-powered insights from rule-based analysis and submission data.
-   *
-   * @param array $rule_based_data
-   *   The rule-based analysis results containing risk scores, evolution paths, etc.
-   * @param array $submissions
-   *   Raw webform submission data.
-   * @param int $uid
-   *   The user ID for cache tagging.
-   *
-   * @return array|null
-   *   Array of AI insights or NULL if generation fails.
+   * {@inheritdoc}
    */
-  public function generateAiInsights(array $rule_based_data, array $submissions, int $uid): ?array {
-    // Check cache first.
-    $cid = "role_impact_analysis:ai_insights:{$uid}";
-    if ($cache = $this->cache->get($cid)) {
-      $this->logger->info('Returning cached AI insights for user @uid', ['@uid' => $uid]);
-      return $cache->data;
-    }
-
-    $start_time = microtime(TRUE);
-
-    try {
-      // Build the prompt with context.
-      $prompt = $this->buildPrompt($rule_based_data, $submissions);
-
-      // Call Anthropic API.
-      $response = $this->callAnthropicApi($prompt);
-
-      if ($response === NULL) {
-        return NULL;
-      }
-
-      // Parse the AI response.
-      $insights = $this->parseAiResponse($response);
-
-      if ($insights === NULL) {
-        return NULL;
-      }
-
-      // Log successful generation.
-      $duration = round(microtime(TRUE) - $start_time, 2);
-      $this->logger->info('Generated AI insights for user @uid in @duration seconds', [
-        '@uid' => $uid,
-        '@duration' => $duration,
-      ]);
-
-      // Cache indefinitely with appropriate tags.
-      $this->cache->set($cid, $insights, CacheBackendInterface::CACHE_PERMANENT, [
-        "user:{$uid}",
-        'webform_submission_list',
-        "ai_analysis:{$uid}",
-      ]);
-
-      return $insights;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Failed to generate AI insights for user @uid: @error', [
-        '@uid' => $uid,
-        '@error' => $e->getMessage(),
-      ]);
-      return NULL;
-    }
+  protected function getModuleName(): string {
+    return 'role_impact_analysis';
   }
 
   /**
-   * Build the prompt for AI analysis.
-   *
-   * @param array $rule_based_data
-   *   Rule-based analysis results.
-   * @param array $submissions
-   *   Raw submission data.
-   *
-   * @return string
-   *   The formatted prompt.
+   * {@inheritdoc}
    */
-  protected function buildPrompt(array $rule_based_data, array $submissions): string {
-    // Extract key information from rule-based analysis.
-    $context = [
-      'risk_score' => $rule_based_data['displacement_risk']['risk_score'] ?? 0,
-      'risk_level' => $rule_based_data['displacement_risk']['risk_level'] ?? 'unknown',
-      'urgency_level' => $rule_based_data['displacement_risk']['urgency_level'] ?? 'unknown',
-      'evolution_path' => $rule_based_data['evolution_path']['id'] ?? 'unknown',
-      'role_category' => $rule_based_data['current_state']['role_category'] ?? 'unknown',
-      'ai_usage_frequency' => $rule_based_data['current_state']['ai_usage_frequency'] ?? 'unknown',
-      'current_comfort' => $rule_based_data['current_state']['current_comfort'] ?? 'unknown',
-    ];
+  protected function getRequiredWebforms(): array {
+    return ['task_analysis', 'skills_gap'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function buildPrompt(array $submission_data): string {
+    // Extract data from submissions.
+    $task_data = $submission_data['task_analysis']['data'] ?? [];
+    $skills_data = $submission_data['skills_gap']['data'] ?? [];
+
+    // Build context from submissions.
+    $role_category = $task_data['m2_q1_role_category'] ?? 'unknown';
 
     // Extract task preferences.
-    $task_breakdown = $rule_based_data['displacement_risk']['task_breakdown'] ?? [];
     $help_tasks = [];
     $keep_tasks = [];
 
-    foreach ($task_breakdown as $task) {
-      if ($task['preference'] === 'help') {
-        $help_tasks[] = $task['task'];
-      }
-      elseif ($task['preference'] === 'keep') {
-        $keep_tasks[] = $task['task'];
+    foreach ($task_data as $key => $value) {
+      if (strpos($key, 'm2_q2_') === 0 && $value) {
+        $task_label = $this->getTaskLabel($key);
+        if ($value === 'help' && $task_label) {
+          $help_tasks[] = $task_label;
+        }
+        elseif ($value === 'keep' && $task_label) {
+          $keep_tasks[] = $task_label;
+        }
       }
     }
 
-    // Limit help tasks to first 5 for prompt brevity
+    // Get skill level.
+    $skill_level = $skills_data['m5_q1_skill_level'] ?? 'never_used';
+
+    // Limit tasks for prompt brevity.
     $help_tasks_str = implode(', ', array_slice($help_tasks, 0, 5));
     $keep_tasks_str = implode(', ', array_slice($keep_tasks, 0, 3));
 
     return <<<PROMPT
 Provide AI insights for this career profile. Be concise.
 
-Role: {$context['role_category']}
-Risk: {$context['risk_score']}/100 ({$context['risk_level']})
-Evolution Path: {$context['evolution_path']}
+Role: {$role_category}
+Skill Level: {$skill_level}
 Tasks wanting help with: {$help_tasks_str}
 Tasks want to keep: {$keep_tasks_str}
 
@@ -195,118 +101,176 @@ PROMPT;
   }
 
   /**
-   * Call the Anthropic API via Drupal AI module.
+   * {@inheritdoc}
+   */
+  protected function validateResponse(array $response): bool {
+    // Validate required AI insights fields.
+    $required_fields = [
+      'personalized_narrative',
+      'hidden_opportunities',
+      'tool_recommendations',
+      'skill_development_roadmap',
+      'industry_context',
+      'confidence_boosters',
+    ];
+
+    foreach ($required_fields as $field) {
+      if (!isset($response[$field])) {
+        $this->logger->error('AI response missing required field: @field', [
+          '@field' => $field,
+        ]);
+        return FALSE;
+      }
+    }
+
+    // Validate nested structures.
+    if (!isset($response['skill_development_roadmap']['immediate_focus']) ||
+        !isset($response['skill_development_roadmap']['thirty_day_goal']) ||
+        !isset($response['skill_development_roadmap']['ninety_day_goal']) ||
+        !isset($response['skill_development_roadmap']['learning_approach'])) {
+      $this->logger->error('AI response missing skill_development_roadmap subfields');
+      return FALSE;
+    }
+
+    if (!isset($response['industry_context']['role_evolution']) ||
+        !isset($response['industry_context']['competitive_advantage']) ||
+        !isset($response['industry_context']['watch_out_for'])) {
+      $this->logger->error('AI response missing industry_context subfields');
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Get human-readable task label from task key.
    *
-   * @param string $prompt
-   *   The prompt to send.
+   * @param string $task_key
+   *   The task key (e.g., 'm2_q2_sales_followup').
    *
    * @return string|null
-   *   The AI response text or NULL on failure.
+   *   The task label or NULL.
    */
-  protected function callAnthropicApi(string $prompt): ?string {
-    try {
-      // Get Anthropic provider.
-      $provider = $this->aiProvider->createInstance('anthropic');
+  protected function getTaskLabel($task_key) {
+    $task_labels = [
+      // Sales tasks.
+      'm2_q2_sales_followup' => 'Writing follow-up emails',
+      'm2_q2_sales_research' => 'Researching prospects/accounts',
+      'm2_q2_sales_scheduling' => 'Scheduling meetings',
+      'm2_q2_sales_relationships' => 'Building relationships with clients',
+      'm2_q2_sales_proposals' => 'Creating proposals/quotes',
+      'm2_q2_sales_crm' => 'Entering data into CRM',
+      'm2_q2_sales_negotiations' => 'Having complex negotiations',
+      'm2_q2_sales_analysis' => 'Analyzing sales data',
 
-      // Build system prompt.
-      $system_prompt = 'You are an expert career analyst specializing in AI\'s impact on professional roles. You provide empowering, actionable, and personalized insights based on data. You always respond with valid JSON.';
+      // Engineering tasks.
+      'm2_q2_eng_boilerplate' => 'Writing boilerplate code',
+      'm2_q2_eng_debugging' => 'Debugging errors',
+      'm2_q2_eng_docs' => 'Writing documentation',
+      'm2_q2_eng_reviews' => 'Code reviews',
+      'm2_q2_eng_architecture' => 'System architecture decisions',
+      'm2_q2_eng_learning' => 'Learning new frameworks',
+      'm2_q2_eng_tests' => 'Writing tests',
+      'm2_q2_eng_mentoring' => 'Mentoring junior developers',
 
-      // Create chat input.
-      $messages = new ChatInput([
-        new ChatMessage('user', $prompt),
-      ]);
-      $messages->setSystemPrompt($system_prompt);
+      // Marketing tasks.
+      'm2_q2_mkt_brainstorm' => 'Brainstorming campaign ideas',
+      'm2_q2_mkt_social' => 'Writing social media posts',
+      'm2_q2_mkt_design' => 'Designing visual assets',
+      'm2_q2_mkt_analysis' => 'Analyzing campaign performance',
+      'm2_q2_mkt_strategy' => 'Creating brand strategy',
+      'm2_q2_mkt_ab' => 'A/B test analysis',
+      'm2_q2_mkt_presentations' => 'Client presentations',
+      'm2_q2_mkt_calendar' => 'Content calendar planning',
 
-      // Call AI with claude-sonnet-4-5-20250929.
-      $response = $provider->chat(
-        $messages,
-        'claude-sonnet-4-5-20250929',
-        ['role-impact-analysis', 'ai-insights']
-      );
+      // Operations tasks.
+      'm2_q2_ops_data_entry' => 'Data entry',
+      'm2_q2_ops_scheduling' => 'Scheduling / calendar management',
+      'm2_q2_ops_email' => 'Email management',
+      'm2_q2_ops_reports' => 'Report generation',
+      'm2_q2_ops_docs' => 'Process documentation',
+      'm2_q2_ops_vendors' => 'Vendor coordination',
+      'm2_q2_ops_meetings' => 'Meeting coordination',
+      'm2_q2_ops_edge_cases' => 'Problem-solving edge cases',
 
-      // Extract response text.
-      $normalized = $response->getNormalized();
-      return $normalized->getText();
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Anthropic API call failed: @error', [
-        '@error' => $e->getMessage(),
-      ]);
-      return NULL;
-    }
+      // Management tasks.
+      'm2_q2_mgmt_reviews' => 'Performance review writing',
+      'm2_q2_mgmt_communication' => 'Team communication',
+      'm2_q2_mgmt_planning' => 'Strategic planning',
+      'm2_q2_mgmt_budget' => 'Budget analysis',
+      'm2_q2_mgmt_coaching' => 'One-on-one coaching',
+      'm2_q2_mgmt_hiring' => 'Hiring decisions',
+      'm2_q2_mgmt_conflict' => 'Conflict resolution',
+      'm2_q2_mgmt_vision' => 'Vision setting',
+
+      // Finance tasks.
+      'm2_q2_fin_cleaning' => 'Data cleaning / preparation',
+      'm2_q2_fin_models' => 'Building financial models',
+      'm2_q2_fin_viz' => 'Creating visualizations',
+      'm2_q2_fin_trends' => 'Identifying trends/patterns',
+      'm2_q2_fin_forecasting' => 'Forecasting',
+      'm2_q2_fin_reconciliation' => 'Reconciliation tasks',
+      'm2_q2_fin_recommendations' => 'Strategic recommendations',
+      'm2_q2_fin_presentations' => 'Stakeholder presentations',
+
+      // HR tasks.
+      'm2_q2_hr_screening' => 'Resume screening',
+      'm2_q2_hr_scheduling' => 'Interview scheduling',
+      'm2_q2_hr_onboarding' => 'Onboarding documentation',
+      'm2_q2_hr_benefits' => 'Benefits administration',
+      'm2_q2_hr_relations' => 'Employee relations / sensitive issues',
+      'm2_q2_hr_training' => 'Training program design',
+      'm2_q2_hr_performance' => 'Performance management',
+      'm2_q2_hr_culture' => 'Culture building',
+    ];
+
+    return $task_labels[$task_key] ?? NULL;
   }
 
   /**
-   * Parse AI response into structured data.
+   * Generate AI-powered insights from rule-based analysis and submission data.
    *
-   * @param string $response
-   *   The raw AI response.
+   * This is the main public method that the RoleImpactAnalysis service calls.
+   * It wraps the generateReport() method from the base class.
+   *
+   * @param array $rule_based_data
+   *   The rule-based analysis results containing risk scores, evolution paths, etc.
+   * @param array $submissions
+   *   Raw webform submission data.
+   * @param int $uid
+   *   The user ID for cache tagging.
    *
    * @return array|null
-   *   Parsed insights array or NULL if parsing fails.
+   *   Array of AI insights or NULL if generation fails.
    */
-  protected function parseAiResponse(string $response): ?array {
-    try {
-      // Extract JSON from response (handle potential markdown code blocks).
-      $json_string = $response;
+  public function generateAiInsights(array $rule_based_data, array $submissions, int $uid): ?array {
+    // Use the base class generateReport() method which handles:
+    // - Cache checking
+    // - Entity storage
+    // - Versioning
+    // - AI API calls
+    // - Error handling
+    $report = $this->generateReport($uid);
 
-      // Remove markdown code blocks if present.
-      if (preg_match('/```json\s*(.*?)\s*```/s', $response, $matches)) {
-        $json_string = $matches[1];
-      }
-      elseif (preg_match('/```\s*(.*?)\s*```/s', $response, $matches)) {
-        $json_string = $matches[1];
-      }
-
-      // Decode JSON.
-      $insights = json_decode($json_string, TRUE);
-
-      if ($insights === NULL) {
-        $this->logger->error('Failed to parse AI response as JSON. Response: @response', [
-          '@response' => substr($response, 0, 500),
-        ]);
-        return NULL;
-      }
-
-      // Validate required fields.
-      $required_fields = [
-        'personalized_narrative',
-        'hidden_opportunities',
-        'tool_recommendations',
-        'skill_development_roadmap',
-        'industry_context',
-        'confidence_boosters',
-      ];
-
-      foreach ($required_fields as $field) {
-        if (!isset($insights[$field])) {
-          $this->logger->error('AI response missing required field: @field', [
-            '@field' => $field,
-          ]);
-          return NULL;
-        }
-      }
-
-      return $insights;
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error parsing AI response: @error', [
-        '@error' => $e->getMessage(),
+    // If we get an error array, return NULL.
+    if (is_array($report) && isset($report['error'])) {
+      $this->logger->warning('AI insights generation returned error: @error', [
+        '@error' => $report['error'],
       ]);
       return NULL;
     }
-  }
 
-  /**
-   * Clear cached AI insights for a user.
-   *
-   * @param int $uid
-   *   The user ID.
-   */
-  public function clearCache(int $uid): void {
-    $cid = "role_impact_analysis:ai_insights:{$uid}";
-    $this->cache->delete($cid);
-    $this->logger->info('Cleared AI insights cache for user @uid', ['@uid' => $uid]);
+    // Return just the AI insights portion (without metadata).
+    if (is_array($report)) {
+      // Remove metadata fields that were added by base class.
+      unset($report['generated_at']);
+      unset($report['uid']);
+      unset($report['generation_time']);
+      unset($report['version']);
+      return $report;
+    }
+
+    return NULL;
   }
 
 }

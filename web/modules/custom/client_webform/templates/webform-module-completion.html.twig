@@ -10,22 +10,15 @@
  */
 #}
 <div class="module-completion">
-  <div class="module-completion__unicorn">
-    🦄 🌈
-  </div>
-  <div class="module-completion__header">
-    <h1>{{ 'Section Completed'|t }}</h1>
-    <p class="module-completion__message">
-      {{ 'Thank you for your responses to'|t }}
-      <strong>{{ module_title }}</strong>.
-    </p>
-  </div>
-
-  {% if has_next_module %}
-    <div class="module-completion__actions">
-      <a href="{{ next_module_url }}" class="button button--primary module-completion__button">
-        {{ 'Continue to Next Section'|t }}
-      </a>
-    </div>
-  {% endif %}
+	{% if has_next_module %}
+		<a href="/dashboard" class="button button--secondary button--return">{{ 'Return to Dashboard'|t }}</a>
+		<a href="{{ next_module_url }}" class="button button--primary button--next module-completion__button">
+			{{ 'Continue to Next Section'|t }}
+		</a>
+	{% else %}
+		<div class="module-completion__actions">
+			<h2>{{ 'Review Your Responses'|t }}</h2>
+			<p>{{ 'You have completed all sections.'|t }}</p>
+		</div>
+	{% endif %}
 </div>

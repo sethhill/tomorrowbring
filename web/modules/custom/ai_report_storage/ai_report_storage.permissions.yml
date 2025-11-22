@@ -1,0 +1,12 @@
+view own ai reports:
+  title: 'View own AI reports'
+  description: 'View your own AI-generated reports and history'
+
+administer ai reports:
+  title: 'Administer AI reports'
+  description: 'View and manage all users AI reports'
+  restrict access: true
+
+delete own ai reports:
+  title: 'Delete own AI reports'
+  description: 'Delete your own AI report history'
