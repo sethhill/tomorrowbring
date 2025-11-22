@@ -145,6 +145,7 @@ h2 {
   margin: 0;
   font-weight: bold;
   font-feature-settings: normal;
+  text-wrap: balance;
 }
 
 .content {
