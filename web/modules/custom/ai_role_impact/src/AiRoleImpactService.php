@@ -202,7 +202,7 @@ class AiRoleImpactService {
     $unsure_percentage = $total_tasks > 0 ? round((count($tasks_unsure) / $total_tasks) * 100) : 0;
 
     return <<<PROMPT
-Analyze this professional's AI displacement risk. Be specific and actionable.
+Analyze AI displacement risk for this professional. Be concise but actionable.
 
 PROFILE:
 Role: {$role_category}{$role_other}
@@ -216,21 +216,65 @@ TASKS ({$total_tasks} total):
 - Want to KEEP ({$keep_percentage}%): {$tasks_keep_str}
 - UNSURE ({$unsure_percentage}%): {$tasks_unsure_str}
 
-Generate comprehensive JSON report with these sections:
-- current_state: role_category, ai_frequency, ai_comfort, task_profile (percentages)
-- displacement_risk: risk_score (number 0-100), risk_level (low|medium|high|critical), urgency, task_breakdown with all tasks listed
-- skill_evolution: increasing_value and emerging_value skills with reasons and actions
-- evolution_path: path name, from/to states, description, positioning points, obstacles, actions
-- value_proposition: summary, irreplaceable_skills, ai_multipliers
-- action_plan: immediate, thirty_day, ninety_day, six_month actions
-- learning_path: recommended_approach, timeline (month_1, month_2_3, month_4_6 with focus and activities), learning_profile, barrier_strategies
-- ai_insights: personalized_narrative (2-3 paragraphs), hidden_opportunities, tool_recommendations (3-5 real AI tools), skill_development_roadmap, industry_context, confidence_boosters
+Generate JSON report with these sections (be concise):
 
-IMPORTANT:
-- Include ALL their actual tasks in task_breakdown with automation_potential
-- Risk score based on help_me% and role (0-30=low, 31-55=medium, 56-75=high, 76+=critical)
-- Be specific to THEIR profile, not generic
-- Suggest real, specific AI tools they can use today
+1. current_state:
+   - role_category, ai_frequency, ai_comfort
+   - task_profile: {help_me_percentage, keep_it_percentage, unsure_percentage}
+
+2. displacement_risk:
+   - risk_score (0-100), risk_level (low|medium|high|critical), urgency
+   - task_breakdown: {help: [], keep: [], unsure: []} - list actual tasks with automation_potential
+
+3. skill_evolution:
+   - increasing_value: [3-4 skills with {skill, reason, action}]
+   - emerging_value: [3-4 skills with {skill, reason, action}]
+
+4. evolution_path:
+   - path_name, from_state, to_state, description (2 sentences)
+   - positioning_points: [3-4 strings]
+   - obstacles: [3-4 strings]
+   - actions: [3-4 strings]
+
+5. value_proposition:
+   - summary (2 sentences)
+   - irreplaceable_skills: [3-4 items with {skill, task}]
+   - ai_multipliers: [3-4 items with {skill, why}]
+
+6. action_plan:
+   - immediate: {title, actions: [3-4 strings]}
+   - thirty_day: {title, actions: [3-4 strings]}
+   - ninety_day: {title, actions: [3-4 strings]}
+   - six_month: {title, actions: [3-4 strings]}
+
+7. learning_path:
+   - recommended_approach (1 sentence)
+   - timeline: {
+       month_1: {focus, activities: [3-4 strings]},
+       month_2_3: {focus, activities: [3-4 strings]},
+       month_4_6: {focus, activities: [3-4 strings]}
+     }
+   - barrier_strategies: {
+       time_management: [2-3 strings],
+       staying_current: [2-3 strings],
+       avoiding_overwhelm: [2-3 strings]
+     }
+
+8. ai_insights:
+   - personalized_narrative (1 paragraph, 3 sentences max)
+   - hidden_opportunities: [3-4 items with {opportunity, description, action}]
+   - tool_recommendations: [3-4 items with {tool, why_for_you, use_cases: [2-3 strings]}]
+   - skill_development_roadmap: {
+       quarter_1: {primary_focus, skills: [3-4 strings], deliverables: [3-4 strings]},
+       quarter_2: {primary_focus, skills: [3-4 strings], deliverables: [3-4 strings]}
+     }
+   - industry_context: {role_evolution, competitive_advantage, watch_out_for} (1 sentence each)
+   - confidence_boosters: [3-4 items with {insight, evidence}]
+
+RULES:
+- Risk score: 0-30=low, 31-55=medium, 56-75=high, 76+=critical (based on help_me% and role)
+- Be specific to THEIR data, avoid generic advice
+- Keep responses concise - this is about actionable insights, not volume
 PROMPT;
   }
 
@@ -270,14 +314,17 @@ PROMPT;
       $attempt++;
 
       try {
-        $this->logger->info('Calling Anthropic API (attempt @attempt of @max)', [
+        $this->logger->info('Calling Anthropic API (attempt @attempt of @max) with 600s timeout', [
           '@attempt' => $attempt,
           '@max' => $max_attempts,
         ]);
 
-        $provider = $this->aiProvider->createInstance('anthropic');
+        // Set execution timeout to allow for long API calls.
+        set_time_limit(630);
 
-        $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested.';
+        $provider = $this->aiProvider->createInstance('anthropic', ['timeout' => 600]);
+
+        $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
 
         $messages = new ChatInput([
           new ChatMessage('user', $prompt),

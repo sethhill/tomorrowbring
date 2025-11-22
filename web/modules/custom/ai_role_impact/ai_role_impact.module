@@ -18,3 +18,11 @@ function ai_role_impact_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements template_preprocess_HOOK() for ai_role_impact_report.
+ */
+function template_preprocess_ai_role_impact_report(&$variables) {
+  // Nothing needed here - report data is passed directly as variables.
+  // The template handles all array access safely.
+}

@@ -12,5 +12,3 @@ ai_role_impact.regenerate:
     _controller: '\Drupal\ai_role_impact\Controller\RoleImpactReportController::regenerateAnalysis'
   requirements:
     _user_is_logged_in: 'TRUE'
-    _method: 'POST'
-    _csrf_token: 'TRUE'

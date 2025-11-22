@@ -141,7 +141,7 @@ xxxsection {
 
 h2 {
   font-size: 1.875em;
-  line-height: 0.9;
+  line-height: 1.1;
   margin: 0;
   font-weight: bold;
   font-feature-settings: normal;
@@ -479,6 +479,7 @@ footer {
   padding-top: 6em;
   padding-bottom: 6em;
   color: var(--color-white);
+  text-align: center;
 }
 
 #block-tbring-page-title{
