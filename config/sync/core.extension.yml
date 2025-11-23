@@ -4,6 +4,7 @@ module:
   ai: 0
   ai_career_transitions: 0
   ai_industry_insights: 0
+  ai_learning_resources: 0
   ai_provider_anthropic: 0
   ai_report_storage: 0
   ai_role_impact: 0
@@ -13,7 +14,7 @@ module:
   block_content: 0
   client_dashboard: 0
   client_webform: 0
-  dashboard_leadership: 0
+  dashboard_leadership: null
   dblog: 0
   dynamic_page_cache: 0
   entity: 0

@@ -1,0 +1,12 @@
+name: 'AI Learning Resources'
+type: module
+description: 'Provides personalized learning paths and resource recommendations.'
+core_version_requirement: ^11
+package: Custom
+dependencies:
+  - drupal:user
+  - webform:webform
+  - client_webform:client_webform
+  - ai:ai
+  - ai_report_storage:ai_report_storage
+  - ai_skills_analyzer:ai_skills_analyzer

@@ -2,7 +2,7 @@ ai_skills_analyzer.report:
   path: '/analysis/skills'
   defaults:
     _controller: '\Drupal\ai_skills_analyzer\Controller\AiSkillsReportController::viewReport'
-    _title: 'AI Skills Analysis'
+    _title: 'Improving Your Skills'
   requirements:
     _user_is_logged_in: 'TRUE'
 

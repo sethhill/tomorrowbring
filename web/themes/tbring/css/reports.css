@@ -85,6 +85,10 @@
   }
 }
 
+.report-actions {
+  text-align: center;
+}
+
 .transformation-pace h3 {
   text-align: center;
   font-size: 1.25em;
@@ -555,11 +559,30 @@ h3 + .timeline-period {
   }
 }
 
+.learning-period {
+  margin-bottom: 3em;
+
+  .target-competencies {
+    margin-bottom: 1.5em;
+  }
+}
+
+.difficulty-badge,
+.opportunity-relevance-badge,
+.title-meta {
+  font-size: 0.875em;
+  font-weight: bold;
+  color: var(--color-deep-green);
+  margin-bottom: 0.5em;
+}
+
 /* Footer */
 .report-footer {
   margin-top: 3rem;
   text-align: center;
 }
+
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -593,16 +616,22 @@ h3 + .timeline-period {
 }
 
 .transition-cards,
-.confidence-cards {
+.confidence-cards,
+.highlight-grid,
+.action-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
+  gap: 1em;
+}
 
-
+.learning-periods .action-cards {
+  grid-template-columns: none;
 }
 
 .transition-card,
-.confidence-card {
+.confidence-card,
+.action-card,
+.highlight-card {
   padding: 1.5em;
   background: linear-gradient(
     to bottom,
@@ -612,6 +641,7 @@ h3 + .timeline-period {
   background: var(--color-gold-light);
   border-start-start-radius: 0.5em;
   border-end-end-radius: 0.5em;
+  /* margin-bottom: 1em; */
 
   .card-header {
     display: flex;
@@ -631,49 +661,26 @@ h3 + .timeline-period {
   }
 
   li {
-    border-color: var(--color-cream-dark);
+    padding: 0.5em 0;
+    border-top: 2px solid var(--color-cream-dark);
+
     &:last-child {
-      border-bottom-color: var(--color-cream-dark);
+      border-bottom: 2px solid var(--color-cream-dark);
     }
   }
 }
 
-.learning-period {
-  padding: 1.5em;
-  margin-bottom: 1em;
-  background: linear-gradient(
-    to bottom,
-    var(--color-gold-light),
-    var(--color-white)
-  );
-  background: var(--color-gold-light);
-  border-start-start-radius: 0.5em;
-  border-end-end-radius: 0.5em;
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: top;
-    gap: 1rem;
-  }
-
-  h3 {
-    text-align: left;
-    margin-bottom: 0.5em;
-    font-size: 1.25em;
-    font-weight: 600;
-    color: var(--color-orange);
-    line-height: 1.3;
-    flex: 1;
-  }
-
+.automatable-tasks {
   li {
-    border-color: var(--color-cream-dark);
+    padding: 0.5em 0;
+    border-top: 2px solid var(--color-cream-dark);
+
     &:last-child {
-      border-bottom-color: var(--color-cream-dark);
+      border-bottom: 2px solid var(--color-cream-dark);
     }
   }
 }
+
 
 
   /* .skill {
@@ -707,7 +714,6 @@ h3 + .timeline-period {
     position: relative;
     top: 0.25em;
   } */
-}
 
 .action-plan {
   .timeline {
@@ -952,16 +958,7 @@ h3 + .timeline-period {
   }
 }
 
-.action-card {
-  h4 {
-    font-size: 1.125em;
-  }
-
-  border-top: 2px solid var(--color-cream);
-  padding-top: 0.5em;
-  padding-bottom: 1em;
-
-  &:last-child {
-    border-bottom: 2px solid var(--color-cream);
-  }
+.practice-projects,
+.community-resources {
+  margin-top: 3em;
 }

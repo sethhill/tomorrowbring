@@ -1,0 +1,16 @@
+ai_learning_resources.report:
+  path: '/analysis/learning-resources'
+  defaults:
+    _controller: '\Drupal\ai_learning_resources\Controller\LearningResourcesReportController::viewReport'
+    _title: 'Learning Resources'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_learning_resources.regenerate:
+  path: '/analysis/learning-resources/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_learning_resources\Controller\LearningResourcesReportController::regenerateAnalysis'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'

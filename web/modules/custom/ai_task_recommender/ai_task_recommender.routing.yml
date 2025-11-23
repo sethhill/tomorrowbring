@@ -2,7 +2,7 @@ ai_task_recommender.report:
   path: '/analysis/task-recommendations'
   defaults:
     _controller: '\Drupal\ai_task_recommender\Controller\AiTaskRecommenderController::viewReport'
-    _title: 'Task Automation'
+    _title: 'Automating Tasks'
   requirements:
     _user_is_logged_in: 'TRUE'
 

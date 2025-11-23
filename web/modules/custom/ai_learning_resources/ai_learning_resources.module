@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * AI Learning Resources module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ai_learning_resources_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.ai_learning_resources':
+      return '<p>' . t('Provides personalized learning paths and resource recommendations.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ai_learning_resources_theme($existing, $type, $theme, $path) {
+  return [
+    'ai_learning_resources_report' => [
+      'variables' => ['report' => NULL],
+      'template' => 'ai-learning-resources-report',
+    ],
+  ];
+}

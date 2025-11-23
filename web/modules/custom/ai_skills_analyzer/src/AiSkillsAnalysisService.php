@@ -53,7 +53,7 @@ Respond with JSON (keep it concise, limit arrays to 2-3 items):
 
 {
   "skill_trajectory": {
-    "current_strengths": [{"skill": "name", "why_valuable": "brief", "leverage_opportunities": "brief"}],
+    "current_strengths": "2-sentence summary of their strongest skills and why they matter",
     "critical_gaps": [{"skill": "name", "why_critical": "brief", "impact_without": "brief", "acquisition_difficulty": "easy|moderate|challenging"}],
     "emerging_opportunities": [{"skill": "name", "why_emerging": "brief", "time_to_relevance": "brief"}]
   },
@@ -76,6 +76,7 @@ Respond with JSON (keep it concise, limit arrays to 2-3 items):
     "community_resources": [{"resource": "name", "value": "brief", "how_to_engage": "brief"}]
   },
   "skill_synergies": {
+    "introduction": "1-2 affirming sentences about their skill combinations",
     "powerful_combinations": [{"skills": ["A", "B"], "why_powerful": "brief", "application": "brief"}],
     "ai_augmentation_opportunities": [{"current_skill": "skill", "ai_tool": "tool", "multiplier_effect": "brief"}]
   },
@@ -84,7 +85,7 @@ Respond with JSON (keep it concise, limit arrays to 2-3 items):
     "overcoming_strategies": [{"barrier": "specific", "strategies": ["strategy 1"], "mindset_shift": "brief"}]
   },
   "motivational_insights": {
-    "unique_advantages": ["advantage 1"],
+    "unique_advantages": [{"insight": "inspirational statement about adapting existing skills", "evidence": "supporting detail"}],
     "quick_wins": ["win 1"],
     "long_term_vision": "1-2 sentences"
   }

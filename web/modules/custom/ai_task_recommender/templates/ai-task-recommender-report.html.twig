@@ -6,121 +6,104 @@
 #}
 
 <div class="ai-task-recommender-report">
-  {% if report.overview %}
-    <section class="report-section overview">
-      <h2>{{ 'Your Automation Opportunity'|t }}</h2>
-      <p class="automation-potential">{{ report.overview.automation_potential }}</p>
-      <p class="quick-wins"><strong>{{ 'Quick Wins:'|t }}</strong> {{ report.overview.quick_wins }}</p>
-    </section>
-  {% endif %}
+	{% if report.overview %}
+		<section class="report-section overview">
+			<h2>{{ 'Your Automation Opportunity'|t }}</h2>
+			<p class="report-intro">{{ report.overview.automation_potential }}</p>
 
-  {% if report.tool_recommendations %}
-    <section class="report-section tool-recommendations">
-      <h2>{{ 'Recommended AI Tools'|t }}</h2>
-      <div class="tool-grid">
-        {% for tool in report.tool_recommendations %}
-          <div class="tool-card difficulty-{{ tool.difficulty }}">
-            <div class="tool-header">
-              <h3>{{ tool.tool_name }}</h3>
-              <span class="tool-category">{{ tool.tool_category }}</span>
-            </div>
-            <div class="tool-task"><strong>{{ 'For:'|t }}</strong> {{ tool.task }}</div>
-            <p class="why">{{ tool.why_recommended }}</p>
-            <p class="getting-started"><strong>{{ 'Getting Started:'|t }}</strong> {{ tool.getting_started }}</p>
-            <div class="tool-meta">
-              <span class="time-savings">{{ 'Saves:'|t }} {{ tool.time_savings }}</span>
-              <span class="cost-badge">{{ tool.cost|capitalize }}</span>
-              <span class="difficulty-badge">{{ tool.difficulty|capitalize }}</span>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </section>
-  {% endif %}
+			{% if report.overview.automatable_tasks %}
+				<div class="automatable-tasks">
+					<h3>{{ 'Things AI Can Do for You'|t }}</h3>
+					<ul>
+						{% for task in report.overview.automatable_tasks %}
+							<li>{{ task }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
 
-  {% if report.implementation_roadmap %}
-    <section class="report-section implementation-roadmap">
-      <h2>{{ 'Your Implementation Roadmap'|t }}</h2>
+		</section>
+	{% endif %}
 
-      <div class="roadmap-timeline">
-        {% if report.implementation_roadmap.week_1 %}
-          <div class="roadmap-phase">
-            <h3>{{ 'Week 1'|t }}</h3>
-            <p><strong>{{ 'Focus:'|t }}</strong> {{ report.implementation_roadmap.week_1.focus }}</p>
-            <p><strong>{{ 'Action:'|t }}</strong> {{ report.implementation_roadmap.week_1.action }}</p>
-          </div>
-        {% endif %}
+{% if report.tool_recommendations %}
+	<section class="report-section tool-recommendations">
+		<h2>{{ 'Recommended AI Tools'|t }}</h2>
+		<div class="report-lists highlight-grid">
+			{% for tool in report.tool_recommendations %}
+				<div class="highlight-card difficulty-{{ tool.difficulty }}">
+					<div class="tool-header">
+						<h3>{{ tool.tool_name }}</h3>
+						<div class="title-meta">{{ tool.tool_category }}
+							|
+							{{ tool.cost|capitalize }}
+							|
+							{{ tool.difficulty|capitalize }}</div>
+					</div>
+					<div class="tool-task">
+						<strong>{{ 'Purpose:'|t }}</strong>
+						{{ tool.task }}</div>
+					<p class="why">{{ tool.why_recommended }}</p>
+					<p class="getting-started">
+						<strong>{{ 'Getting Started:'|t }}</strong>
+						{{ tool.getting_started }}</p>
+					<p class="time-savings">
+						<strong>{{ 'Saves:'|t }}</strong>
+						{{ tool.time_savings }}</p>
+				</div>
+			{% endfor %}
+		</div>
+	</section>
+{% endif %}
 
-        {% if report.implementation_roadmap.week_2_4 %}
-          <div class="roadmap-phase">
-            <h3>{{ 'Weeks 2-4'|t }}</h3>
-            <p><strong>{{ 'Focus:'|t }}</strong> {{ report.implementation_roadmap.week_2_4.focus }}</p>
-            <p><strong>{{ 'Action:'|t }}</strong> {{ report.implementation_roadmap.week_2_4.action }}</p>
-          </div>
-        {% endif %}
+	{% if report.workflow_integration and report.workflow_integration.automation_workflows %}
+		<section class="report-section workflow-integration">
+			<h2>{{ 'Chaining Tools into Workflows'|t }}</h2>
+			<div class="highlight-grid">
+				{% for workflow in report.workflow_integration.automation_workflows %}
+					<div class="highlight-card">
+						<h3>{{ workflow.workflow_name }}</h3>
+						<h4>{{ 'Tools'|t }}</h4>
+						<ul>
+							{% for tool in workflow.tools_combined %}
+								<li>{{ tool }}</li>
+							{% endfor %}
+						</ul>
 
-        {% if report.implementation_roadmap.ongoing %}
-          <div class="roadmap-phase">
-            <h3>{{ 'Ongoing Habits'|t }}</h3>
-            <ul>
-              {% for habit in report.implementation_roadmap.ongoing.habits %}
-                <li>{{ habit }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
-      </div>
-    </section>
-  {% endif %}
+						<h4>{{ 'Process'|t }}</h4>
+						<ol>
+							{% for step in workflow.process_steps %}
+								<li>{{ step }}</li>
+							{% endfor %}
+						</ol>
+						<h4>{{ 'Impact'|t }}</h4>
+						<p>{{ workflow.expected_impact }}</p>
+					</div>
+				{% endfor %}
+			</div>
+		</section>
+	{% endif %}
 
-  {% if report.workflow_integration and report.workflow_integration.automation_workflows %}
-    <section class="report-section workflow-integration">
-      <h2>{{ 'Automation Workflows'|t }}</h2>
-      {% for workflow in report.workflow_integration.automation_workflows %}
-        <div class="workflow-card">
-          <h3>{{ workflow.workflow_name }}</h3>
-          <p><strong>{{ 'Tools Combined:'|t }}</strong> {{ workflow.tools_combined|join(', ') }}</p>
-          <div class="process-steps">
-            <h4>{{ 'Process:'|t }}</h4>
-            <ol>
-              {% for step in workflow.process_steps %}
-                <li>{{ step }}</li>
-              {% endfor %}
-            </ol>
-          </div>
-          <p class="impact"><strong>{{ 'Impact:'|t }}</strong> {{ workflow.expected_impact }}</p>
-        </div>
-      {% endfor %}
-    </section>
-  {% endif %}
+	{% if report.overview.quick_wins %}
+		<div class="report-section quick-wins">
+			<h2>{{ 'Quick Wins'|t }}</h2>
+			<div class="confidence-cards">
+				{% for win in report.overview.quick_wins %}
+					<div class="confidence-card">
+						<h3>{{ win.insight }}</h3>
+						{% if win.evidence %}
+							<p>{{ win.evidence }}</p>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
 
-  {% if report.skill_development %}
-    <section class="report-section skill-development">
-      <h2>{{ 'Building Your AI Skills'|t }}</h2>
 
-      <div class="skill-area">
-        <h3>{{ 'Prompt Engineering'|t }}</h3>
-        <p>{{ report.skill_development.prompt_engineering }}</p>
-      </div>
-
-      <div class="skill-area">
-        <h3>{{ 'Tool Mastery'|t }}</h3>
-        <p>{{ report.skill_development.tool_mastery }}</p>
-      </div>
-
-      <div class="skill-area">
-        <h3>{{ 'Staying Current'|t }}</h3>
-        <p>{{ report.skill_development.staying_current }}</p>
-      </div>
-    </section>
-  {% endif %}
-
-  <div class="report-footer">
-    <div class="report-actions">
-      <form method="post" action="/analysis/task-recommendations/regenerate">
-        <button type="submit" class="button button--secondary">{{ 'Regenerate Analysis'|t }}</button>
-      </form>
-      <a href="/dashboard" class="button">{{ 'Back to Dashboard'|t }}</a>
-    </div>
-  </div>
+	<div class="report-footer">
+		<div class="report-actions">
+			<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
+			<a href="/analysis/career-transitions" class="button button--next">{{ 'Career Opportunities'|t }}</a>
+		</div>
+	</div>
 </div>

@@ -571,7 +571,7 @@ footer {
   font-size: 3em;
   font-weight: normal;
   text-align: center;
-  margin-top: 0.5em;
+  /* margin-top: 0.5em; */
 
   h1 {
     margin: 0;
@@ -638,14 +638,10 @@ input[type="submit"].webform-button--next {
 .button--return,
 input[type="submit"].webform-button--previous {
   padding-left: 2.5em;
-  background-image: url("../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
+  background-image: url("../images/apps_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
   background-repeat: no-repeat;
   background-position: left 0.75em center;
   background-size: 1.5em 1.5em;
-}
-
-.button--return {
-  background-image: url("../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
 }
 
 h2 {
@@ -659,11 +655,32 @@ h3 {
   font-size: 1.5em;
   text-align: center;
   font-weight: 900;
+  margin-bottom: 0.5em;
 }
 h4 {
-  font-size: 1.25em;
+  font-size: 1.125em;
   color: var(--color-deep-green);
   font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+
+  span {
+    color: var(--color-orange);
+  }
+}
+
+
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
+  margin-top: 0;
+}
+
+p {
+  margin-bottom: 0.5em;
 }
 
 

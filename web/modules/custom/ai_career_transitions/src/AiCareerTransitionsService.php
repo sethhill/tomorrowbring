@@ -89,7 +89,17 @@ Respond with JSON (limit to 3-4 viable transitions):
     "month_1_3": "Focus for months 1-3",
     "month_4_6": "Focus for months 4-6",
     "beyond": "Long-term focus"
-  }
+  },
+  "career_confidence": [
+    {
+      "insight": "Inspiring statement about their career transition potential",
+      "evidence": "Supporting detail about why this transition is achievable"
+    },
+    {
+      "insight": "Second inspiring statement about career development",
+      "evidence": "Supporting detail about their strengths"
+    }
+  ]
 }
 PROMPT;
   }

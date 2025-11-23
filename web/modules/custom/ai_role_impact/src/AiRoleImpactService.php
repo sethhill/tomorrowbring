@@ -167,7 +167,7 @@ Generate JSON report with these sections (be concise):
        quarter_2: {primary_focus, skills: [3-4 strings], deliverables: [3-4 strings]}
      }
    - industry_context: {role_evolution, competitive_advantage, watch_out_for} (1 sentence each)
-   - confidence_boosters: [3-4 items with {insight, evidence}]
+   - confidence_boosters: [exactly 2 items with {insight, evidence}]
 
 RULES:
 - Risk score: 0-30=low, 31-55=medium, 56-75=high, 76+=critical (based on help_me% and role)

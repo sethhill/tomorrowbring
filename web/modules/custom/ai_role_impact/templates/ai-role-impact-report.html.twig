@@ -24,7 +24,7 @@
 		{# Industry Context #}
 		{% if report.ai_insights.industry_context %}
 			<div class="industry-context">
-				<h2>{{ 'How Your Role is Evolving'|t }}</h2>
+				<h2>{{ 'How Your Role is Changing'|t }}</h2>
 				<p class="report-intro">{{ report.ai_insights.industry_context.role_evolution }}</p>
 
 				<div class="report-columns">
@@ -44,25 +44,25 @@
 
 
 	{# <section class="report-section current-state">
-			<h2>{{ 'Your Role Today'|t }}</h2>
+					<h2>{{ 'Your Role Today'|t }}</h2>
 
-			<div class="current-state-summary">
-				<div class="stat-grid">
-					<div class="stat-item">
-						<div class="stat-label">{{ 'Role Category'|t }}</div>
-						<div class="stat-value">{{ report.current_state.role_category|replace({'_': ' '})|capitalize }}</div>
+					<div class="current-state-summary">
+						<div class="stat-grid">
+							<div class="stat-item">
+								<div class="stat-label">{{ 'Role Category'|t }}</div>
+								<div class="stat-value">{{ report.current_state.role_category|replace({'_': ' '})|capitalize }}</div>
+							</div>
+							<div class="stat-item">
+								<div class="stat-label">{{ 'AI Usage Frequency'|t }}</div>
+								<div class="stat-value">{{ report.current_state.ai_frequency|replace({'_': ' '})|capitalize }}</div>
+							</div>
+							<div class="stat-item">
+								<div class="stat-label">{{ 'Comfort Level'|t }}</div>
+								<div class="stat-value">{{ report.current_state.ai_comfort }}/5</div>
+							</div>
+						</div>
 					</div>
-					<div class="stat-item">
-						<div class="stat-label">{{ 'AI Usage Frequency'|t }}</div>
-						<div class="stat-value">{{ report.current_state.ai_frequency|replace({'_': ' '})|capitalize }}</div>
-					</div>
-					<div class="stat-item">
-						<div class="stat-label">{{ 'Comfort Level'|t }}</div>
-						<div class="stat-value">{{ report.current_state.ai_comfort }}/5</div>
-					</div>
-				</div>
-			</div>
-		</section> #}
+				</section> #}
 
 	{# Section 2: Displacement Risk #}
 	<section class="report-section displacement-risk risk-{{ report.displacement_risk.risk_level }}">
@@ -155,7 +155,7 @@
 	</section>
 
 	{# Section 5: Value Proposition #}
-	{# <section class="report-section value-proposition">
+{# <section class="report-section value-proposition">
 <h2>{{ 'Your Skill Evolution'|t }}</h2>
 
 		<p class="report-intro">{{ report.value_proposition.summary }}</p>
@@ -196,51 +196,51 @@
 {% endif %} #}
 
 
-		{# <div class="value-components">
-					{% if report.value_proposition.irreplaceable_skills %}
-						<div class="value-component">
-							<h4>{{ 'Your Irreplaceable Skills'|t }}</h4>
-							<ul>
-								{% for item in report.value_proposition.irreplaceable_skills %}
-									<li>
-										<strong>{{ item.skill }}</strong>
-										for
-										{{ item.task|lower }}</li>
-								{% endfor %}
-							</ul>
-						</div>
-					{% endif %}
+	{# <div class="value-components">
+							{% if report.value_proposition.irreplaceable_skills %}
+								<div class="value-component">
+									<h4>{{ 'Your Irreplaceable Skills'|t }}</h4>
+									<ul>
+										{% for item in report.value_proposition.irreplaceable_skills %}
+											<li>
+												<strong>{{ item.skill }}</strong>
+												for
+												{{ item.task|lower }}</li>
+										{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
 
-					{% if report.value_proposition.ai_multipliers %}
-						<div class="value-component">
-							<h4>{{ 'Your AI Multipliers'|t }}</h4>
-							<p class="component-note">{{ 'These skills make AI more effective in your hands:'|t }}</p>
-							<ul>
-								{% for item in report.value_proposition.ai_multipliers %}
-									<li>
-										{% if item.skill is defined or item.capability is defined or item.multiplier is defined %}
-											{{ item.skill|default(item.capability|default(item.multiplier)) }}
-											{% if item.description is defined %}
-												-
-												{{ item.description }}
-											{% elseif item.why is defined %}
-												-
-												{{ item.why }}
-											{% endif %}
-										{% else %}
-											{{ item }}
-										{% endif %}
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
-					{% endif %}
-				</div> #}
-	</section>
+							{% if report.value_proposition.ai_multipliers %}
+								<div class="value-component">
+									<h4>{{ 'Your AI Multipliers'|t }}</h4>
+									<p class="component-note">{{ 'These skills make AI more effective in your hands:'|t }}</p>
+									<ul>
+										{% for item in report.value_proposition.ai_multipliers %}
+											<li>
+												{% if item.skill is defined or item.capability is defined or item.multiplier is defined %}
+													{{ item.skill|default(item.capability|default(item.multiplier)) }}
+													{% if item.description is defined %}
+														-
+														{{ item.description }}
+													{% elseif item.why is defined %}
+														-
+														{{ item.why }}
+													{% endif %}
+												{% else %}
+													{{ item }}
+												{% endif %}
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							{% endif %}
+						</div> #}
+</section>
 
 
-	{# Section 6: Action Plan #}
-	{# <section class="report-section action-plan">
+{# Section 6: Action Plan #}
+{# <section class="report-section action-plan">
 			<h2>{{ 'Your Action Plan'|t }}</h2>
 
 			<div class="timeline">
@@ -298,89 +298,91 @@
 			</div>
 		</section> #}
 
-	{# AI-Powered Insights Section #}
-		{% if report.ai_insights %}
+{# AI-Powered Insights Section #}
+	{% if report.ai_insights %}
 
 
-		{# Skill Development Roadmap #}
+	{# Skill Development Roadmap #}
 
-		{# <section
-					class="report-section skill-development-roadmap">
-					{% if report.ai_insights.skill_development_roadmap %}
-						<div class="skill-roadmap">
-							<h3>{{ 'Your Skill Development Roadmap'|t }}</h3>
+	{# <section
+							class="report-section skill-development-roadmap">
+							{% if report.ai_insights.skill_development_roadmap %}
+								<div class="skill-roadmap">
+									<h3>{{ 'Your Skill Development Roadmap'|t }}</h3>
 
-							{% if report.ai_insights.skill_development_roadmap.quarter_1 %}
-								<div class="roadmap-quarter">
-									<h4>{{ 'Quarter 1'|t }}:
-										{{ report.ai_insights.skill_development_roadmap.quarter_1.primary_focus }}</h4>
-									{% if report.ai_insights.skill_development_roadmap.quarter_1.skills %}
-										<p>
-											<strong>{{ 'Skills'|t }}:</strong>
-											{{ report.ai_insights.skill_development_roadmap.quarter_1.skills|join(', ') }}</p>
+									{% if report.ai_insights.skill_development_roadmap.quarter_1 %}
+										<div class="roadmap-quarter">
+											<h4>{{ 'Quarter 1'|t }}:
+												{{ report.ai_insights.skill_development_roadmap.quarter_1.primary_focus }}</h4>
+											{% if report.ai_insights.skill_development_roadmap.quarter_1.skills %}
+												<p>
+													<strong>{{ 'Skills'|t }}:</strong>
+													{{ report.ai_insights.skill_development_roadmap.quarter_1.skills|join(', ') }}</p>
+											{% endif %}
+											{% if report.ai_insights.skill_development_roadmap.quarter_1.deliverables %}
+												<p>
+													<strong>{{ 'Deliverables'|t }}:</strong>
+												</p>
+												<ul>
+													{% for deliverable in report.ai_insights.skill_development_roadmap.quarter_1.deliverables %}
+														<li>{{ deliverable }}</li>
+													{% endfor %}
+												</ul>
+											{% endif %}
+										</div>
 									{% endif %}
-									{% if report.ai_insights.skill_development_roadmap.quarter_1.deliverables %}
-										<p>
-											<strong>{{ 'Deliverables'|t }}:</strong>
-										</p>
-										<ul>
-											{% for deliverable in report.ai_insights.skill_development_roadmap.quarter_1.deliverables %}
-												<li>{{ deliverable }}</li>
-											{% endfor %}
-										</ul>
+
+									{% if report.ai_insights.skill_development_roadmap.quarter_2 %}
+										<div class="roadmap-quarter">
+											<h4>{{ 'Quarter 2'|t }}:
+												{{ report.ai_insights.skill_development_roadmap.quarter_2.primary_focus }}</h4>
+											{% if report.ai_insights.skill_development_roadmap.quarter_2.skills %}
+												<p>
+													<strong>{{ 'Skills'|t }}:</strong>
+													{{ report.ai_insights.skill_development_roadmap.quarter_2.skills|join(', ') }}</p>
+											{% endif %}
+											{% if report.ai_insights.skill_development_roadmap.quarter_2.deliverables %}
+												<p>
+													<strong>{{ 'Deliverables'|t }}:</strong>
+												</p>
+												<ul>
+													{% for deliverable in report.ai_insights.skill_development_roadmap.quarter_2.deliverables %}
+														<li>{{ deliverable }}</li>
+													{% endfor %}
+												</ul>
+											{% endif %}
+										</div>
 									{% endif %}
 								</div>
 							{% endif %}
+						</section> #}
 
-							{% if report.ai_insights.skill_development_roadmap.quarter_2 %}
-								<div class="roadmap-quarter">
-									<h4>{{ 'Quarter 2'|t }}:
-										{{ report.ai_insights.skill_development_roadmap.quarter_2.primary_focus }}</h4>
-									{% if report.ai_insights.skill_development_roadmap.quarter_2.skills %}
-										<p>
-											<strong>{{ 'Skills'|t }}:</strong>
-											{{ report.ai_insights.skill_development_roadmap.quarter_2.skills|join(', ') }}</p>
-									{% endif %}
-									{% if report.ai_insights.skill_development_roadmap.quarter_2.deliverables %}
-										<p>
-											<strong>{{ 'Deliverables'|t }}:</strong>
-										</p>
-										<ul>
-											{% for deliverable in report.ai_insights.skill_development_roadmap.quarter_2.deliverables %}
-												<li>{{ deliverable }}</li>
-											{% endfor %}
-										</ul>
-									{% endif %}
-								</div>
+		<section
+		class="report-section confidence-boosters"> {# Confidence Boosters #}
+		{% if report.ai_insights.confidence_boosters %}
+			<div class="confidence-boosters">
+				<h2>{{ 'Reasons to Be Optimistic'|t }}</h2>
+				<div class="confidence-cards">
+					{% for item in report.ai_insights.confidence_boosters %}
+						<div class="confidence-card">
+							<h3>{{ item.insight|default(item.booster|default(item.reason)) }}</h3>
+							{% if item.evidence %}
+								<p>{{ item.evidence }}</p>
 							{% endif %}
 						</div>
-					{% endif %}
-				</section> #}
-
-			<section
-			class="report-section confidence-boosters"> {# Confidence Boosters #}
-			{% if report.ai_insights.confidence_boosters %}
-				<div class="confidence-boosters">
-					<h2>{{ 'Reasons to Be Optimistic'|t }}</h2>
-					<div class="confidence-cards">
-						{% for item in report.ai_insights.confidence_boosters %}
-							<div class="confidence-card">
-								<h3>{{ item.insight|default(item.booster|default(item.reason)) }}</h3>
-								{% if item.evidence %}
-									<p>{{ item.evidence }}</p>
-								{% endif %}
-							</div>
-						{% endfor %}
-					</div>
+					{% endfor %}
 				</div>
-			{% endif %}
+			</div>
+		{% endif %}
 
-		</section>
-	{% endif %}
+	</section>
+{% endif %}
 
-	<div class="report-footer">
-		<div class="report-actions">
-			<a href="/dashboard" class="button">{{ 'Back to Dashboard'|t }}</a>
-		</div>
+<div class="report-footer">
+	<div class="report-actions">
+		<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
+		<a href="/analysis/skills" class="button button--next">{{ 'Improving Your Skills'|t }}</a>
+
+
 	</div>
-</div>
+</div></div>
