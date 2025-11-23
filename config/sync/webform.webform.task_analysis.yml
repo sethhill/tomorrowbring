@@ -57,50 +57,50 @@ elements: |-
         '#type': radios
         '#title': 'Researching prospects/accounts'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_sales_scheduling:
         '#type': radios
         '#title': 'Scheduling meetings'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_sales_relationships:
         '#type': radios
         '#title': 'Building relationships with clients'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_sales_proposals:
         '#type': radios
         '#title': 'Creating proposals/quotes'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_sales_crm:
         '#type': radios
         '#title': 'Entering data into CRM'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_sales_negotiations:
         '#type': radios
         '#title': 'Having complex negotiations'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_sales_analysis:
         '#type': radios
         '#title': 'Analyzing sales data'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
     m2_q2_engineering_container:
       '#type': container
@@ -113,57 +113,57 @@ elements: |-
         '#type': radios
         '#title': 'Writing boilerplate code'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_debugging:
         '#type': radios
         '#title': 'Debugging errors'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_docs:
         '#type': radios
         '#title': 'Writing documentation'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_reviews:
         '#type': radios
         '#title': 'Code reviews'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_architecture:
         '#type': radios
         '#title': 'System architecture decisions'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_learning:
         '#type': radios
         '#title': 'Learning new frameworks'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_tests:
         '#type': radios
         '#title': 'Writing tests'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_eng_mentoring:
         '#type': radios
         '#title': 'Mentoring junior developers'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
     m2_q2_marketing_container:
       '#type': container
@@ -176,57 +176,57 @@ elements: |-
         '#type': radios
         '#title': 'Brainstorming campaign ideas'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_social:
         '#type': radios
         '#title': 'Writing social media posts'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_design:
         '#type': radios
         '#title': 'Designing visual assets'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_analysis:
         '#type': radios
         '#title': 'Analyzing campaign performance'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_strategy:
         '#type': radios
         '#title': 'Creating brand strategy'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_ab:
         '#type': radios
         '#title': 'A/B test analysis'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_presentations:
         '#type': radios
         '#title': 'Client presentations'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mkt_calendar:
         '#type': radios
         '#title': 'Content calendar planning'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
     m2_q2_ops_container:
       '#type': container
@@ -239,57 +239,57 @@ elements: |-
         '#type': radios
         '#title': 'Data entry'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_scheduling:
         '#type': radios
         '#title': 'Scheduling / calendar management'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_email:
         '#type': radios
         '#title': 'Email management'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_reports:
         '#type': radios
         '#title': 'Report generation'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_docs:
         '#type': radios
         '#title': 'Process documentation'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_vendors:
         '#type': radios
         '#title': 'Vendor coordination'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_meetings:
         '#type': radios
         '#title': 'Meeting coordination'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_ops_edge_cases:
         '#type': radios
         '#title': 'Problem-solving edge cases'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
     m2_q2_mgmt_container:
       '#type': container
@@ -302,57 +302,57 @@ elements: |-
         '#type': radios
         '#title': 'Performance review writing'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_communication:
         '#type': radios
         '#title': 'Team communication'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_planning:
         '#type': radios
         '#title': 'Strategic planning'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_budget:
         '#type': radios
         '#title': 'Budget analysis'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_coaching:
         '#type': radios
         '#title': 'One-on-one coaching'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_hiring:
         '#type': radios
         '#title': 'Hiring decisions'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_conflict:
         '#type': radios
         '#title': 'Conflict resolution'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_mgmt_vision:
         '#type': radios
         '#title': 'Vision setting'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
     m2_q2_finance_container:
       '#type': container
@@ -365,57 +365,57 @@ elements: |-
         '#type': radios
         '#title': 'Data cleaning / preparation'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_models:
         '#type': radios
         '#title': 'Building financial models'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_viz:
         '#type': radios
         '#title': 'Creating visualizations'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_trends:
         '#type': radios
         '#title': 'Identifying trends/patterns'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_forecasting:
         '#type': radios
         '#title': Forecasting
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_reconciliation:
         '#type': radios
         '#title': 'Reconciliation tasks'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_recommendations:
         '#type': radios
         '#title': 'Strategic recommendations'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_fin_presentations:
         '#type': radios
         '#title': 'Stakeholder presentations'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
     m2_q2_hr_container:
       '#type': container
@@ -428,57 +428,57 @@ elements: |-
         '#type': radios
         '#title': 'Resume screening'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_scheduling:
         '#type': radios
         '#title': 'Interview scheduling'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_onboarding:
         '#type': radios
         '#title': 'Onboarding documentation'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_benefits:
         '#type': radios
         '#title': 'Benefits administration'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_relations:
         '#type': radios
         '#title': 'Employee relations / sensitive issues'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_training:
         '#type': radios
         '#title': 'Training program design'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_performance:
         '#type': radios
         '#title': 'Performance management'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
       m2_q2_hr_culture:
         '#type': radios
         '#title': 'Culture building'
         '#options':
-          help: 'Help me'
-          keep: 'Keep it'
+          help: "Help me - I’d love AI to handle or assist with this"
+          keep: "Keep it - I want to keep doing this myself"
           unsure: Unsure
   3:
     '#type': webform_wizard_page

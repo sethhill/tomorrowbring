@@ -241,5 +241,11 @@ PROMPT;
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getServiceId(): string {
+    return 'ai_task_recommender.analysis_service';
+  }
 
 }

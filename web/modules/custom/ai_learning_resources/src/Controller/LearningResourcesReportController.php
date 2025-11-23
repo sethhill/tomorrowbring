@@ -3,7 +3,7 @@
 namespace Drupal\ai_learning_resources\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\ai_skills_analyzer\AiSkillsAnalysisService;
+use Drupal\ai_learning_resources\AiLearningResourcesService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -13,19 +13,19 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class LearningResourcesReportController extends ControllerBase {
 
   /**
-   * The AI skills analysis service.
+   * The AI learning resources service.
    *
-   * @var \Drupal\ai_skills_analyzer\AiSkillsAnalysisService
+   * @var \Drupal\ai_learning_resources\AiLearningResourcesService
    */
   protected $analysisService;
 
   /**
    * Constructs a LearningResourcesReportController object.
    *
-   * @param \Drupal\ai_skills_analyzer\AiSkillsAnalysisService $analysis_service
-   *   The AI skills analysis service.
+   * @param \Drupal\ai_learning_resources\AiLearningResourcesService $analysis_service
+   *   The AI learning resources service.
    */
-  public function __construct(AiSkillsAnalysisService $analysis_service) {
+  public function __construct(AiLearningResourcesService $analysis_service) {
     $this->analysisService = $analysis_service;
   }
 
@@ -34,7 +34,7 @@ class LearningResourcesReportController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('ai_skills_analyzer.analysis_service')
+      $container->get('ai_learning_resources.analysis_service')
     );
   }
 
@@ -51,11 +51,54 @@ class LearningResourcesReportController extends ControllerBase {
       return $this->redirect('client_dashboard.dashboard');
     }
 
-    // Generate the report (reusing skills analysis).
-    $report = $this->analysisService->generateReport();
+    // Check for pending report first.
+    $pending = $this->analysisService->getPendingReport();
+    if ($pending) {
+      return [
+        '#theme' => 'ai_learning_resources_report',
+        '#report' => [
+          'status' => 'pending',
+          'queued_at' => $pending->getGeneratedAt(),
+        ],
+        '#cache' => [
+          'max-age' => 0,
+        ],
+        '#attached' => [
+          'library' => ['ai_report_storage/report_polling'],
+        ],
+      ];
+    }
 
+    // Try to get existing report from cache/database (without generating).
+    $report = $this->analysisService->getExistingReport();
+
+    // If no report exists, queue generation.
     if (!$report) {
-      $this->messenger()->addError($this->t('Unable to generate your learning resources. AI service may be temporarily unavailable.'));
+      $queue_result = $this->analysisService->queueReportGeneration();
+
+      if (!$queue_result) {
+        $this->messenger()->addError($this->t('Unable to generate your learning resources. AI service may be temporarily unavailable.'));
+        return $this->redirect('client_dashboard.dashboard');
+      }
+
+      return [
+        '#theme' => 'ai_learning_resources_report',
+        '#report' => [
+          'status' => 'pending',
+          'queued_at' => $queue_result['queued_at'],
+        ],
+        '#cache' => [
+          'max-age' => 0,
+        ],
+        '#attached' => [
+          'library' => ['ai_report_storage/report_polling'],
+        ],
+      ];
+    }
+
+    // Check if report is an error.
+    if (is_array($report) && isset($report['error'])) {
+      $this->messenger()->addError($report['message'] ?? $this->t('An error occurred generating your report.'));
       return $this->redirect('client_dashboard.dashboard');
     }
 
@@ -78,10 +121,18 @@ class LearningResourcesReportController extends ControllerBase {
   public function regenerateAnalysis() {
     $uid = $this->currentUser()->id();
 
-    // Clear the cache for this user.
+    // Clear the cache for this user and archive any existing reports.
     $this->analysisService->clearCache($uid);
 
-    $this->messenger()->addStatus($this->t('Learning resources are being regenerated...'));
+    // Queue a new report generation.
+    $queue_result = $this->analysisService->queueReportGeneration($uid);
+
+    if ($queue_result) {
+      $this->messenger()->addStatus($this->t('Your learning resources are being regenerated. This may take a few minutes...'));
+    }
+    else {
+      $this->messenger()->addError($this->t('Unable to queue report generation. Please try again later.'));
+    }
 
     return new RedirectResponse('/analysis/learning-resources');
   }

@@ -1,0 +1,141 @@
+<?php
+
+namespace Drupal\ai_learning_resources;
+
+use Drupal\ai_report_storage\AiReportServiceBase;
+
+/**
+ * Service for AI-powered learning resources recommendations.
+ */
+class AiLearningResourcesService extends AiReportServiceBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getReportType(): string {
+    return 'learning_resources';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getModuleName(): string {
+    return 'ai_learning_resources';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRequiredWebforms(): array {
+    return ['task_analysis', 'skills_gap'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function buildPrompt(array $submission_data): string {
+    // Extract task analysis data.
+    $task_data = $submission_data['task_analysis']['data'] ?? [];
+    $skills_data = $submission_data['skills_gap']['data'] ?? [];
+
+    // Extract role information
+    $role_category = $task_data['m2_q1_role_category'] ?? 'unknown';
+    $role_other = $task_data['m2_q1_other'] ?? '';
+
+    // Extract skills data
+    $current_skills = $skills_data['m5_q2_current_skills'] ?? 'not specified';
+    if (is_array($current_skills)) {
+      $current_skills = implode(', ', $current_skills);
+    }
+    $desired_skills = $skills_data['m5_q3_want_to_develop'] ?? 'not specified';
+    if (is_array($desired_skills)) {
+      $desired_skills = implode(', ', $desired_skills);
+    }
+    $learning_barrier = $skills_data['m5_q4_barriers'] ?? 'not specified';
+    if (is_array($learning_barrier)) {
+      $learning_barrier = implode(', ', $learning_barrier);
+    }
+    $learning_style = $skills_data['m5_q5_learning_preference'] ?? 'not specified';
+    if (is_array($learning_style)) {
+      $learning_style = implode(', ', $learning_style);
+    }
+
+    return <<<PROMPT
+Generate personalized learning resources for this professional based on their skills gap and learning preferences.
+
+PROFILE:
+Role: {$role_category}{$role_other}
+Current Skills: {$current_skills}
+Want to Learn: {$desired_skills}
+Learning Barriers: {$learning_barrier}
+Learning Style: {$learning_style}
+
+Generate JSON report matching this EXACT structure:
+
+1. personalized_learning_path:
+   - learning_style_assessment (2-3 sentences about their learning style and approach)
+   - immediate_actions: [3-4 items with {skill, action, time_required, expected_outcome}]
+   - thirty_day_sprint: {
+       focus_skill: "primary skill to focus on",
+       success_metrics: [3-4 strings of what they'll achieve],
+       week_by_week: [
+         {week: 1, activities: [3-4 strings], milestone: "what they'll accomplish"},
+         {week: 2, activities: [3-4 strings], milestone: "what they'll accomplish"},
+         {week: 3, activities: [3-4 strings], milestone: "what they'll accomplish"},
+         {week: 4, activities: [3-4 strings], milestone: "what they'll accomplish"}
+       ]
+     }
+   - ninety_day_mastery: {
+       target_competencies: [4-5 strings of competencies they'll develop],
+       project_based_learning: [3-4 items with {project, skills_practiced: [strings], portfolio_value}]
+     }
+
+2. learning_resources:
+   - recommended_platforms: [4-5 items with {platform, why_recommended, specific_courses: [3-4 course names]}]
+   - practice_projects: [4-5 items with {project, skills_developed: [strings], time_estimate, difficulty}]
+   - community_resources: [3-4 items with {resource, value, how_to_engage}]
+
+3. action_plan:
+   - immediate (1-2 sentences: what to do this week)
+   - month_1_3 (1-2 sentences: months 1-3 focus)
+   - month_4_6 (1-2 sentences: months 4-6 focus)
+   - beyond (1-2 sentences: long-term vision)
+
+RULES:
+- All resources should be real, current, and accessible
+- Tailor recommendations to their specific learning style and barriers
+- Include mix of free and paid resources
+- Focus on practical, actionable learning paths
+- Be specific to their role and desired skills
+- Keep action_plan items concise (1-2 sentences each)
+PROMPT;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function validateResponse(array $response): bool {
+    $required_fields = [
+      'personalized_learning_path',
+      'learning_resources',
+      'action_plan',
+    ];
+
+    foreach ($required_fields as $field) {
+      if (!isset($response[$field])) {
+        $this->logger->error('AI response missing required field: @field', ['@field' => $field]);
+        return FALSE;
+      }
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getServiceId(): string {
+    return 'ai_learning_resources.analysis_service';
+  }
+
+}

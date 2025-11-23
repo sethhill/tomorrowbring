@@ -1,5 +1,0 @@
-role_impact_report:
-  version: 1.x
-  css:
-    theme:
-      css/role-impact-report.css: {}

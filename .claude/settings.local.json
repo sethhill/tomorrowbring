@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "Bash(ddev drush:*)"
+      "Bash(ddev drush:*)",
+      "Bash(cat:*)",
+      "Bash(php:*)"
     ],
     "deny": [],
     "ask": []

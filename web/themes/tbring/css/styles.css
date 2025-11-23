@@ -595,7 +595,7 @@ footer {
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     margin-bottom: 0.7svh;
-    /* margin-bottom: -3svh; */
+    font-variation-settings: "wdth" 90;
   }
   .l3 {
     color: var(--color-green);
@@ -604,6 +604,10 @@ footer {
     text-box-edge: ex alphabetic;
     font-variation-settings: "wdth" 140;
   }
+
+  .li { font-variation-settings: "wdth" 906; }
+  .l2 { font-variation-settings: "wdth" 137; }
+  .l3 { font-variation-settings: "wdth" 216; }
 }
 
 .webform-submission-form > .form-wrapper {
@@ -638,7 +642,7 @@ input[type="submit"].webform-button--next {
 .button--return,
 input[type="submit"].webform-button--previous {
   padding-left: 2.5em;
-  background-image: url("../images/apps_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
+  background-image: url("../images/arrow_back_16dp_FFFFFF_FILL0_wght400_GRAD0_opsz20.svg");
   background-repeat: no-repeat;
   background-position: left 0.75em center;
   background-size: 1.5em 1.5em;
@@ -668,7 +672,13 @@ h4 {
     color: var(--color-orange);
   }
 }
-
+h5 {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+  color: var(--color-deep-green);
+}
 
 h1:first-child,
 h2:first-child,

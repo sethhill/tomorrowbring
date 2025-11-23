@@ -9,59 +9,76 @@
  * - total_modules: Total number of modules.
  * - completed_modules: Number of completed modules.
  * - progress_percentage: Completion percentage.
+ * - all_modules_completed: Whether all modules are completed.
+ * - report_statuses: Array of report statuses.
  */
 #}
 <div class="webform-client-dashboard">
-  <div class="dashboard-header">
-    {% if client_name %}
-      <p class="dashboard-subtitle">{{ client_name }}</p>
-    {% endif %}
-  </div>
+	<div class="dashboard-header">
+		{% if client_name %}
+			<p class="dashboard-subtitle">{{ client_name }}</p>
+		{% endif %}
+	</div>
 
-  {% if analysis_available %}
-  <div class="dashboard-section dashboard-results">
-    <h2>Your Results</h2>
+	{% if all_modules_completed and report_statuses is not empty %}
+		<div class="dashboard-section dashboard-results">
+			<h2>Your Results</h2>
 
-    <div class="analysis-callout">
-      <h3>{{ 'Role Impact Analysis'|t }}</h3>
-      <p>{{ 'Based on your completed assessments, we have generated a personalized analysis of how AI will impact your role and what you should do about it.'|t }}</p>
-      <div class="analysis-callout-actions"><a href="/analysis/role-impact" class="button button-primary">{{ 'View Your Analysis'|t }}</a></div>
+			{% if report_statuses is not empty %}
+				<div class="analysis-reports highlight-grid">
+					{% for type, report_info in report_statuses %}
+						<div class="highlight-card analysis-callout report-{{ type }} report-status-{{ report_info.status }}">
+							<h3>{{ report_info.title }}</h3>
+							<p>{{ report_info.description }}</p>
 
-      <h3>{{ 'Career Transition Opportunities'|t }}</h3>
-      <p>{{ 'Based on your completed assessments, we have generated a personalized analysis of career transition opportunities.'|t }}</p>
-      <div class="analysis-callout-actions"><a href="/analysis/career-transitions" class="button button-primary">{{ 'View Your Analysis'|t }}</a></div>
+							{% if report_info.status == 'ready' %}
+								<div class="analysis-callout-actions">
+									<a href="{{ report_info.url }}" class="button button-primary aria-label=" view the {{ report_info.title }} report">{{ 'View the Report'|t }}</a>
+								</div>
+							{% elseif report_info.status == 'pending' %}
+								<div class="analysis-callout-actions">
+									<button class="button button-secondary" disabled>{{ 'Report Generating'|t }}</button>
+								</div>
+							{% else %}
+								<div class="analysis-callout-actions">
+									<a href="{{ report_info.url }}" class="button button-primary">{{ 'Generate Analysis'|t }}</a>
+								</div>
+							{% endif %}
+						</div>
+					{% endfor %}
+				</div>
+			{% else %}
+				<div class="analysis-callout">
+					<p>{{ 'Congratulations on completing all the modules! Your personalized analysis reports are being prepared. Please check back shortly.'|t }}</p>
+				</div>
+			{% endif %}
 
-      <h3>{{ 'Task Automation Recommendations'|t }}</h3>
-      <p>{{ 'Based on your completed assessments, we have generated a personalized analysis of task automation recommendations.'|t }}</p>
-      <div class="analysis-callout-actions"><a href="/analysis/task-recommendations" class="button button-primary">{{ 'View Your Analysis'|t }}</a></div>
+		</div>
+	{% else %}
 
-      <h3>{{ 'Industry Insights'|t }}</h3>
-      <p>{{ 'Based on your completed assessments, we have generated a personalized analysis of industry insights.'|t }}</p>
-      <div class="analysis-callout-actions"><a href="/analysis/industry-insights" class="button button-primary">{{ 'View Your Analysis'|t }}</a></div>
-    </div>
+		<div class="dashboard-section dashboard-learning">
 
-  </div>
-  {% endif %}
+			<h2>{{ 'Complete Your Profile'|t }}</h2>
 
-  <div class="dashboard-section dashboard-learning">
-
-  <h2>Learning About You</h2>
-
-  <div class="dashboard-progress">
-    <div class="progress-info">
-      <span class="progress-text">{{ 'Your Progress'|t }}</span>
-      <span class="progress-count">{{ completed_modules }} / {{ total_modules }} {{ 'sections completed'|t }}</span>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-bar-fill" style="width: {{ progress_percentage }}%"></div>
-    </div>
-    <span class="progress-percentage">{{ progress_percentage }}%</span>
-  </div>
+			<div class="dashboard-progress">
+				<div class="progress-info">
+					<span class="progress-text">{{ 'Your Progress'|t }}</span>
+					<span class="progress-count">{{ completed_modules }}
+						/
+						{{ total_modules }}
+						{{ 'sections completed'|t }}</span>
+				</div>
+				<div class="progress-bar">
+					<div class="progress-bar-fill" style="width: {{ progress_percentage }}%"></div>
+				</div>
+				<span class="progress-percentage">{{ progress_percentage }}%</span>
+			</div>
 
 
-  <div class="dashboard-modules">
-    {{ modules_view }}
-  </div>
+			<div class="dashboard-modules">
+				{{ modules_view }}
+			</div>
 
-  </div>
+		</div>
+	{% endif %}
 </div>

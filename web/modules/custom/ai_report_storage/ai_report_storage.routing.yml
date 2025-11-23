@@ -44,3 +44,10 @@ entity.ai_report.delete_form:
     parameters:
       ai_report:
         type: 'entity:ai_report'
+
+ai_report_storage.process_queue:
+  path: '/admin/reports/ai-reports/process-queue'
+  defaults:
+    _controller: '\Drupal\ai_report_storage\Controller\QueueProcessorController::process'
+  requirements:
+    _permission: 'administer ai reports'

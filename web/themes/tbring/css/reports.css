@@ -22,6 +22,16 @@
   background: var(--color-white);
   border-start-start-radius: 2em;
   border-end-end-radius: 2em;
+
+
+  ul li {
+    padding: 0.5em 0;
+    border-top: 2px solid var(--color-cream);
+
+    &:last-child {
+      border-bottom: 2px solid var(--color-cream);
+    }
+  }
 }
 
 .report-highlight {
@@ -660,6 +670,53 @@ h3 + .timeline-period {
     flex: 1;
   }
 
+  h4.card-title {
+    color: var(--color-orange);
+  }
+
+  li {
+    padding: 0.5em 0;
+    border-top: 2px solid var(--color-cream-dark);
+
+    &:last-child {
+      border-bottom: 2px solid var(--color-cream-dark);
+    }
+  }
+
+  button,
+  a.button {
+    font-size: 1rem;
+  }
+
+  .button-primary {
+    background: white;
+    color: var(--color-orange);
+
+    &:hover {
+      background: var(--color-orange);
+      color: var(--color-white);
+    }
+  }
+
+  .button-secondary {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 2px solid #d1d5db;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+}
+
+.analysis-callout-actions {
+  text-align: center;
+}
+
+.automatable-tasks,
+.target-competencies {
   li {
     padding: 0.5em 0;
     border-top: 2px solid var(--color-cream-dark);
@@ -670,17 +727,9 @@ h3 + .timeline-period {
   }
 }
 
-.automatable-tasks {
-  li {
-    padding: 0.5em 0;
-    border-top: 2px solid var(--color-cream-dark);
-
-    &:last-child {
-      border-bottom: 2px solid var(--color-cream-dark);
-    }
-  }
+.analysis-callout-actions {
+  margin-top: 1.5em;
 }
-
 
 
   /* .skill {

@@ -30,11 +30,49 @@ class RoleImpactReportController extends ControllerBase {
       return $this->redirect('client_dashboard.dashboard');
     }
 
-    $report = $this->analysisService->generateReport();
+    // Check for pending report first.
+    $pending = $this->analysisService->getPendingReport();
+    if ($pending) {
+      return [
+        '#theme' => 'ai_role_impact_report',
+        '#report' => [
+          'status' => 'pending',
+          'queued_at' => $pending->getGeneratedAt(),
+        ],
+        '#cache' => [
+          'max-age' => 0,
+        ],
+        '#attached' => [
+          'library' => ['ai_report_storage/report_polling'],
+        ],
+      ];
+    }
 
+    // Try to get existing report from cache/database (without generating).
+    $report = $this->analysisService->getExistingReport();
+
+    // If no report exists, queue generation.
     if (!$report) {
-      $this->messenger()->addError($this->t('Unable to generate role impact analysis. Please complete the required assessment modules.'));
-      return $this->redirect('client_dashboard.dashboard');
+      $queue_result = $this->analysisService->queueReportGeneration();
+
+      if (!$queue_result) {
+        $this->messenger()->addError($this->t('Unable to generate role impact analysis. Please complete the required assessment modules.'));
+        return $this->redirect('client_dashboard.dashboard');
+      }
+
+      return [
+        '#theme' => 'ai_role_impact_report',
+        '#report' => [
+          'status' => 'pending',
+          'queued_at' => $queue_result['queued_at'],
+        ],
+        '#cache' => [
+          'max-age' => 0,
+        ],
+        '#attached' => [
+          'library' => ['ai_report_storage/report_polling'],
+        ],
+      ];
     }
 
     // Check for error responses
@@ -75,16 +113,15 @@ class RoleImpactReportController extends ControllerBase {
   public function regenerateAnalysis() {
     $uid = $this->currentUser()->id();
     $this->analysisService->clearCache($uid);
-    $this->messenger()->addStatus($this->t('Generating your AI-powered role impact analysis. This comprehensive analysis may take up to 3 minutes to complete. Please wait...'));
 
-    // Pre-generate the report to show real-time feedback
-    $report = $this->analysisService->generateReport($uid, TRUE);
+    // Queue a new report generation.
+    $queue_result = $this->analysisService->queueReportGeneration($uid);
 
-    if (isset($report['error'])) {
-      $this->messenger()->addWarning($this->t('Analysis generation encountered an issue. Redirecting to the report page where you can try again.'));
+    if ($queue_result) {
+      $this->messenger()->addStatus($this->t('Your role impact analysis is being regenerated. This may take a few minutes...'));
     }
     else {
-      $this->messenger()->addStatus($this->t('Your analysis has been successfully generated!'));
+      $this->messenger()->addError($this->t('Unable to queue report generation. Please try again later.'));
     }
 
     return new RedirectResponse('/analysis/role-impact');

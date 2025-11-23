@@ -10,14 +10,25 @@
 
 <div
 	class="ai-skills-analysis-report">
-	{# Skill Trajectory Section #}
-	{% if report.skill_trajectory %}
-		<section class="report-section skill-trajectory">
-			<h2>{{ 'Your Skill Trajectory'|t }}</h2>
 
-			{% if report.skill_trajectory.current_strengths %}
-				<div class="current-strengths">
-					<p class="report-intro">{{ report.skill_trajectory.current_strengths }}</p>
+	{# Pending state - shown while report is being generated #}
+	{% if report.status == 'pending' %}
+		{% include '@ai_report_storage/report-pending.html.twig' with {
+			'report': report,
+			'report_title': 'Generating Your Skills Analysis'|t
+		} %}
+	{% else %}
+
+		{# Skill Trajectory Section #}
+		{% if report.skill_trajectory %}
+			<section class="report-section skill-trajectory">
+				<h2>{{ 'Your Skill Trajectory'|t }}</h2>
+
+				{% if report.skill_trajectory.current_strengths %}
+					<div class="current-strengths">
+						<p class="report-intro">{{ report.skill_trajectory.current_strengths }}</p>
+
+					{% endif %}
 				</div>
 			{% endif %}
 
@@ -139,38 +150,10 @@
 		</section>
 	{% endif %}
 
-	{# Barrier Strategies #}
-	{# {% if report.barrier_strategies %}
-					<section class="report-section barrier-strategies">
-						<h2>{{ 'Overcoming Your Barriers'|t }}</h2>
-
-						{% if report.barrier_strategies.identified_barriers %}
-							<p>
-								<strong>{{ 'Your barriers:'|t }}</strong>
-								{{ report.barrier_strategies.identified_barriers|join(', ') }}</p>
-						{% endif %}
-
-						{% if report.barrier_strategies.overcoming_strategies %}
-							{% for strategy in report.barrier_strategies.overcoming_strategies %}
-								<div class="strategy-item">
-									<h4>{{ strategy.barrier }}</h4>
-									<ul>
-										{% for strat in strategy.strategies %}
-											<li>{{ strat }}</li>
-										{% endfor %}
-									</ul>
-									<p class="mindset">
-										<strong>{{ 'Mindset Shift:'|t }}</strong>
-										{{ strategy.mindset_shift }}</p>
-								</div>
-							{% endfor %}
-						{% endif %}
-					</section>
-				{% endif %} #}
-
 	{# Motivational Insights #}
-		{% if report.motivational_insights %}
-			<section class="report-section motivational-insights"> <h2>{{ 'Your Unique Advantages'|t }}</h2>
+	{% if report.motivational_insights %}
+		<section class="report-section motivational-insights">
+			<h2>{{ 'Your Unique Advantages'|t }}</h2>
 
 			{% if report.motivational_insights.unique_advantages %}
 				<div class="advantages">
@@ -186,13 +169,6 @@
 					</div>
 				</div>
 			{% endif %}
-
-			{% if report.motivational_insights.long_term_vision %}
-				{# <div class="long-term-vision">
-																	<h3>{{ 'Your Future Vision'|t }}</h3>
-																	<p>{{ report.motivational_insights.long_term_vision }}</p>
-																</div> #}
-			{% endif %}
 		</section>
 	{% endif %}
 
@@ -203,4 +179,6 @@
 			<a href="/analysis/task-recommendations" class="button button--next">{{ 'Automating Tasks'|t }}</a>
 		</div>
 	</div>
+
+
 </div>

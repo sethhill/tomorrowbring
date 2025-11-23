@@ -126,4 +126,11 @@ PROMPT;
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getServiceId(): string {
+    return 'ai_career_transitions.analysis_service';
+  }
+
 }

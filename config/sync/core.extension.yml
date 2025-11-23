@@ -14,7 +14,6 @@ module:
   block_content: 0
   client_dashboard: 0
   client_webform: 0
-  dashboard_leadership: null
   dblog: 0
   dynamic_page_cache: 0
   entity: 0

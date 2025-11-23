@@ -5,100 +5,120 @@
  */
 #}
 
-<div class="ai-task-recommender-report">
-	{% if report.overview %}
-		<section class="report-section overview">
-			<h2>{{ 'Your Automation Opportunity'|t }}</h2>
-			<p class="report-intro">{{ report.overview.automation_potential }}</p>
+<div
+	class="ai-task-recommender-report">
 
-			{% if report.overview.automatable_tasks %}
-				<div class="automatable-tasks">
-					<h3>{{ 'Things AI Can Do for You'|t }}</h3>
-					<ul>
-						{% for task in report.overview.automatable_tasks %}
-							<li>{{ task }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-			{% endif %}
+	{# Pending state - shown while report is being generated #}
+	{% if report.status == 'pending' %}
+		{% include '@ai_report_storage/report-pending.html.twig' with {
+			'report': report,
+			'report_title': 'Generating Your Task Recommendations'|t
+		} %}
+	{% else %}
 
-		</section>
-	{% endif %}
+		{# Pending state - shown while report is being generated #}
+		{% if report.status == 'pending' %}
+			{% include '/report-pending.html.twig' with {
+			'report': report,
+			'report_title': 'Generating Your Report'|t
+		} %}
+		{% else %}
 
-{% if report.tool_recommendations %}
-	<section class="report-section tool-recommendations">
-		<h2>{{ 'Recommended AI Tools'|t }}</h2>
-		<div class="report-lists highlight-grid">
-			{% for tool in report.tool_recommendations %}
-				<div class="highlight-card difficulty-{{ tool.difficulty }}">
-					<div class="tool-header">
-						<h3>{{ tool.tool_name }}</h3>
-						<div class="title-meta">{{ tool.tool_category }}
-							|
-							{{ tool.cost|capitalize }}
-							|
-							{{ tool.difficulty|capitalize }}</div>
-					</div>
-					<div class="tool-task">
-						<strong>{{ 'Purpose:'|t }}</strong>
-						{{ tool.task }}</div>
-					<p class="why">{{ tool.why_recommended }}</p>
-					<p class="getting-started">
-						<strong>{{ 'Getting Started:'|t }}</strong>
-						{{ tool.getting_started }}</p>
-					<p class="time-savings">
-						<strong>{{ 'Saves:'|t }}</strong>
-						{{ tool.time_savings }}</p>
-				</div>
-			{% endfor %}
-		</div>
-	</section>
-{% endif %}
+			{% if report.overview %}
+				<section class="report-section overview">
+					<h2>{{ 'Your Automation Opportunity'|t }}</h2>
+					<p class="report-intro">{{ report.overview.automation_potential }}</p>
 
-	{% if report.workflow_integration and report.workflow_integration.automation_workflows %}
-		<section class="report-section workflow-integration">
-			<h2>{{ 'Chaining Tools into Workflows'|t }}</h2>
-			<div class="highlight-grid">
-				{% for workflow in report.workflow_integration.automation_workflows %}
-					<div class="highlight-card">
-						<h3>{{ workflow.workflow_name }}</h3>
-						<h4>{{ 'Tools'|t }}</h4>
-						<ul>
-							{% for tool in workflow.tools_combined %}
-								<li>{{ tool }}</li>
-							{% endfor %}
-						</ul>
+					{% if report.overview.automatable_tasks %}
+						<div class="automatable-tasks">
+							<h3>{{ 'Things AI Can Do for You'|t }}</h3>
+							<ul>
+								{% for task in report.overview.automatable_tasks %}
+									<li>{{ task }}</li>
+								{% endfor %}
+							</ul>
 
-						<h4>{{ 'Process'|t }}</h4>
-						<ol>
-							{% for step in workflow.process_steps %}
-								<li>{{ step }}</li>
-							{% endfor %}
-						</ol>
-						<h4>{{ 'Impact'|t }}</h4>
-						<p>{{ workflow.expected_impact }}</p>
-					</div>
-				{% endfor %}
-			</div>
-		</section>
-	{% endif %}
-
-	{% if report.overview.quick_wins %}
-		<div class="report-section quick-wins">
-			<h2>{{ 'Quick Wins'|t }}</h2>
-			<div class="confidence-cards">
-				{% for win in report.overview.quick_wins %}
-					<div class="confidence-card">
-						<h3>{{ win.insight }}</h3>
-						{% if win.evidence %}
-							<p>{{ win.evidence }}</p>
 						{% endif %}
 					</div>
-				{% endfor %}
-			</div>
-		</div>
-	{% endif %}
+				{% endif %}
 
+			</section>
+		{% endif %}
+
+		{% if report.tool_recommendations %}
+			<section class="report-section tool-recommendations">
+				<h2>{{ 'Recommended AI Tools'|t }}</h2>
+				<div class="report-lists highlight-grid">
+					{% for tool in report.tool_recommendations %}
+						<div class="highlight-card difficulty-{{ tool.difficulty }}">
+							<div class="tool-header">
+								<h3>{{ tool.tool_name }}</h3>
+								<div class="title-meta">{{ tool.tool_category }}
+									|
+									{{ tool.cost|capitalize }}
+									|
+									{{ tool.difficulty|capitalize }}</div>
+							</div>
+							<div class="tool-task">
+								<strong>{{ 'Purpose:'|t }}</strong>
+								{{ tool.task }}</div>
+							<p class="why">{{ tool.why_recommended }}</p>
+							<p class="getting-started">
+								<strong>{{ 'Getting Started:'|t }}</strong>
+								{{ tool.getting_started }}</p>
+							<p class="time-savings">
+								<strong>{{ 'Saves:'|t }}</strong>
+								{{ tool.time_savings }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</section>
+		{% endif %}
+
+		{% if report.workflow_integration and report.workflow_integration.automation_workflows %}
+			<section class="report-section workflow-integration">
+				<h2>{{ 'Chaining Tools into Workflows'|t }}</h2>
+				<div class="highlight-grid">
+					{% for workflow in report.workflow_integration.automation_workflows %}
+						<div class="highlight-card">
+							<h3>{{ workflow.workflow_name }}</h3>
+							<h4>{{ 'Tools'|t }}</h4>
+							<ul>
+								{% for tool in workflow.tools_combined %}
+									<li>{{ tool }}</li>
+								{% endfor %}
+							</ul>
+
+							<h4>{{ 'Process'|t }}</h4>
+							<ol>
+								{% for step in workflow.process_steps %}
+									<li>{{ step }}</li>
+								{% endfor %}
+							</ol>
+							<h4>{{ 'Impact'|t }}</h4>
+							<p>{{ workflow.expected_impact }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</section>
+		{% endif %}
+
+		{% if report.overview.quick_wins %}
+			<div class="report-section quick-wins">
+				<h2>{{ 'Quick Wins'|t }}</h2>
+				<div class="confidence-cards">
+					{% for win in report.overview.quick_wins %}
+						<div class="confidence-card">
+							<h3>{{ win.insight }}</h3>
+							{% if win.evidence %}
+								<p>{{ win.evidence }}</p>
+							{% endif %}
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+	{% endif %}
 
 	<div class="report-footer">
 		<div class="report-actions">
@@ -106,4 +126,6 @@
 			<a href="/analysis/career-transitions" class="button button--next">{{ 'Career Opportunities'|t }}</a>
 		</div>
 	</div>
+
+
 </div>

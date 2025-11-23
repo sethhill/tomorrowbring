@@ -1,0 +1,4 @@
+services:
+  ai_learning_resources.analysis_service:
+    class: Drupal\ai_learning_resources\AiLearningResourcesService
+    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']

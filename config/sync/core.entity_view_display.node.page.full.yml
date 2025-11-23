@@ -1,0 +1,29 @@
+uuid: 978e7345-c596-4550-b9a4-fdde68af3f15
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.page.field_content
+    - node.type.page
+  module:
+    - text
+    - user
+id: node.page.full
+targetEntityType: node
+bundle: page
+mode: full
+content:
+  field_content:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

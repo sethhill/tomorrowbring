@@ -19,6 +19,8 @@ function client_dashboard_theme($existing, $type, $theme, $path) {
         'completed_modules' => 0,
         'progress_percentage' => 0,
         'analysis_available' => FALSE,
+        'all_modules_completed' => FALSE,
+        'report_statuses' => [],
       ],
     ],
   ];

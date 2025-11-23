@@ -81,7 +81,7 @@ class DashboardController extends ControllerBase {
     $module_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($enabled_module_nids);
 
     // Calculate progress.
-    $total = count($module_nodes);
+    $total = (int) count($module_nodes);
     $completed = 0;
 
     foreach ($module_nodes as $node) {
@@ -105,11 +105,13 @@ class DashboardController extends ControllerBase {
 
     $progress_percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
 
-    // Check if role impact analysis service is available
-    $analysis_available = FALSE;
-    if (\Drupal::hasService('role_impact_analysis.analysis_service')) {
-      $analysisService = \Drupal::service('role_impact_analysis.analysis_service');
-      $analysis_available = $analysisService->hasMinimumData();
+    // Check if all modules are completed
+    $all_modules_completed = ($total > 0 && (int) $completed === (int) $total);
+
+    // Get report statuses for all available report types
+    $report_statuses = [];
+    if ($all_modules_completed) {
+      $report_statuses = $this->getReportStatuses($current_user->id());
     }
 
     // Build the view with enabled module NIDs as arguments.
@@ -125,11 +127,16 @@ class DashboardController extends ControllerBase {
       '#completed_modules' => $completed,
       '#progress_percentage' => $progress_percentage,
       '#modules_view' => $view_render,
-      '#analysis_available' => $analysis_available,
+      '#all_modules_completed' => $all_modules_completed,
+      '#report_statuses' => $report_statuses,
       '#attached' => [
         'library' => [
           'client_dashboard/dashboard',
         ],
+      ],
+      '#cache' => [
+        'contexts' => ['user'],
+        'tags' => ['webform_submission_list', 'ai_report_list'],
       ],
     ];
   }
@@ -158,6 +165,110 @@ class DashboardController extends ControllerBase {
       ->execute();
 
     return !empty($submissions) ? reset($submissions) : NULL;
+  }
+
+  /**
+   * Get report statuses for all available report types.
+   *
+   * @param int $uid
+   *   The user ID.
+   *
+   * @return array
+   *   Array of report statuses keyed by report type.
+   */
+  protected function getReportStatuses($uid) {
+    $statuses = [];
+
+    // Define all available report types with their service IDs and metadata.
+    $report_types = [
+      'role_impact' => [
+        'service_id' => 'ai_role_impact.analysis_service',
+        'title' => $this->t('Role Impact Analysis'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of how AI will impact your role and what you should do about it.'),
+        'url' => '/analysis/role-impact',
+      ],
+      'career_transitions' => [
+        'service_id' => 'ai_career_transitions.analysis_service',
+        'title' => $this->t('Career Transition Opportunities'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of career transition opportunities.'),
+        'url' => '/analysis/career-transitions',
+      ],
+      'task_recommender' => [
+        'service_id' => 'ai_task_recommender.analysis_service',
+        'title' => $this->t('Task Automation Recommendations'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of task automation recommendations.'),
+        'url' => '/analysis/task-recommendations',
+      ],
+      'industry_insights' => [
+        'service_id' => 'ai_industry_insights.analysis_service',
+        'title' => $this->t('Industry Insights'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of industry insights.'),
+        'url' => '/analysis/industry-insights',
+      ],
+      'skills_analysis' => [
+        'service_id' => 'ai_skills_analyzer.analysis_service',
+        'title' => $this->t('Skills Analysis'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of your skills and development recommendations.'),
+        'url' => '/analysis/skills',
+      ],
+      'learning_resources' => [
+        'service_id' => 'ai_learning_resources.analysis_service',
+        'title' => $this->t('Learning Resources'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized list of learning resources to help you develop the skills you need.'),
+        'url' => '/analysis/learning-resources',
+      ],
+    ];
+
+    foreach ($report_types as $type => $info) {
+      if (!\Drupal::hasService($info['service_id'])) {
+        continue;
+      }
+
+      $service = \Drupal::service($info['service_id']);
+
+      // Check if the service has minimum data
+      $has_minimum_data = $service->hasMinimumData($uid);
+
+      // If no minimum data, skip this report type entirely
+      if (!$has_minimum_data) {
+        continue;
+      }
+
+      // Check for existing published report
+      $existing_report = $service->getExistingReport($uid);
+
+      // Check for pending report
+      $pending_report = $service->getPendingReport($uid);
+
+      if ($pending_report) {
+        $statuses[$type] = [
+          'status' => 'pending',
+          'title' => $info['title'],
+          'description' => $info['description'],
+          'url' => $info['url'],
+          'queued_at' => $pending_report->getGeneratedAt(),
+        ];
+      }
+      elseif ($existing_report) {
+        $statuses[$type] = [
+          'status' => 'ready',
+          'title' => $info['title'],
+          'description' => $info['description'],
+          'url' => $info['url'],
+          'generated_at' => $existing_report['generated_at'],
+        ];
+      }
+      else {
+        $statuses[$type] = [
+          'status' => 'not_generated',
+          'title' => $info['title'],
+          'description' => $info['description'],
+          'url' => $info['url'],
+        ];
+      }
+    }
+
+    return $statuses;
   }
 
 }

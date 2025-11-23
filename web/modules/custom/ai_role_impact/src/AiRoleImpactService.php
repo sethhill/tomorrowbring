@@ -160,6 +160,7 @@ Generate JSON report with these sections (be concise):
 
 8. ai_insights:
    - personalized_narrative (1 paragraph, 3 sentences max)
+   - confidence_boosters: [REQUIRED - exactly 2 items with {insight, evidence}] - specific reasons THIS person should be optimistic based on their data
    - hidden_opportunities: [3-4 items with {opportunity, description, action}]
    - tool_recommendations: [3-4 items with {tool, why_for_you, use_cases: [2-3 strings]}]
    - skill_development_roadmap: {
@@ -167,12 +168,12 @@ Generate JSON report with these sections (be concise):
        quarter_2: {primary_focus, skills: [3-4 strings], deliverables: [3-4 strings]}
      }
    - industry_context: {role_evolution, competitive_advantage, watch_out_for} (1 sentence each)
-   - confidence_boosters: [exactly 2 items with {insight, evidence}]
 
 RULES:
 - Risk score: 0-30=low, 31-55=medium, 56-75=high, 76+=critical (based on help_me% and role)
 - Be specific to THEIR data, avoid generic advice
 - Keep responses concise - this is about actionable insights, not volume
+- ALWAYS include confidence_boosters - find genuine reasons for optimism in their profile
 PROMPT;
   }
 
@@ -358,6 +359,13 @@ PROMPT;
         'details' => $e->getMessage(),
       ];
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getServiceId(): string {
+    return 'ai_role_impact.analysis_service';
   }
 
 }

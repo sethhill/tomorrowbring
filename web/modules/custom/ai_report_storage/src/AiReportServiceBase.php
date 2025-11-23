@@ -601,4 +601,278 @@ abstract class AiReportServiceBase {
     }
   }
 
+  /**
+   * Get existing report without generating a new one.
+   *
+   * Only returns cached or database reports. Never triggers generation.
+   *
+   * @param int|null $uid
+   *   The user ID, or NULL for current user.
+   *
+   * @return array|null
+   *   The report data array, or NULL if no report exists.
+   */
+  public function getExistingReport($uid = NULL) {
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Check minimum data first.
+    if (!$this->hasMinimumData($uid)) {
+      return NULL;
+    }
+
+    // Check cache first.
+    $cached = $this->getCachedReport($uid);
+    if ($cached !== NULL) {
+      return $cached;
+    }
+
+    // Check for existing entity.
+    $latest_entity = $this->loadLatestReport($uid);
+    if ($latest_entity && $latest_entity->getStatus() === 'published') {
+      $report_data = $latest_entity->getReportData();
+      $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+      $report_data['uid'] = $uid;
+      $report_data['generation_time'] = $latest_entity->getGenerationTime();
+      $report_data['version'] = $latest_entity->getVersion();
+
+      // Populate cache from entity.
+      $this->setCachedReport($uid, $report_data);
+      return $report_data;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Queue a report for background generation.
+   *
+   * Creates a pending report entity and queues it for processing.
+   *
+   * @param int|null $uid
+   *   The user ID, or NULL for current user.
+   *
+   * @return array
+   *   Array with 'status' => 'pending' and 'entity_id'.
+   */
+  public function queueReportGeneration($uid = NULL) {
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Check minimum data first.
+    if (!$this->hasMinimumData($uid)) {
+      return NULL;
+    }
+
+    // Check if there's already a pending report for this user and type.
+    $existing_pending = $this->reportStorage->loadByProperties([
+      'uid' => $uid,
+      'type' => $this->getReportType(),
+      'status' => 'pending',
+    ]);
+
+    if (!empty($existing_pending)) {
+      // Return the existing pending report.
+      $entity = reset($existing_pending);
+      return [
+        'status' => 'pending',
+        'entity_id' => $entity->id(),
+        'queued_at' => $entity->getGeneratedAt(),
+      ];
+    }
+
+    // Collect submission data for source hash.
+    $submission_data = [];
+    $submission_ids = [];
+    foreach ($this->getRequiredWebforms() as $webform_id) {
+      $result = $this->getSubmissionData($webform_id, $uid);
+      if ($result) {
+        $submission_data[$webform_id] = $result;
+        $submission_ids[] = $result['sid'];
+      }
+    }
+
+    $source_hash = $this->getSourceDataHash($submission_data);
+
+    // Create a pending report entity.
+    $entity = $this->reportStorage->create([
+      'uid' => $uid,
+      'type' => $this->getReportType(),
+      'status' => 'pending',
+      'report_data' => json_encode([]),
+      'version' => 1,
+      'generated_at' => time(),
+      'source_data_hash' => $source_hash,
+      'source_submissions' => json_encode($submission_ids),
+    ]);
+    $entity->save();
+
+    // Queue the generation task.
+    $queue = \Drupal::queue('generate_ai_report');
+    $queue->createItem([
+      'service_id' => $this->getServiceId(),
+      'uid' => $uid,
+      'entity_id' => $entity->id(),
+    ]);
+
+    $this->logger->info('Queued @type report generation for user @uid (entity @id)', [
+      '@type' => $this->getReportType(),
+      '@uid' => $uid,
+      '@id' => $entity->id(),
+    ]);
+
+    return [
+      'status' => 'pending',
+      'entity_id' => $entity->id(),
+      'queued_at' => $entity->getGeneratedAt(),
+    ];
+  }
+
+  /**
+   * Generate report in background (called by queue worker).
+   *
+   * @param int $uid
+   *   The user ID.
+   * @param int $entity_id
+   *   The pending report entity ID.
+   *
+   * @return array|null
+   *   The report data array, or NULL/error array on failure.
+   */
+  public function generateReportInBackground($uid, $entity_id) {
+    // Load the entity.
+    $entity = $this->reportStorage->load($entity_id);
+    if (!$entity) {
+      $this->logger->error('Entity @id not found for background generation', ['@id' => $entity_id]);
+      return NULL;
+    }
+
+    // Collect submission data.
+    $submission_data = [];
+    $submission_ids = [];
+    foreach ($this->getRequiredWebforms() as $webform_id) {
+      $result = $this->getSubmissionData($webform_id, $uid);
+      if ($result) {
+        $submission_data[$webform_id] = $result;
+        $submission_ids[] = $result['sid'];
+      }
+    }
+
+    // Generate new report via AI.
+    $start_time = microtime(TRUE);
+
+    try {
+      $prompt = $this->buildPrompt($submission_data);
+      $response = $this->callAnthropicApi($prompt, TRUE);
+
+      if ($response === NULL) {
+        $entity->setStatus('failed');
+        $entity->save();
+        return [
+          'error' => 'API_TIMEOUT',
+          'message' => 'The AI service timed out. This analysis requires complex processing. Please try again in a moment.',
+        ];
+      }
+
+      $report = $this->parseResponse($response);
+
+      if ($report === NULL) {
+        $entity->setStatus('failed');
+        $entity->save();
+        return [
+          'error' => 'PARSE_ERROR',
+          'message' => 'Unable to parse AI response. Please try regenerating the analysis.',
+        ];
+      }
+
+      $duration = round(microtime(TRUE) - $start_time, 2);
+
+      // Calculate version number.
+      $latest = $this->loadLatestReport($uid);
+      $version = $latest ? $latest->getVersion() + 1 : 1;
+
+      // Update the entity with the generated report.
+      $entity->setReportData($report);
+      $entity->setStatus('published');
+      $entity->setGenerationTime($duration);
+      $entity->setGeneratedAt(time());
+      $entity->setModelUsed('claude-sonnet-4-5-20250929');
+      $source_hash = $this->getSourceDataHash($submission_data);
+      $entity->setSourceDataHash($source_hash);
+      $entity->setSourceSubmissions($submission_ids);
+      $entity->setVersion($version);
+
+      $entity->save();
+
+      // Archive old versions (keep last 5).
+      $this->archiveOldReports($uid, 5);
+
+      // Add metadata to report for return value.
+      $report['generated_at'] = $entity->getGeneratedAt();
+      $report['uid'] = $uid;
+      $report['generation_time'] = $duration;
+      $report['version'] = $version;
+
+      // Update cache.
+      $this->setCachedReport($uid, $report);
+
+      $this->logger->info('Generated report in background for user @uid in @duration seconds (version @version)', [
+        '@uid' => $uid,
+        '@duration' => $duration,
+        '@version' => $version,
+      ]);
+
+      return $report;
+    }
+    catch (\Exception $e) {
+      $entity->setStatus('failed');
+      $entity->save();
+
+      $this->logger->error('Failed to generate report in background for user @uid: @error', [
+        '@uid' => $uid,
+        '@error' => $e->getMessage(),
+      ]);
+      return [
+        'error' => 'EXCEPTION',
+        'message' => 'An unexpected error occurred. Please try again later.',
+        'details' => $e->getMessage(),
+      ];
+    }
+  }
+
+  /**
+   * Check if there is a pending report for the user.
+   *
+   * @param int|null $uid
+   *   The user ID, or NULL for current user.
+   *
+   * @return \Drupal\ai_report_storage\Entity\AiReportInterface|null
+   *   The pending report entity, or NULL if none exists.
+   */
+  public function getPendingReport($uid = NULL) {
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    $pending_reports = $this->reportStorage->loadByProperties([
+      'uid' => $uid,
+      'type' => $this->getReportType(),
+      'status' => 'pending',
+    ]);
+
+    return !empty($pending_reports) ? reset($pending_reports) : NULL;
+  }
+
+  /**
+   * Get the service ID for dependency injection.
+   *
+   * This must match the service defined in the module's services.yml file.
+   *
+   * @return string
+   *   The service ID.
+   */
+  abstract protected function getServiceId(): string;
+
 }

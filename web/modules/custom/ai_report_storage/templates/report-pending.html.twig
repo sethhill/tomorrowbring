@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Reusable pending state template for AI reports.
+ *
+ * Available variables:
+ * - report: Report data with 'status' => 'pending' and 'queued_at' timestamp
+ * - report_title: (optional) Custom title for the pending message
+ */
+#}
+
+{% if report.status == 'pending' %}
+	<div class="report-pending">
+		<div class="pending-message">
+			<div class="spinner"></div>
+			<h2>{{ report_title|default('Generating Your Report'|t) }}</h2>
+			<p>{{ 'Your personalized report is being generated. This can take up to 15 minutes. This page will automatically refresh when ready.'|t }}</p>
+			<p class="pending-details">{{ 'Your report was queued at'|t }}
+				{{ report.queued_at|date('g:i A') }}</p>
+		</div>
+	</div>
+{% endif %}

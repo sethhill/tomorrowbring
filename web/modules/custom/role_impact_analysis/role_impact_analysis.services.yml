@@ -1,7 +1,0 @@
-services:
-  role_impact_analysis.analysis_service:
-    class: Drupal\role_impact_analysis\RoleImpactAnalysis
-    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@role_impact_analysis.ai_service']
-  role_impact_analysis.ai_service:
-    class: Drupal\role_impact_analysis\Service\AiAnalysisService
-    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']

@@ -96,4 +96,11 @@ PROMPT;
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getServiceId(): string {
+    return 'ai_industry_insights.analysis_service';
+  }
+
 }

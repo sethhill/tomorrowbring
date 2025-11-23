@@ -1,0 +1,9 @@
+report_polling:
+  version: 1.x
+  js:
+    js/report-polling.js: {}
+  css:
+    theme:
+      css/report-pending.css: {}
+  dependencies:
+    - core/drupal

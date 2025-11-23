@@ -1,12 +1,23 @@
 {# AI Career Transitions Report #}
-<div class="career-transitions-report">
+<div
+	class="career-transitions-report">
 
-	{% if report.transition_readiness %}
-		<section class="report-section readiness">
-			<h2>{{ 'Transition Readiness'|t }}</h2>
-			<div class="gauge-wrapper">
-				{% set readiness_class = report.transition_readiness.overall_score|number_format(0) >= 70  ? 'gauge-risk-low' : (report.transition_readiness.overall_score|number_format(0) >= 40 ? 'gauge-risk-medium' : 'gauge-risk-high') %}
-				<div class="gauge {{ readiness_class }}" data-score="{{ report.transition_readiness.overall_score|number_format(0) }}" style="--score: {{ report.transition_readiness.overall_score|number_format(0) }}">
+	{# Pending state - shown while report is being generated #}
+	{% if report.status == 'pending' %}
+		{% include '@ai_report_storage/report-pending.html.twig' with {
+			'report': report,
+			'report_title': 'Generating Your Career Opportunities'|t
+		} %}
+	{% else %}
+
+		{% if report.transition_readiness %}
+			<section class="report-section readiness">
+				<h2>{{ 'Transition Readiness'|t }}</h2>
+				<div class="gauge-wrapper">
+					{% set readiness_class = report.transition_readiness.overall_score|number_format(0) >= 70  ? 'gauge-risk-low' : (report.transition_readiness.overall_score|number_format(0) >= 40 ? 'gauge-risk-medium' : 'gauge-risk-high') %}
+					<div class="gauge {{ readiness_class }}" data-score="{{ report.transition_readiness.overall_score|number_format(0) }}" style="--score: {{ report.transition_readiness.overall_score|number_format(0) }}">
+
+					{% endif %}
 					<div class="gauge-fill"></div>
 					<div class="gauge-inner">
 						<span class="gauge-value">{{ report.transition_readiness.overall_score|number_format(0) }}</span>

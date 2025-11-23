@@ -34,15 +34,56 @@
 
 }
 
-.analysis-callout {
-  h3 {
-    text-align: left;
+.report-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5em 0.75em;
+  border-radius: 0.375em;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1em;
+  width: fit-content;
+}
+
+.status-ready {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+
+  .status-icon {
+    color: #10b981;
+    font-weight: bold;
   }
 }
 
-.analysis-callout-actions {
-  text-align: center;
-  margin-top: 2em;
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+
+  .status-icon {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+.status-not-generated {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+
+  .status-icon {
+    color: #9ca3af;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .dashboard-progress {
@@ -62,7 +103,7 @@
 
 .progress-text {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--color-deep-green);
 }
 
@@ -133,6 +174,7 @@
 .module-card__title {
   font-size: 1.25em;
   font-weight: normal;
+  margin: 0;
 }
 
 .module-card__duration {

@@ -118,4 +118,11 @@ PROMPT;
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getServiceId(): string {
+    return 'ai_skills_analyzer.analysis_service';
+  }
+
 }
