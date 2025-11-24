@@ -311,15 +311,31 @@ abstract class AiReportServiceBase {
         // Use reflection to inject our custom HTTP client with extended timeout
         $http_client = new \Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient();
 
+        // The provider might be wrapped in a ProviderProxy, get the actual provider
+        $actual_provider = $provider;
         $reflection = new \ReflectionClass($provider);
-        $property = $reflection->getProperty('httpClient');
-        $property->setAccessible(TRUE);
-        $property->setValue($provider, $http_client);
 
-        // Reset the client so it gets recreated with our HTTP client
-        $client_property = $reflection->getProperty('client');
-        $client_property->setAccessible(TRUE);
-        $client_property->setValue($provider, NULL);
+        // Check if this is a ProviderProxy
+        if ($reflection->hasProperty('provider')) {
+          $proxy_property = $reflection->getProperty('provider');
+          $proxy_property->setAccessible(TRUE);
+          $actual_provider = $proxy_property->getValue($provider);
+          $reflection = new \ReflectionClass($actual_provider);
+        }
+
+        // Now inject the HTTP client into the actual provider
+        if ($reflection->hasProperty('httpClient')) {
+          $property = $reflection->getProperty('httpClient');
+          $property->setAccessible(TRUE);
+          $property->setValue($actual_provider, $http_client);
+
+          // Reset the client so it gets recreated with our HTTP client
+          if ($reflection->hasProperty('client')) {
+            $client_property = $reflection->getProperty('client');
+            $client_property->setAccessible(TRUE);
+            $client_property->setValue($actual_provider, NULL);
+          }
+        }
 
         $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
 
