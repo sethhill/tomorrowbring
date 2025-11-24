@@ -8,7 +8,8 @@
  */
 #}
 
-<div class="ai-breakthrough-strategies-report">
+<div
+	class="ai-breakthrough-strategies-report">
 
 	{# Pending state - shown while report is being generated #}
 	{% if report.status == 'pending' %}
@@ -17,164 +18,6 @@
 			'report_title': 'Generating Your Breakthrough Strategies Report'|t
 		} %}
 	{% else %}
-
-		{# Overcoming Barriers Section #}
-		{% if report.overcoming_barriers %}
-			<section class="report-section overcoming-barriers">
-				<h2>{{ 'Breaking Through Barriers'|t }}</h2>
-
-				{% if report.overcoming_barriers.introduction %}
-					<p class="report-intro">{{ report.overcoming_barriers.introduction }}</p>
-				{% endif %}
-
-				{% if report.overcoming_barriers.barrier_analysis %}
-					<div class="barrier-analysis">
-						{% for barrier in report.overcoming_barriers.barrier_analysis %}
-							<div class="barrier-item">
-								<h3>{{ barrier.barrier }}</h3>
-								<p>
-									<strong>{{ 'Root Cause:'|t }}</strong>
-									{{ barrier.root_cause }}</p>
-								<p>
-									<strong>{{ 'Resolution Strategy:'|t }}</strong>
-									{{ barrier.resolution_strategy }}</p>
-								<p class="first-step">
-									<strong>{{ 'First Step:'|t }}</strong>
-									{{ barrier.first_step }}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% endif %}
-
-				{% if report.overcoming_barriers.mindset_shifts %}
-					<div class="mindset-shifts">
-						<h3>{{ 'Mindset Transformations'|t }}</h3>
-						<ul class="shift-list">
-							{% for shift in report.overcoming_barriers.mindset_shifts %}
-								<li>
-									<div class="shift-from">{{ shift.from }}</div>
-									<div class="shift-arrow">→</div>
-									<div class="shift-to">{{ shift.to }}</div>
-									<p class="practice">
-										<strong>{{ 'Practice:'|t }}</strong>
-										{{ shift.practice }}</p>
-									{% if shift.why_this_matters %}
-										<p class="why-matters">
-											<strong>{{ 'Why This Matters:'|t }}</strong>
-											{{ shift.why_this_matters }}</p>
-									{% endif %}
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-				{% if report.overcoming_barriers.support_systems %}
-					<div class="support-systems">
-						<h3>{{ 'Support Systems'|t }}</h3>
-						<div class="highlight-grid">
-							{% for support in report.overcoming_barriers.support_systems %}
-								<div class="highlight-card">
-									<h4>{{ support.what }}</h4>
-									<p>
-										<strong>{{ 'How It Helps:'|t }}</strong>
-										{{ support.how_helps }}</p>
-									<p>
-										<strong>{{ 'How to Access:'|t }}</strong>
-										{{ support.how_to_access }}</p>
-								</div>
-							{% endfor %}
-						</div>
-					</div>
-				{% endif %}
-
-				{% if report.overcoming_barriers.progress_indicators %}
-					<div class="progress-indicators">
-						<h3>{{ 'Signs of Progress'|t }}</h3>
-						<ul>
-							{% for indicator in report.overcoming_barriers.progress_indicators %}
-								<li>
-									<strong>{{ indicator.indicator }}</strong>
-									<p>{{ indicator.what_it_means }}</p>
-									{% if indicator.how_to_measure %}
-										<p class="measurement">{{ 'How to measure: '|t }}{{ indicator.how_to_measure }}</p>
-									{% endif %}
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-			</section>
-		{% endif %}
-
-		{# Confidence Building Section #}
-		{% if report.confidence_building %}
-			<section class="report-section confidence-building">
-				<h2>{{ 'Building Your Confidence'|t }}</h2>
-
-				{% if report.confidence_building.current_state %}
-					<p class="report-intro">{{ report.confidence_building.current_state }}</p>
-				{% endif %}
-
-				{% if report.confidence_building.confidence_blockers %}
-					<div class="confidence-blockers">
-						<h3>{{ 'What\'s Holding You Back'|t }}</h3>
-						<div class="blocker-grid">
-							{% for blocker in report.confidence_building.confidence_blockers %}
-								<div class="blocker-card">
-									<h4>{{ blocker.blocker }}</h4>
-									<p>
-										<strong>{{ 'Impact:'|t }}</strong>
-										{{ blocker.impact }}</p>
-									<p>
-										<strong>{{ 'Antidote:'|t }}</strong>
-										{{ blocker.antidote }}</p>
-								</div>
-							{% endfor %}
-						</div>
-					</div>
-				{% endif %}
-
-				{% if report.confidence_building.building_blocks %}
-					<div class="building-blocks">
-						<h3>{{ 'Building Blocks of Confidence'|t }}</h3>
-						<ol class="building-steps">
-							{% for block in report.confidence_building.building_blocks %}
-								<li>
-									<h4>{{ block.step }}</h4>
-									<p>
-										<strong>{{ 'Exercise:'|t }}</strong>
-										{{ block.exercise }}</p>
-									<p>
-										<strong>{{ 'Frequency:'|t }}</strong>
-										{{ block.frequency }}</p>
-									<p class="expected-outcome">
-										<strong>{{ 'Expected Outcome:'|t }}</strong>
-										{{ block.expected_outcome }}</p>
-								</li>
-							{% endfor %}
-						</ol>
-					</div>
-				{% endif %}
-
-				{% if report.confidence_building.reinforcement_strategies %}
-					<div class="reinforcement-strategies">
-						<h3>{{ 'Maintaining Momentum'|t }}</h3>
-						<ul>
-							{% for strategy in report.confidence_building.reinforcement_strategies %}
-								<li>
-									<strong>{{ strategy.strategy }}</strong>
-									<p>{{ 'When to use: '|t }}{{ strategy.when_to_use }}</p>
-									<p>{{ 'Why effective: '|t }}{{ strategy.why_effective }}</p>
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-			</section>
-		{% endif %}
 
 		{# Fear to Empowerment Section #}
 		{% if report.fear_to_empowerment %}
@@ -187,400 +30,114 @@
 
 				{% if report.fear_to_empowerment.fear_audit %}
 					<div class="fear-audit">
-						<h3>{{ 'Addressing Your Fears'|t }}</h3>
-						{% for fear in report.fear_to_empowerment.fear_audit %}
-							<div class="fear-item">
-								<h4>{{ fear.fear }}</h4>
-								<p>
-									<strong>{{ 'Reality Check:'|t }}</strong>
-									{{ fear.validity_check }}</p>
-								<p>
-									<strong>{{ 'Reframe:'|t }}</strong>
-									{{ fear.reframe }}</p>
-								<p class="action">
-									<strong>{{ 'Action:'|t }}</strong>
-									{{ fear.action }}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% endif %}
-
-				{% if report.fear_to_empowerment.power_moves %}
-					<div class="power-moves">
-						<h3>{{ 'Power Moves'|t }}</h3>
-						<div class="highlight-grid">
-							{% for move in report.fear_to_empowerment.power_moves %}
-								<div class="highlight-card">
-									<h4>{{ move.move }}</h4>
-									<p>
-										<strong>{{ 'Why Powerful:'|t }}</strong>
-										{{ move.why_powerful }}</p>
-									<p>
-										<strong>{{ 'How to Execute:'|t }}</strong>
-										{{ move.how_to_execute }}</p>
-									<p class="benefit">
-										<strong>{{ 'Immediate Benefit:'|t }}</strong>
-										{{ move.immediate_benefit }}</p>
+						<div class="report-lists">
+							{% for fear in report.fear_to_empowerment.fear_audit %}
+								<div class="report-list">
+									<h3>{{ 'Fear'|t }}:
+										{{ fear.fear }}</h3>
+									<ul>
+										<li>
+											<h4>{{ 'Reality Check'|t }}</h4>
+											<p>{{ fear.validity_check }}</p>
+										</li>
+										<li>
+											<h4>{{ 'Reframe'|t }}</h4>
+											<p>{{ fear.reframe }}</p>
+										</li>
+										<li>
+											<h4>{{ 'Action'|t }}</h4>
+											<p>{{ fear.action }}</p>
+										</li>
+									</ul>
 								</div>
 							{% endfor %}
 						</div>
 					</div>
 				{% endif %}
 
-				{% if report.fear_to_empowerment.success_stories %}
-					<div class="success-stories">
-						<h3>{{ 'Success Stories'|t }}</h3>
-						{% for story in report.fear_to_empowerment.success_stories %}
-							<div class="story-card">
-								<h4>{{ story.scenario }}</h4>
-								<p>{{ story.how_they_overcame }}</p>
-								<p class="lesson">
-									<strong>{{ 'Lesson for You:'|t }}</strong>
-									{{ story.lesson_for_you }}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% endif %}
-
 			</section>
 		{% endif %}
 
-		{# Practical Experiments Section #}
-		{% if report.practical_experiments %}
-			<section class="report-section practical-experiments">
-				<h2>{{ 'Practical Experiments'|t }}</h2>
-
-				{% if report.practical_experiments.experiment_mindset %}
-					<p class="report-intro">{{ report.practical_experiments.experiment_mindset }}</p>
-				{% endif %}
-
-				{% if report.practical_experiments.low_risk_starts %}
-					<div class="low-risk-starts">
-						<h3>{{ 'Start Here: Low-Risk Experiments'|t }}</h3>
-						<div class="experiment-grid">
-							{% for experiment in report.practical_experiments.low_risk_starts %}
-								<div class="experiment-card">
-									<h4>{{ experiment.experiment }}</h4>
-									<p>
-										<strong>{{ 'Time Required:'|t }}</strong>
-										{{ experiment.time_required }}</p>
-									<p>
-										<strong>{{ 'What You\'ll Learn:'|t }}</strong>
-										{{ experiment.what_youll_learn }}</p>
-									<p>
-										<strong>{{ 'Success Criteria:'|t }}</strong>
-										{{ experiment.success_criteria }}</p>
+		{% if report.overcoming_barriers.mindset_shifts %}
+			<section class="report-section mindset-shifts">
+				<h2>{{ 'Mindset Transformations'|t }}</h2>
+				<div class="highlight-list">
+					{% for shift in report.overcoming_barriers.mindset_shifts %}
+						<div class="highlight-card">
+							<div class="shift">
+								<div class="shift-from">
+									<h3>{{ shift.from }}</h3>
 								</div>
-							{% endfor %}
-						</div>
-					</div>
-				{% endif %}
-
-				{% if report.practical_experiments.escalation_path %}
-					<div class="escalation-path">
-						<h3>{{ 'Next Level: Progressive Challenges'|t }}</h3>
-						<ol>
-							{% for challenge in report.practical_experiments.escalation_path %}
-								<li>
-									<h4>{{ challenge.timeframe }}</h4>
-									<p><strong>{{ 'Activities:'|t }}</strong> {{ challenge.activities }}</p>
-									<p><strong>{{ 'Milestone:'|t }}</strong> {{ challenge.milestone }}</p>
-								</li>
-							{% endfor %}
-						</ol>
-					</div>
-				{% endif %}
-
-				{% if report.practical_experiments.reflection_framework %}
-					<div class="reflection-framework">
-						<h3>{{ 'Reflection Framework'|t }}</h3>
-						{% if report.practical_experiments.reflection_framework.questions %}
-							<div class="reflection-questions">
-								<h4>{{ 'Questions to Ask After Each Experiment'|t }}</h4>
-								<ul>
-									{% for question in report.practical_experiments.reflection_framework.questions %}
-										<li>{{ question }}</li>
-									{% endfor %}
-								</ul>
-							</div>
-						{% endif %}
-						{% if report.practical_experiments.reflection_framework.journaling_prompts %}
-							<div class="journaling-prompts">
-								<h4>{{ 'Journaling Prompts'|t }}</h4>
-								<ul>
-									{% for prompt in report.practical_experiments.reflection_framework.journaling_prompts %}
-										<li>{{ prompt }}</li>
-									{% endfor %}
-								</ul>
-							</div>
-						{% endif %}
-					</div>
-				{% endif %}
-
-			</section>
-		{% endif %}
-
-		{# Community and Support Section #}
-		{% if report.community_and_support %}
-			<section class="report-section community-and-support">
-				<h2>{{ 'Community and Support'|t }}</h2>
-
-				{% if report.community_and_support.why_community_matters %}
-					<p class="report-intro">{{ report.community_and_support.why_community_matters }}</p>
-				{% endif %}
-
-				{% if report.community_and_support.peer_connections %}
-					<div class="peer-connections">
-						<h3>{{ 'Peer Connections'|t }}</h3>
-						<div class="connection-grid">
-							{% for connection in report.community_and_support.peer_connections %}
-								<div class="connection-card">
-									<h4>{{ connection.type }}</h4>
-									<p>
-										<strong>{{ 'Where to Find:'|t }}</strong>
-										{{ connection.where_to_find }}</p>
-									<p>
-										<strong>{{ 'What to Look For:'|t }}</strong>
-										{{ connection.what_to_look_for }}</p>
-									{% if connection.conversation_starters %}
-										<p>
-											<strong>{{ 'Conversation Starters:'|t }}</strong>
-											{{ connection.conversation_starters }}</p>
-									{% endif %}
+								<div class="shift-arrow">→</div>
+								<div class="shift-to">
+									<h3>{{ shift.to }}</h3>
 								</div>
-							{% endfor %}
+							</div>
+							<h4>{{ 'Practice'|t }}</h4>
+							<p>{{ shift.practice }}</p>
+							{% if shift.why_this_matters %}
+								<h4>{{ 'Why This Matters'|t }}</h4>
+								<p>{{ shift.why_this_matters }}</p>
+							{% endif %}
 						</div>
-					</div>
-				{% endif %}
-
-				{% if report.community_and_support.mentor_guidance %}
-					<div class="mentor-guidance">
-						<h3>{{ 'Finding a Mentor'|t }}</h3>
-						<p>
-							<strong>{{ 'Ideal Mentor Profile:'|t }}</strong>
-							{{ report.community_and_support.mentor_guidance.ideal_mentor_profile }}</p>
-						<p>
-							<strong>{{ 'Where to Find:'|t }}</strong>
-							{{ report.community_and_support.mentor_guidance.where_to_find }}</p>
-						<p>
-							<strong>{{ 'How to Approach:'|t }}</strong>
-							{{ report.community_and_support.mentor_guidance.how_to_approach }}</p>
-						<p>
-							<strong>{{ 'What to Ask:'|t }}</strong>
-							{{ report.community_and_support.mentor_guidance.what_to_ask }}</p>
-					</div>
-				{% endif %}
-
-				{% if report.community_and_support.accountability_structures %}
-					<div class="accountability-structures">
-						<h3>{{ 'Accountability Systems'|t }}</h3>
-						{% for structure in report.community_and_support.accountability_structures %}
-							<div class="accountability-item">
-								<h4>{{ structure.structure }}</h4>
-								<p>{{ structure.how_it_works }}</p>
-								<p>
-									<strong>{{ 'Best For:'|t }}</strong>
-									{{ structure.best_for }}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% endif %}
-
+					{% endfor %}
+				</div>
 			</section>
 		{% endif %}
 
-		{# Resilience Toolkit Section #}
-		{% if report.resilience_toolkit %}
-			<section class="report-section resilience-toolkit">
-				<h2>{{ 'Resilience Toolkit'|t }}</h2>
-
-				{% if report.resilience_toolkit.setback_strategies %}
-					<div class="setback-strategies">
-						<h3>{{ 'Handling Setbacks'|t }}</h3>
-						{% for strategy in report.resilience_toolkit.setback_strategies %}
-							<div class="strategy-item">
-								<h4>{{ strategy.when_to_use }}</h4>
-								<p>
-									<strong>{{ 'How to Apply:'|t }}</strong>
-									{{ strategy.how_to_apply }}</p>
-								<p>
-									<strong>{{ 'Why It Works:'|t }}</strong>
-									{{ strategy.why_it_works }}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% endif %}
-
-				{% if report.resilience_toolkit.motivation_maintenance %}
-					<div class="motivation-maintenance">
-						<h3>{{ 'Maintaining Motivation'|t }}</h3>
-						<ul>
-							{% for practice in report.resilience_toolkit.motivation_maintenance %}
-								<li>
-									<strong>{{ practice.practice }}</strong>
-									<p>{{ 'Frequency: '|t }}{{ practice.frequency }}</p>
-									<p>{{ 'Benefits: '|t }}{{ practice.benefits }}</p>
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-				{% if report.resilience_toolkit.celebration_rituals %}
-					<div class="celebration-rituals">
-						<h3>{{ 'Celebrate Your Wins'|t }}</h3>
-						{% for ritual in report.resilience_toolkit.celebration_rituals %}
-							<div class="ritual-item">
-								<h4>{{ ritual.milestone_type }}</h4>
-								<p>
-									<strong>{{ 'How to Celebrate:'|t }}</strong>
-									{{ ritual.how_to_celebrate }}</p>
-								<p>
-									<strong>{{ 'Why Important:'|t }}</strong>
-									{{ ritual.why_important }}</p>
-							</div>
-						{% endfor %}
-					</div>
-				{% endif %}
-
-				{% if report.resilience_toolkit.energy_management %}
-					<div class="energy-management">
-						<h3>{{ 'Energy Management'|t }}</h3>
-						<ul>
-							{% for tip in report.resilience_toolkit.energy_management %}
-								<li>
-									<strong>{{ tip.tip }}</strong>
-									<p>{{ 'Implementation: '|t }}{{ tip.implementation }}</p>
-									<p>{{ 'Expected Impact: '|t }}{{ tip.expected_impact }}</p>
-								</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-			</section>
-		{% endif %}
-
-		{# Personalized Action Plan Section #}
-		{% if report.personalized_action_plan %}
-			<section class="report-section personalized-action-plan">
-				<h2>{{ 'Your Action Plan'|t }}</h2>
-
-				{% if report.personalized_action_plan.week_one %}
-					<div class="week-one">
-						<h3>{{ report.personalized_action_plan.week_one.focus }}</h3>
-						<h4>{{ 'Daily Actions'|t }}</h4>
-						<ol>
-							{% for action in report.personalized_action_plan.week_one.daily_actions %}
-								<li>{{ action }}</li>
-							{% endfor %}
-						</ol>
-						<p class="reflection">
-							<strong>{{ 'End of Week Reflection:'|t }}</strong>
-							{{ report.personalized_action_plan.week_one.end_of_week_reflection }}</p>
-					</div>
-				{% endif %}
-
-				{% if report.personalized_action_plan.weeks_two_to_four %}
-					<div class="weeks-two-to-four">
-						<h3>{{ report.personalized_action_plan.weeks_two_to_four.focus }}</h3>
-						<h4>{{ 'Weekly Goals'|t }}</h4>
-						<ul>
-							{% for goal in report.personalized_action_plan.weeks_two_to_four.weekly_goals %}
-								<li>{{ goal }}</li>
-							{% endfor %}
-						</ul>
-						<h4>{{ 'Practices to Establish'|t }}</h4>
-						<ul>
-							{% for practice in report.personalized_action_plan.weeks_two_to_four.practices_to_establish %}
-								<li>{{ practice }}</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-				{% if report.personalized_action_plan.months_two_to_three %}
-					<div class="months-two-to-three">
-						<h3>{{ report.personalized_action_plan.months_two_to_three.focus }}</h3>
-						<h4>{{ 'Milestones'|t }}</h4>
-						<ul>
-							{% for milestone in report.personalized_action_plan.months_two_to_three.milestones %}
-								<li>{{ milestone }}</li>
-							{% endfor %}
-						</ul>
-						<h4>{{ 'New Challenges'|t }}</h4>
-						<ul>
-							{% for challenge in report.personalized_action_plan.months_two_to_three.new_challenges %}
-								<li>{{ challenge }}</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
-
-			</section>
-		{% endif %}
-
-		{# Breakthrough Insights Section #}
-		{% if report.breakthrough_insights %}
-			<section class="report-section breakthrough-insights">
-				<h2>{{ 'Your Breakthrough Insights'|t }}</h2>
-
+		{# Confidence Building Section #}
+		{% if report.confidence_building %}
+			<section class="report-section confidence-building">
+				<h2>{{ 'Building Your Confidence'|t }}</h2>
 				{% if report.breakthrough_insights.transformation_narrative %}
 					<p class="report-intro">{{ report.breakthrough_insights.transformation_narrative }}</p>
 				{% endif %}
 
-				{% if report.breakthrough_insights.personal_strengths %}
-					<div class="personal-strengths">
-						<h3>{{ 'Personal Strengths'|t }}</h3>
+
+				{% if report.confidence_building.confidence_blockers %}
+					<div class="confidence-blockers">
+						<h3>{{ 'What\'s Holding You Back'|t }}</h3>
 						<div class="highlight-grid">
-							{% for strength in report.breakthrough_insights.personal_strengths %}
+							{% for blocker in report.confidence_building.confidence_blockers %}
 								<div class="highlight-card">
-									<h4>{{ strength.strength }}</h4>
-									<p>
-										<strong>{{ 'Evidence:'|t }}</strong>
-										{{ strength.evidence_from_data }}</p>
-									<p>
-										<strong>{{ 'How This Helps:'|t }}</strong>
-										{{ strength.how_this_helps_breakthrough }}</p>
+									<h4 class="card-title">{{ blocker.blocker }}</h4>
+									<h5>{{ 'Impact'|t }}</h5>
+									<p>{{ blocker.impact }}</p>
+									<h5>{{ 'Antidote'|t }}</h5>
+									<p>{{ blocker.antidote }}</p>
 								</div>
 							{% endfor %}
 						</div>
 					</div>
 				{% endif %}
 
-				{% if report.breakthrough_insights.competitive_advantages %}
-					<div class="competitive-advantages">
-						<h3>{{ 'Competitive Advantages'|t }}</h3>
-						<ul>
-							{% for advantage in report.breakthrough_insights.competitive_advantages %}
-								<li>{{ advantage }}</li>
+				{% if report.confidence_building.building_blocks %}
+					<div class="building-blocks">
+						<h3>{{ 'Building Blocks of Confidence'|t }}</h3>
+						<div class="highlight-grid">
+							{% for block in report.confidence_building.building_blocks %}
+								<div class="highlight-card">
+									<h4 class="card-title">{{ block.step }}</h4>
+									<h5>{{ 'Exercise'|t }}</h5>
+									<p>{{ block.exercise }}</p>
+									<h5>{{ 'Frequency'|t }}</h5>
+									<p>{{ block.frequency }}</p>
+									<h5>{{ 'Expected Outcome'|t }}</h5>
+									<p>{{ block.expected_outcome }}</p>
+								</div>
 							{% endfor %}
-						</ul>
+						</div>
 					</div>
 				{% endif %}
 
-				{% if report.breakthrough_insights.optimism_anchors %}
-					<div class="optimism-anchors">
-						<h3>{{ 'Reasons for Confidence'|t }}</h3>
-						<ul>
-							{% for anchor in report.breakthrough_insights.optimism_anchors %}
-								<li>{{ anchor }}</li>
-							{% endfor %}
-						</ul>
-					</div>
-				{% endif %}
+
 
 			</section>
 		{% endif %}
 
-		{# Actions #}
-		<div class="report-footer">
-			<div class="report-actions">
-				<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
-				<a href="/analysis/concerns-navigator" class="button button--related">{{ 'View Concerns Navigator'|t }}</a>
-			</div>
-		</div>
 
-	{% endif %}
 
-</div>
+{# Actions #}
+<div class="report-footer"><div class="report-actions">
+<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
+<a href="/analysis/concerns-navigator" class="button button--related">{{ 'View Concerns Navigator'|t }}</a></div></div>{% endif %}</div>

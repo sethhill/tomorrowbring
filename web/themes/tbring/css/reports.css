@@ -634,6 +634,14 @@ h3 + .timeline-period {
   gap: 1em;
 }
 
+.highlight-list {
+  gap: 1em;
+
+  .highlight-card {
+    margin-bottom: 1em;
+  }
+}
+
 .learning-periods .action-cards {
   grid-template-columns: none;
 }
@@ -1010,4 +1018,32 @@ h3 + .timeline-period {
 .practice-projects,
 .community-resources {
   margin-top: 3em;
+}
+
+.shift {
+  display: flex;
+  border-bottom: 2px solid var(--color-cream-dark);
+  padding-bottom: 0.25em;
+}
+
+.shift-from,
+.shift-to {
+  flex: 1;
+  justify-self: center;
+  text-wrap: balance;
+}
+
+.shift-from h3 {
+  text-align: right;
+}
+
+.shift-arrow {
+  flex: 0 0 2em;
+  text-align: center;
+  font-size: 2em;
+  color: var(--color-orange);
+}
+
+.shift + h4 {
+  margin-top: 0.75em;
 }
