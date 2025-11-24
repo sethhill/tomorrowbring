@@ -18,7 +18,7 @@ class ExtendedTimeoutHttpClient extends Client {
   public function __construct() {
     parent::__construct([
       'timeout' => 600,
-      'connect_timeout' => 30,
+      'connect_timeout' => 600,
       'http_errors' => false,
       'verify' => TRUE,
     ]);

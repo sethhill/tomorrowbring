@@ -356,6 +356,7 @@ $settings['update_free_access'] = FALSE;
  * calls. This affects Guzzle's cURL timeout settings.
  */
 $settings['http_client_config']['timeout'] = 600;
+$settings['http_client_config']['connect_timeout'] = 600;
 
 /**
  * PHP default socket timeout for AI API calls.
