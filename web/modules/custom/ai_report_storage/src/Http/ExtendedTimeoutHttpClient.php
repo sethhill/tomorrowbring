@@ -3,43 +3,25 @@
 namespace Drupal\ai_report_storage\Http;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 /**
- * HTTP client with extended timeout for AI API calls.
+ * Guzzle HTTP client with extended timeout for AI API calls.
+ *
+ * This extends Guzzle's Client directly to ensure compatibility with
+ * the OpenAI SDK's stream handler detection.
  */
-class ExtendedTimeoutHttpClient implements ClientInterface {
-
-  /**
-   * The underlying Guzzle client.
-   *
-   * @var \GuzzleHttp\Client
-   */
-  protected $client;
+class ExtendedTimeoutHttpClient extends Client {
 
   /**
    * Constructs an ExtendedTimeoutHttpClient.
    */
   public function __construct() {
-    $handler = HandlerStack::create();
-
-    $this->client = new Client([
-      'handler' => $handler,
+    parent::__construct([
       'timeout' => 600,
       'connect_timeout' => 30,
       'http_errors' => false,
       'verify' => TRUE,
     ]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function sendRequest(RequestInterface $request): ResponseInterface {
-    return $this->client->send($request);
   }
 
 }
