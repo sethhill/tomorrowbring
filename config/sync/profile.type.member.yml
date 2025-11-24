@@ -1,0 +1,13 @@
+uuid: 00000000-0000-0000-0000-100000000001
+langcode: en
+status: true
+dependencies: {  }
+id: member
+label: Member
+display_label: 'Member Settings'
+multiple: false
+registration: true
+roles:
+  member: member
+allow_revisions: false
+new_revision: false

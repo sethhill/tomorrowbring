@@ -1,0 +1,29 @@
+uuid: 00000000-0000-0000-0000-100000000003
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_industry
+    - profile.type.member
+    - taxonomy.vocabulary.industry
+id: profile.member.field_industry
+field_name: field_industry
+entity_type: profile
+bundle: member
+label: 'What industry do you work in (or want to work in)?'
+description: 'The industry or sector this member works in.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      industry: industry
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

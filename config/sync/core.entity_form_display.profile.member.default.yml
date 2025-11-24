@@ -1,0 +1,40 @@
+uuid: 00000000-0000-0000-0000-100000000004
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.member.field_company_size
+    - field.field.profile.member.field_industry
+    - field.field.profile.member.field_name
+    - profile.type.member
+id: profile.member.default
+targetEntityType: profile
+bundle: member
+mode: default
+content:
+  field_company_size:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_industry:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  is_default: true

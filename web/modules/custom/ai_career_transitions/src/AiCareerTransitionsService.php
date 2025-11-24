@@ -10,6 +10,13 @@ use Drupal\ai_report_storage\AiReportServiceBase;
 class AiCareerTransitionsService extends AiReportServiceBase {
 
   /**
+   * Temporary storage for user ID to pass to buildPrompt.
+   *
+   * @var int|null
+   */
+  protected $tempUid;
+
+  /**
    * {@inheritdoc}
    */
   protected function getReportType(): string {
@@ -31,6 +38,45 @@ class AiCareerTransitionsService extends AiReportServiceBase {
   }
 
   /**
+   * Get the user's industry from their profile.
+   *
+   * @param int|null $uid
+   *   The user ID, or NULL for current user.
+   *
+   * @return string|null
+   *   The industry name, or NULL if not set.
+   */
+  protected function getUserIndustry($uid = NULL) {
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Load the user's member profile.
+    $profile_storage = $this->entityTypeManager->getStorage('profile');
+    $profiles = $profile_storage->loadByProperties([
+      'uid' => $uid,
+      'type' => 'member',
+      'status' => TRUE,
+    ]);
+
+    if (empty($profiles)) {
+      return NULL;
+    }
+
+    $profile = reset($profiles);
+
+    // Get the industry field value.
+    if ($profile->hasField('field_industry') && !$profile->get('field_industry')->isEmpty()) {
+      $industry_term = $profile->get('field_industry')->entity;
+      if ($industry_term) {
+        return $industry_term->getName();
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function buildPrompt(array $submission_data): string {
@@ -42,12 +88,29 @@ class AiCareerTransitionsService extends AiReportServiceBase {
     $current_skills = $skills_data['m5_q2_current_skills'] ?? 'not specified';
     $desired_skills = $skills_data['m5_q3_desired_skills'] ?? 'not specified';
 
+    // Get the user's industry from their profile.
+    $uid = $this->tempUid ?? $this->currentUser->id();
+    $industry = $this->getUserIndustry($uid);
+
+    // Build industry-specific instructions.
+    if ($industry) {
+      $industry_instruction = "Focus on career opportunities specifically within or related to the {$industry} industry. Consider roles that are in high demand in {$industry} and where AI skills provide competitive advantage.";
+      $industry_context = "Industry: {$industry}";
+    }
+    else {
+      $industry_instruction = "Consider diverse career opportunities across industries where the user's skills transfer well.";
+      $industry_context = "Industry: Not specified";
+    }
+
     return <<<PROMPT
 Analyze career transition opportunities in the AI era. Be concise.
 
 Current Role: {$current_role}
+{$industry_context}
 Current Skills: {$current_skills}
 Desired Skills: {$desired_skills}
+
+{$industry_instruction}
 
 Respond with JSON (limit to 3-4 viable transitions):
 
@@ -131,6 +194,35 @@ PROMPT;
    */
   protected function getServiceId(): string {
     return 'ai_career_transitions.analysis_service';
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Override to include user industry in the prompt context.
+   */
+  public function generateReport($uid = NULL, bool $force_regenerate = FALSE, bool $retry = TRUE) {
+    // Store uid for use in buildPrompt.
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Create a temporary storage for uid to pass to buildPrompt.
+    $this->tempUid = $uid;
+
+    return parent::generateReport($uid, $force_regenerate, $retry);
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Override to include user industry in the prompt context.
+   */
+  public function generateReportInBackground($uid, $entity_id) {
+    // Store uid for use in buildPrompt.
+    $this->tempUid = $uid;
+
+    return parent::generateReportInBackground($uid, $entity_id);
   }
 
 }

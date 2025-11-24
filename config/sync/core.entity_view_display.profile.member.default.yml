@@ -1,0 +1,39 @@
+uuid: 00000000-0000-0000-0000-100000000005
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.member.field_company_size
+    - field.field.profile.member.field_industry
+    - field.field.profile.member.field_name
+    - profile.type.member
+id: profile.member.default
+targetEntityType: profile
+bundle: member
+mode: default
+content:
+  field_company_size:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_industry:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

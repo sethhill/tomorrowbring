@@ -1,0 +1,19 @@
+uuid: 3ce48e89-0a17-49e6-8099-50b8edb9149d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_name
+    - profile.type.member
+id: profile.member.field_name
+field_name: field_name
+entity_type: profile
+bundle: member
+label: 'What should we call you?'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

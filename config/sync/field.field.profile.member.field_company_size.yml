@@ -1,0 +1,29 @@
+uuid: 27cbae80-a801-4adc-8cc6-7085e9dbd7be
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_company_size
+    - profile.type.member
+    - taxonomy.vocabulary.company_size
+id: profile.member.field_company_size
+field_name: field_company_size
+entity_type: profile
+bundle: member
+label: 'What size company do you work for (or want to work for)?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      company_size: company_size
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: company_size
+field_type: entity_reference

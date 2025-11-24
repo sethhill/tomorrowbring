@@ -4,8 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.user.user.field_client
+    - field.field.user.user.field_department
+    - field.field.user.user.field_is_leader
   module:
     - path
+    - profile
     - user
 id: user.user.default
 targetEntityType: user
@@ -19,7 +22,7 @@ content:
     third_party_settings: {  }
   field_client:
     type: entity_reference_autocomplete
-    weight: 50
+    weight: 4
     region: content
     settings:
       match_operator: CONTAINS
@@ -32,6 +35,13 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  member_profiles:
+    type: profile_form
+    weight: 5
+    region: content
+    settings:
+      form_mode: default
+    third_party_settings: {  }
   path:
     type: path
     weight: 3
@@ -43,4 +53,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_department: true
+  field_is_leader: true

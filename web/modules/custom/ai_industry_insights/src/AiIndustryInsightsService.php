@@ -10,6 +10,13 @@ use Drupal\ai_report_storage\AiReportServiceBase;
 class AiIndustryInsightsService extends AiReportServiceBase {
 
   /**
+   * Temporary storage for user ID to pass to buildPrompt.
+   *
+   * @var int|null
+   */
+  protected $tempUid;
+
+  /**
    * {@inheritdoc}
    */
   protected function getReportType(): string {
@@ -31,22 +38,78 @@ class AiIndustryInsightsService extends AiReportServiceBase {
   }
 
   /**
+   * Get the user's industry from their profile.
+   *
+   * @param int|null $uid
+   *   The user ID, or NULL for current user.
+   *
+   * @return string|null
+   *   The industry name, or NULL if not set.
+   */
+  protected function getUserIndustry($uid = NULL) {
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Load the user's member profile.
+    $profile_storage = $this->entityTypeManager->getStorage('profile');
+    $profiles = $profile_storage->loadByProperties([
+      'uid' => $uid,
+      'type' => 'member',
+      'status' => TRUE,
+    ]);
+
+    if (empty($profiles)) {
+      return NULL;
+    }
+
+    $profile = reset($profiles);
+
+    // Get the industry field value.
+    if ($profile->hasField('field_industry') && !$profile->get('field_industry')->isEmpty()) {
+      $industry_term = $profile->get('field_industry')->entity;
+      if ($industry_term) {
+        return $industry_term->getName();
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function buildPrompt(array $submission_data): string {
     $task_data = $submission_data['task_analysis']['data'] ?? [];
     $role = $task_data['m2_q1_role_category'] ?? 'unknown';
 
+    // Get the user's industry from their profile.
+    $uid = $this->tempUid ?? $this->currentUser->id();
+    $industry = $this->getUserIndustry($uid);
+
+    // Build industry-specific prompt.
+    if ($industry) {
+      $industry_instruction = "Tailor ALL insights specifically to the {$industry} industry.";
+      $overview_instruction = "1-2 sentences on AI adoption in the {$industry} industry";
+    }
+    else {
+      $industry_instruction = "Provide general industry insights based on the role.";
+      $overview_instruction = "1-2 sentences on AI adoption for this role";
+    }
+
     return <<<PROMPT
 Provide industry-specific AI impact insights. Be concise and current.
 
 Role: {$role}
+Industry: {$industry}
+
+{$industry_instruction}
 
 Respond with JSON:
 
 {
   "industry_overview": {
-    "current_state": "1-2 sentences on AI adoption in this industry",
+    "current_state": "{$overview_instruction}",
     "transformation_pace": "slow|moderate|rapid",
     "key_drivers": ["driver 1", "driver 2"]
   },
@@ -101,6 +164,35 @@ PROMPT;
    */
   protected function getServiceId(): string {
     return 'ai_industry_insights.analysis_service';
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Override to include user industry in the prompt context.
+   */
+  public function generateReport($uid = NULL, bool $force_regenerate = FALSE, bool $retry = TRUE) {
+    // Store uid for use in buildPrompt.
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Create a temporary storage for uid to pass to buildPrompt.
+    $this->tempUid = $uid;
+
+    return parent::generateReport($uid, $force_regenerate, $retry);
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Override to include user industry in the prompt context.
+   */
+  public function generateReportInBackground($uid, $entity_id) {
+    // Store uid for use in buildPrompt.
+    $this->tempUid = $uid;
+
+    return parent::generateReportInBackground($uid, $entity_id);
   }
 
 }
