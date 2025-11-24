@@ -1,0 +1,8 @@
+name: AI Concerns Navigator
+type: module
+description: 'Generates personalized reports addressing user concerns about AI and providing actionable strategies for positioning themselves for the future.'
+package: AI Analysis
+core_version_requirement: ^11
+dependencies:
+  - ai_report_storage
+  - webform

@@ -1,0 +1,8 @@
+name: AI Breakthrough Strategies
+type: module
+description: 'Generates personalized strategies for breaking through barriers and transforming mindsets around AI adoption.'
+package: AI Analysis
+core_version_requirement: ^11
+dependencies:
+  - ai_report_storage
+  - webform

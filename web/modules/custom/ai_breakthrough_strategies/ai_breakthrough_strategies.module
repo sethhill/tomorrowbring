@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * AI Breakthrough Strategies module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ai_breakthrough_strategies_theme($existing, $type, $theme, $path) {
+  return [
+    'ai_breakthrough_strategies_report' => [
+      'variables' => ['report' => NULL],
+      'template' => 'ai-breakthrough-strategies-report',
+    ],
+  ];
+}

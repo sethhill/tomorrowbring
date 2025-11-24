@@ -1,0 +1,174 @@
+{#
+/**
+ * @file
+ * Template for AI Concerns Navigator Report.
+ *
+ * Available variables:
+ * - report: Complete concerns navigator report data
+ */
+#}
+
+<div
+	class="ai-concerns-navigator-report">
+
+	{# Pending state - shown while report is being generated #}
+	{% if report.status == 'pending' %}
+		{% include '@ai_report_storage/report-pending.html.twig' with {
+			'report': report,
+			'report_title': 'Generating Your Concerns Navigator Report'|t
+		} %}
+	{% else %}
+
+		{# Concern Assessment Section #}
+		{% if report.concern_assessment %}
+			<section class="report-section concern-assessment">
+				<h2>{{ 'Understanding Your Concerns'|t }}</h2>
+				{% if report.concern_assessment.opportunity_mindset_score %}
+					<div class="mindset-score">
+						<div class="score-display">
+							<span class="score-value">{{ report.concern_assessment.opportunity_mindset_score }}</span>
+							<span class="score-label">{{ '/100 Opportunity Mindset'|t }}</span>
+						</div>
+					</div>
+				{% endif %}
+
+				{% if report.ethical_positioning.your_values_summary %}
+					<p class="report-intro">{{ report.ethical_positioning.your_values_summary }}</p>
+				{% endif %}
+
+
+				{% if report.ethical_positioning.concern_responses %}
+					<div class="concern-responses">
+						<div class="report-columns">
+							{% for response in report.ethical_positioning.concern_responses %}
+								<div class="report-column">
+									<h3>{{ response.concern }}</h3>
+									<p>{{ response.why_valid }}</p>
+									<h4>{{ 'What You Can Do'|t }}</h4>
+									<p>{{ response.practical_response }}</p>
+									<h4>{{ 'Your Advantage'|t }}</h4>
+									<p>{{ response.empowerment_angle }}</p>
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
+
+					{# {% if report.concern_assessment.underlying_themes %}
+															<div class="underlying-themes">
+																<h3>{{ 'Common Themes'|t }}</h3>
+																<ul>
+																	{% for theme in report.concern_assessment.underlying_themes %}
+																		<li>{{ theme }}</li>
+																	{% endfor %}
+																</ul>
+															</div>
+														{% endif %} #}
+
+					{# {% if report.concern_assessment.readiness_indicators %}
+															<div class="readiness-indicators">
+																<div class="positive-indicators">
+																	<h3>{{ 'Strengths Working in Your Favor'|t }}</h3>
+																	<ul>
+																		{% for indicator in report.concern_assessment.readiness_indicators.positive %}
+																			<li>{{ indicator }}</li>
+																		{% endfor %}
+																	</ul>
+																</div>
+																<div class="barriers">
+																	<h3>{{ 'Barriers to Address'|t }}</h3>
+																	<ul>
+																		{% for barrier in report.concern_assessment.readiness_indicators.barriers %}
+																			<li>{{ barrier }}</li>
+																		{% endfor %}
+																	</ul>
+																</div>
+															</div>
+														{% endif %} #}
+				</section>
+			{% endif %}
+
+			{# Ethical Positioning Section #}
+			{% if report.ethical_positioning %}
+				<section class="report-section ethical-positioning">
+					<h2>{{ 'Building Trust in AI Systems'|t }}</h2>
+					{% if report.ethical_positioning.trust_building_strategies.general_approach %}
+						<p class="report-intro">{{ report.ethical_positioning.trust_building_strategies.general_approach }}</p>
+					{% endif %}
+
+
+					{% if report.ethical_positioning.trust_building_strategies %}
+						<div class="trust-building">
+							<div class="highlight-grid">
+								{% for strategy in report.ethical_positioning.trust_building_strategies.specific_actions %}
+									<div class="highlight-card">
+										<h3>{{ strategy.action }}</h3>
+										<p>{{ strategy.benefit }}</p>
+										<h4>{{ 'How To'|t }}</h4>
+										<p>{{ strategy.how_to }}</p>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+
+				</section>
+			{% endif %}
+
+			{% if report.ethical_positioning.ethical_frameworks %}
+				<section class="report-section ethical-frameworks">
+					<h2>{{ 'Ethical Frameworks for Your Consideration'|t }}</h2>
+					<ul>
+						{% for framework in report.ethical_positioning.ethical_frameworks %}
+							<li>
+								<h3>{{ framework.framework }}</h3>
+								<h4>{{ 'Relevance'|t }}</h4>
+								<p>{{ framework.relevance_to_you }}</p>
+								<h4>{{ 'Application'|t }}</h4>
+								<p>{{ framework.application }}</p>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+
+			{% if report.ai_insights.hidden_strengths %}
+				<div class="report-section hidden-strengths">
+					<h2>{{ 'Hidden Strengths'|t }}</h2>
+					<div class="highlight-grid">
+						{% for strength in report.ai_insights.hidden_strengths %}
+							<div class="highlight-card">
+								<h3>{{ strength.strength }}</h3>
+								<p><strong>{{ strength.evidence_from_data }}</strong></p>
+								<p>{{ strength.how_to_amplify }}</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			{% endif %}
+
+
+			{# AI Insights Section #}
+			{% if report.ai_insights %}
+				<section class="report-section ai-insights">
+					<h2>{{ 'Personal Insights'|t }}</h2>
+
+					{% if report.ai_insights.personalized_narrative %}
+						<p class="report-intro">{{ report.ai_insights.personalized_narrative }}</p>
+					{% endif %}
+
+
+				</section>
+			{% endif %}
+
+			{# Actions #}
+			<div class="report-footer">
+				<div class="report-actions">
+					<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
+					<a href="/analysis/breakthrough-strategies" class="button button--related">{{ 'View Breakthrough Strategies'|t }}</a>
+					<a href="/analysis/learning-resources" class="button button--next">{{ 'View Learning Resources'|t }}</a>
+				</div>
+			</div>
+
+		{% endif %}
+
+	</div>

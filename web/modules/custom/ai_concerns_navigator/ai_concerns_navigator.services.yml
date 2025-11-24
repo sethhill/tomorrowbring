@@ -1,0 +1,4 @@
+services:
+  ai_concerns_navigator.service:
+    class: Drupal\ai_concerns_navigator\AiConcernsNavigatorService
+    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']

@@ -28,6 +28,7 @@ class AiReportManager {
     'skills' => 'ai_skills_analyzer.analysis_service',
     'task_recommendations' => 'ai_task_recommender.analysis_service',
     'hybrid_analysis' => 'role_impact_analysis.analysis_service',
+    'concerns_navigator' => 'ai_concerns_navigator.service',
   ];
 
   /**
@@ -40,6 +41,7 @@ class AiReportManager {
     'skills' => 'Skills Analysis',
     'task_recommendations' => 'Task Recommendations',
     'hybrid_analysis' => 'Hybrid Analysis',
+    'concerns_navigator' => 'AI Concerns Navigator',
   ];
 
   /**

@@ -217,6 +217,18 @@ class DashboardController extends ControllerBase {
         'description' => $this->t('Based on your completed assessments, we have generated a personalized list of learning resources to help you develop the skills you need.'),
         'url' => '/analysis/learning-resources',
       ],
+      'breakthrough_strategies' => [
+        'service_id' => 'ai_breakthrough_strategies.service',
+        'title' => $this->t('Breakthrough Strategies'),
+        'description' => $this->t('Based on your completed assessments, we have generated personalized strategies to help you overcome barriers and build confidence with AI adoption.'),
+        'url' => '/analysis/breakthrough-strategies',
+      ],
+      'concerns_navigator' => [
+        'service_id' => 'ai_concerns_navigator.service',
+        'title' => $this->t('Concerns Navigator'),
+        'description' => $this->t('Based on your completed assessments, we have generated a personalized guide to address your concerns about AI and provide balanced perspectives.'),
+        'url' => '/analysis/concerns-navigator',
+      ],
     ];
 
     foreach ($report_types as $type => $info) {

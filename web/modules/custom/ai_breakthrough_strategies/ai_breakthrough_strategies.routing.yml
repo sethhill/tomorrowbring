@@ -1,0 +1,16 @@
+ai_breakthrough_strategies.report:
+  path: '/analysis/breakthrough-strategies'
+  defaults:
+    _controller: '\Drupal\ai_breakthrough_strategies\Controller\AiBreakthroughStrategiesController::viewReport'
+    _title: 'Breakthrough Strategies'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_breakthrough_strategies.regenerate:
+  path: '/analysis/breakthrough-strategies/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_breakthrough_strategies\Controller\AiBreakthroughStrategiesController::regenerateReport'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'
