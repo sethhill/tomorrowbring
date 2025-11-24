@@ -334,19 +334,30 @@ abstract class AiReportServiceBase {
         }
 
         // Use the Anthropic SDK directly with streaming
-        $api_key = \Drupal::config('ai_provider_anthropic.settings')->get('api_key');
-        if (empty($api_key)) {
+        // Get the key name from config, then load the actual key value
+        $key_name = \Drupal::config('ai_provider_anthropic.settings')->get('api_key');
+        if (empty($key_name)) {
           throw new \Exception('Anthropic API key not configured');
         }
 
-        // Create HTTP client with extended timeout
-        $http_client = new \Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient();
+        // Load the actual API key value from the Key module
+        $key_repository = \Drupal::service('key.repository');
+        $key = $key_repository->getKey($key_name);
+        if (!$key || !($api_key = $key->getKeyValue())) {
+          throw new \Exception('Could not load the Anthropic API key, please check your environment settings or your setup key.');
+        }
 
         // Create Anthropic client with streaming support
         $client = new \Anthropic\Client(
-          apiKey: $api_key,
-          httpClient: $http_client
+          apiKey: $api_key
         );
+
+        // Inject our custom HTTP client with extended timeout using reflection
+        $http_client = new \Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient();
+        $reflection = new \ReflectionClass($client);
+        $transporter_property = $reflection->getProperty('transporter');
+        $transporter_property->setAccessible(TRUE);
+        $transporter_property->setValue($client, $http_client);
 
         $timing['checkpoints']['client_created'] = microtime(TRUE) - $timing['start'];
 
