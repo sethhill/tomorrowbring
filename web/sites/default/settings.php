@@ -350,6 +350,22 @@ $settings['update_free_access'] = FALSE;
 # $settings['http_client_config']['proxy']['no'] = ['127.0.0.1', 'localhost'];
 
 /**
+ * HTTP client timeout configuration for AI API calls.
+ *
+ * Set a longer timeout for HTTP requests to accommodate long-running AI API
+ * calls. This affects Guzzle's cURL timeout settings.
+ */
+$settings['http_client_config']['timeout'] = 600;
+
+/**
+ * PHP default socket timeout for AI API calls.
+ *
+ * Set the default socket timeout to accommodate long-running AI API calls.
+ * This affects cURL operations system-wide.
+ */
+ini_set('default_socket_timeout', '600');
+
+/**
  * Reverse Proxy Configuration:
  *
  * Reverse proxy servers are often used to enhance the performance

@@ -301,6 +301,10 @@ abstract class AiReportServiceBase {
         // Set execution timeout to allow for long API calls.
         set_time_limit($timeout + 30);
 
+        // Set default socket timeout for cURL operations.
+        // This affects the underlying HTTP client used by the Anthropic SDK.
+        ini_set('default_socket_timeout', (string) $timeout);
+
         $provider = $this->aiProvider->createInstance('anthropic', ['timeout' => $timeout]);
 
         $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
