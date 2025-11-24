@@ -305,7 +305,19 @@ abstract class AiReportServiceBase {
         // This affects the underlying HTTP client used by the Anthropic SDK.
         ini_set('default_socket_timeout', (string) $timeout);
 
-        $provider = $this->aiProvider->createInstance('anthropic', ['timeout' => $timeout]);
+        // Set cURL timeout options explicitly
+        ini_set('default_socket_timeout', (string) $timeout);
+
+        // Configure the provider with explicit timeout and HTTP client options
+        $config = [
+          'timeout' => $timeout,
+          'http_client_config' => [
+            'timeout' => $timeout,
+            'connect_timeout' => 30,
+          ],
+        ];
+
+        $provider = $this->aiProvider->createInstance('anthropic', $config);
 
         $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
 
