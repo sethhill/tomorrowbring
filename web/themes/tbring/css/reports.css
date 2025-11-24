@@ -1033,8 +1033,12 @@ h3 + .timeline-period {
   text-wrap: balance;
 }
 
-.shift-from h3 {
-  text-align: right;
+.shift-from {
+  flex-basis: 35%;
+}
+
+.shift-to {
+  flex-basis: 65%;
 }
 
 .shift-arrow {

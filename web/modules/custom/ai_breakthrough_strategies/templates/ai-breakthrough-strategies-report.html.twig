@@ -94,35 +94,17 @@
 				{% endif %}
 
 
-				{% if report.confidence_building.confidence_blockers %}
-					<div class="confidence-blockers">
-						<h3>{{ 'What\'s Holding You Back'|t }}</h3>
-						<div class="highlight-grid">
-							{% for blocker in report.confidence_building.confidence_blockers %}
-								<div class="highlight-card">
-									<h4 class="card-title">{{ blocker.blocker }}</h4>
-									<h5>{{ 'Impact'|t }}</h5>
-									<p>{{ blocker.impact }}</p>
-									<h5>{{ 'Antidote'|t }}</h5>
-									<p>{{ blocker.antidote }}</p>
-								</div>
-							{% endfor %}
-						</div>
-					</div>
-				{% endif %}
-
 				{% if report.confidence_building.building_blocks %}
 					<div class="building-blocks">
-						<h3>{{ 'Building Blocks of Confidence'|t }}</h3>
 						<div class="highlight-grid">
 							{% for block in report.confidence_building.building_blocks %}
 								<div class="highlight-card">
-									<h4 class="card-title">{{ block.step }}</h4>
-									<h5>{{ 'Exercise'|t }}</h5>
+									<h3 class="card-title">{{ block.step }}</h3>
+									<h4>{{ 'Exercise'|t }}</h4>
 									<p>{{ block.exercise }}</p>
-									<h5>{{ 'Frequency'|t }}</h5>
+									<h4>{{ 'Frequency'|t }}</h4>
 									<p>{{ block.frequency }}</p>
-									<h5>{{ 'Expected Outcome'|t }}</h5>
+									<h4>{{ 'Expected Outcome'|t }}</h4>
 									<p>{{ block.expected_outcome }}</p>
 								</div>
 							{% endfor %}
@@ -131,13 +113,34 @@
 				{% endif %}
 
 
+				{# {% if report.confidence_building.confidence_blockers %}
+									<div class="confidence-blockers">
+										<h3>{{ 'What\'s Holding You Back'|t }}</h3>
+										<div class="highlight-grid">
+											{% for blocker in report.confidence_building.confidence_blockers %}
+												<div class="highlight-card">
+													<h4 class="card-title">{{ blocker.blocker }}</h4>
+													<h5>{{ 'Impact'|t }}</h5>
+													<p>{{ blocker.impact }}</p>
+													<h5>{{ 'Antidote'|t }}</h5>
+													<p>{{ blocker.antidote }}</p>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								{% endif %} #}
+
 
 			</section>
 		{% endif %}
 
 
-
-{# Actions #}
-<div class="report-footer"><div class="report-actions">
-<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
-<a href="/analysis/concerns-navigator" class="button button--related">{{ 'View Concerns Navigator'|t }}</a></div></div>{% endif %}</div>
+		{# Actions #}
+		<div class="report-footer">
+			<div class="report-actions">
+				<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
+				<a href="/analysis/concerns-navigator" class="button button--related">{{ 'View Concerns Navigator'|t }}</a>
+			</div>
+		</div>
+	{% endif %}
+</div>
