@@ -6,3 +6,7 @@ services:
       - '@current_user'
       - '@logger.factory'
       - '@module_handler'
+
+  ai_report_storage.extended_timeout_http_client:
+    class: Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient
+    public: false
