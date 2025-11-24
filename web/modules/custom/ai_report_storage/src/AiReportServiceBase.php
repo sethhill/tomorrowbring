@@ -272,7 +272,7 @@ abstract class AiReportServiceBase {
   }
 
   /**
-   * Call the Anthropic API with retry logic.
+   * Call the Anthropic API with retry logic and streaming support.
    *
    * @param string $prompt
    *   The prompt to send.
@@ -298,7 +298,7 @@ abstract class AiReportServiceBase {
       ];
 
       try {
-        $this->logger->info('Calling Anthropic API (attempt @attempt of @max) with @timeout s timeout', [
+        $this->logger->info('Calling Anthropic API with streaming (attempt @attempt of @max) with @timeout s timeout', [
           '@attempt' => $attempt,
           '@max' => $max_attempts,
           '@timeout' => $timeout,
@@ -306,7 +306,7 @@ abstract class AiReportServiceBase {
 
         // TROUBLESHOOTING: Log using custom debug function if available
         if (function_exists('ai_debug_log')) {
-          ai_debug_log('API Call Started', [
+          ai_debug_log('API Call Started (Streaming)', [
             'attempt' => $attempt,
             'max_attempts' => $max_attempts,
             'timeout' => $timeout,
@@ -333,94 +333,119 @@ abstract class AiReportServiceBase {
           ]);
         }
 
-        // Create the provider instance
-        $provider = $this->aiProvider->createInstance('anthropic', ['timeout' => $timeout]);
-        $timing['checkpoints']['provider_created'] = microtime(TRUE) - $timing['start'];
-
-        // TROUBLESHOOTING: Log provider creation
-        if (function_exists('ai_debug_log')) {
-          ai_debug_log('Provider Created', [
-            'elapsed_ms' => round($timing['checkpoints']['provider_created'] * 1000, 2),
-          ]);
+        // Use the Anthropic SDK directly with streaming
+        $api_key = \Drupal::config('ai_provider_anthropic.settings')->get('api_key');
+        if (empty($api_key)) {
+          throw new \Exception('Anthropic API key not configured');
         }
 
-        // Use reflection to inject our custom HTTP client with extended timeout
+        // Create HTTP client with extended timeout
         $http_client = new \Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient();
 
-        // The provider might be wrapped in a ProviderProxy, get the actual provider
-        $actual_provider = $provider;
-        $reflection = new \ReflectionClass($provider);
+        // Create Anthropic client with streaming support
+        $client = new \Anthropic\Client(
+          apiKey: $api_key,
+          httpClient: $http_client
+        );
 
-        // Check if this is a ProviderProxy
-        if ($reflection->hasProperty('provider')) {
-          $proxy_property = $reflection->getProperty('provider');
-          $proxy_property->setAccessible(TRUE);
-          $actual_provider = $proxy_property->getValue($provider);
-          $reflection = new \ReflectionClass($actual_provider);
-        }
+        $timing['checkpoints']['client_created'] = microtime(TRUE) - $timing['start'];
 
-        // Now inject the HTTP client into the actual provider
-        if ($reflection->hasProperty('httpClient')) {
-          $property = $reflection->getProperty('httpClient');
-          $property->setAccessible(TRUE);
-          $property->setValue($actual_provider, $http_client);
-
-          // Reset the client so it gets recreated with our HTTP client
-          if ($reflection->hasProperty('client')) {
-            $client_property = $reflection->getProperty('client');
-            $client_property->setAccessible(TRUE);
-            $client_property->setValue($actual_provider, NULL);
-          }
+        // TROUBLESHOOTING: Log client creation
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('Anthropic Client Created', [
+            'elapsed_ms' => round($timing['checkpoints']['client_created'] * 1000, 2),
+          ]);
         }
 
         $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
 
-        $messages = new ChatInput([
-          new ChatMessage('user', $prompt),
-        ]);
-        $messages->setSystemPrompt($system_prompt);
-        $timing['checkpoints']['messages_prepared'] = microtime(TRUE) - $timing['start'];
-
         // TROUBLESHOOTING: Log before making the actual API call
         if (function_exists('ai_debug_log')) {
-          ai_debug_log('Making API Request', [
-            'elapsed_ms' => round($timing['checkpoints']['messages_prepared'] * 1000, 2),
+          ai_debug_log('Making Streaming API Request', [
+            'elapsed_ms' => round((microtime(TRUE) - $timing['start']) * 1000, 2),
             'model' => 'claude-sonnet-4-5-20250929',
           ]);
         }
 
-        $response = $provider->chat(
-          $messages,
-          'claude-sonnet-4-5-20250929'
+        // Use createStream() to enable streaming and prevent timeouts
+        $stream = $client->messages->createStream(
+          maxTokens: 8096,
+          messages: [
+            \Anthropic\Messages\MessageParam::with(
+              role: 'user',
+              content: $prompt
+            ),
+          ],
+          model: 'claude-sonnet-4-5-20250929',
+          system: $system_prompt
         );
-        $timing['checkpoints']['api_response_received'] = microtime(TRUE) - $timing['start'];
+
+        $timing['checkpoints']['stream_started'] = microtime(TRUE) - $timing['start'];
+
+        // Collect the full response from the stream
+        $full_response = '';
+        $chunk_count = 0;
+
+        foreach ($stream as $event) {
+          $chunk_count++;
+
+          // Log progress periodically
+          if ($chunk_count % 10 === 0 && function_exists('ai_debug_log')) {
+            ai_debug_log('Stream Progress', [
+              'chunks_received' => $chunk_count,
+              'elapsed_seconds' => round(microtime(TRUE) - $timing['start'], 2),
+              'response_length' => strlen($full_response),
+            ]);
+          }
+
+          // Process different event types from the stream
+          if (isset($event->type)) {
+            switch ($event->type) {
+              case 'content_block_delta':
+                if (isset($event->delta->text)) {
+                  $full_response .= $event->delta->text;
+                }
+                break;
+
+              case 'message_start':
+                $this->logger->info('Stream started');
+                break;
+
+              case 'message_stop':
+                $this->logger->info('Stream completed');
+                break;
+            }
+          }
+        }
+
+        $timing['checkpoints']['stream_completed'] = microtime(TRUE) - $timing['start'];
 
         // TROUBLESHOOTING: Log successful response
         if (function_exists('ai_debug_log')) {
-          ai_debug_log('API Response Received', [
-            'elapsed_ms' => round($timing['checkpoints']['api_response_received'] * 1000, 2),
-            'total_seconds' => round($timing['checkpoints']['api_response_received'], 2),
+          ai_debug_log('API Stream Completed', [
+            'chunks_received' => $chunk_count,
+            'elapsed_ms' => round($timing['checkpoints']['stream_completed'] * 1000, 2),
+            'total_seconds' => round($timing['checkpoints']['stream_completed'], 2),
+            'response_length' => strlen($full_response),
           ]);
         }
 
-        $this->logger->info('API call successful on attempt @attempt (took @seconds seconds)', [
+        $this->logger->info('API streaming call successful on attempt @attempt (took @seconds seconds, @chunks chunks)', [
           '@attempt' => $attempt,
-          '@seconds' => round($timing['checkpoints']['api_response_received'], 2),
+          '@seconds' => round($timing['checkpoints']['stream_completed'], 2),
+          '@chunks' => $chunk_count,
         ]);
-
-        $text_result = $response->getNormalized()->getText();
-        $timing['checkpoints']['text_extracted'] = microtime(TRUE) - $timing['start'];
 
         // TROUBLESHOOTING: Log final timing breakdown
         if (function_exists('ai_debug_log')) {
           ai_debug_log('API Call Complete', [
-            'total_seconds' => round($timing['checkpoints']['text_extracted'], 2),
-            'response_length' => strlen($text_result),
+            'total_seconds' => round($timing['checkpoints']['stream_completed'], 2),
+            'response_length' => strlen($full_response),
             'timing_breakdown' => $timing['checkpoints'],
           ]);
         }
 
-        return $text_result;
+        return $full_response;
       }
       catch (\Exception $e) {
         $elapsed = microtime(TRUE) - $timing['start'];
