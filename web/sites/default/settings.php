@@ -366,6 +366,40 @@ $settings['http_client_config']['timeout'] = 600;
 ini_set('default_socket_timeout', '600');
 
 /**
+ * Additional timeout settings for troubleshooting AI API calls.
+ *
+ * These settings help identify where timeouts are occurring.
+ */
+ini_set('max_execution_time', '600');
+ini_set('max_input_time', '600');
+
+/**
+ * Enable detailed error logging for troubleshooting.
+ *
+ * IMPORTANT: Only enable on production if needed for debugging, then disable.
+ */
+// Uncomment these lines to enable detailed logging:
+// error_reporting(E_ALL);
+// ini_set('display_errors', '1');
+// ini_set('log_errors', '1');
+
+/**
+ * Custom logging function for AI API debugging.
+ *
+ * Usage in your code:
+ * ai_debug_log('Starting API call', ['endpoint' => $url, 'timeout' => $timeout]);
+ */
+if (!function_exists('ai_debug_log')) {
+  function ai_debug_log($message, $context = []) {
+    $log_file = '/tmp/drupal_ai_debug.log';
+    $timestamp = date('Y-m-d H:i:s');
+    $context_str = !empty($context) ? json_encode($context) : '';
+    $log_entry = sprintf("[%s] %s %s\n", $timestamp, $message, $context_str);
+    file_put_contents($log_file, $log_entry, FILE_APPEND);
+  }
+}
+
+/**
  * Reverse Proxy Configuration:
  *
  * Reverse proxy servers are often used to enhance the performance

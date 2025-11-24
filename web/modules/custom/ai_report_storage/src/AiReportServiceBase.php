@@ -291,6 +291,12 @@ abstract class AiReportServiceBase {
     while ($attempt < $max_attempts) {
       $attempt++;
 
+      // TROUBLESHOOTING: Log detailed timing information
+      $timing = [
+        'start' => microtime(TRUE),
+        'checkpoints' => [],
+      ];
+
       try {
         $this->logger->info('Calling Anthropic API (attempt @attempt of @max) with @timeout s timeout', [
           '@attempt' => $attempt,
@@ -298,15 +304,45 @@ abstract class AiReportServiceBase {
           '@timeout' => $timeout,
         ]);
 
+        // TROUBLESHOOTING: Log using custom debug function if available
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('API Call Started', [
+            'attempt' => $attempt,
+            'max_attempts' => $max_attempts,
+            'timeout' => $timeout,
+            'prompt_length' => strlen($prompt),
+            'timestamp' => date('Y-m-d H:i:s'),
+          ]);
+        }
+
         // Set execution timeout to allow for long API calls.
         set_time_limit($timeout + 30);
+        $timing['checkpoints']['execution_timeout_set'] = microtime(TRUE) - $timing['start'];
 
         // Set default socket timeout for cURL operations.
         // This affects the underlying HTTP client used by the Anthropic SDK.
         ini_set('default_socket_timeout', (string) $timeout);
+        $timing['checkpoints']['socket_timeout_set'] = microtime(TRUE) - $timing['start'];
+
+        // TROUBLESHOOTING: Log current PHP timeout settings
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('PHP Timeout Settings', [
+            'max_execution_time' => ini_get('max_execution_time'),
+            'default_socket_timeout' => ini_get('default_socket_timeout'),
+            'max_input_time' => ini_get('max_input_time'),
+          ]);
+        }
 
         // Create the provider instance
         $provider = $this->aiProvider->createInstance('anthropic', ['timeout' => $timeout]);
+        $timing['checkpoints']['provider_created'] = microtime(TRUE) - $timing['start'];
+
+        // TROUBLESHOOTING: Log provider creation
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('Provider Created', [
+            'elapsed_ms' => round($timing['checkpoints']['provider_created'] * 1000, 2),
+          ]);
+        }
 
         // Use reflection to inject our custom HTTP client with extended timeout
         $http_client = new \Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient();
@@ -343,20 +379,84 @@ abstract class AiReportServiceBase {
           new ChatMessage('user', $prompt),
         ]);
         $messages->setSystemPrompt($system_prompt);
+        $timing['checkpoints']['messages_prepared'] = microtime(TRUE) - $timing['start'];
+
+        // TROUBLESHOOTING: Log before making the actual API call
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('Making API Request', [
+            'elapsed_ms' => round($timing['checkpoints']['messages_prepared'] * 1000, 2),
+            'model' => 'claude-sonnet-4-5-20250929',
+          ]);
+        }
 
         $response = $provider->chat(
           $messages,
           'claude-sonnet-4-5-20250929'
         );
+        $timing['checkpoints']['api_response_received'] = microtime(TRUE) - $timing['start'];
 
-        $this->logger->info('API call successful on attempt @attempt', ['@attempt' => $attempt]);
-        return $response->getNormalized()->getText();
+        // TROUBLESHOOTING: Log successful response
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('API Response Received', [
+            'elapsed_ms' => round($timing['checkpoints']['api_response_received'] * 1000, 2),
+            'total_seconds' => round($timing['checkpoints']['api_response_received'], 2),
+          ]);
+        }
+
+        $this->logger->info('API call successful on attempt @attempt (took @seconds seconds)', [
+          '@attempt' => $attempt,
+          '@seconds' => round($timing['checkpoints']['api_response_received'], 2),
+        ]);
+
+        $text_result = $response->getNormalized()->getText();
+        $timing['checkpoints']['text_extracted'] = microtime(TRUE) - $timing['start'];
+
+        // TROUBLESHOOTING: Log final timing breakdown
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('API Call Complete', [
+            'total_seconds' => round($timing['checkpoints']['text_extracted'], 2),
+            'response_length' => strlen($text_result),
+            'timing_breakdown' => $timing['checkpoints'],
+          ]);
+        }
+
+        return $text_result;
       }
       catch (\Exception $e) {
+        $elapsed = microtime(TRUE) - $timing['start'];
         $is_timeout = strpos($e->getMessage(), 'timeout') !== FALSE || strpos($e->getMessage(), 'timed out') !== FALSE;
+
+        // TROUBLESHOOTING: Log detailed error information
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('API Call Failed', [
+            'attempt' => $attempt,
+            'elapsed_seconds' => round($elapsed, 2),
+            'is_timeout' => $is_timeout,
+            'error_message' => $e->getMessage(),
+            'error_type' => get_class($e),
+            'error_code' => $e->getCode(),
+            'timing_at_failure' => $timing['checkpoints'],
+          ]);
+        }
+
+        $this->logger->error('API call exception (attempt @attempt, @elapsed s elapsed): @error | Type: @type | Code: @code', [
+          '@attempt' => $attempt,
+          '@elapsed' => round($elapsed, 2),
+          '@error' => $e->getMessage(),
+          '@type' => get_class($e),
+          '@code' => $e->getCode(),
+        ]);
 
         if ($is_timeout && $attempt < $max_attempts) {
           $this->logger->warning('API timeout on attempt @attempt, retrying...', ['@attempt' => $attempt]);
+
+          if (function_exists('ai_debug_log')) {
+            ai_debug_log('Retrying After Timeout', [
+              'next_attempt' => $attempt + 1,
+              'max_attempts' => $max_attempts,
+            ]);
+          }
+
           sleep(2);
           continue;
         }
@@ -365,6 +465,14 @@ abstract class AiReportServiceBase {
           '@attempt' => $attempt,
           '@error' => $e->getMessage(),
         ]);
+
+        if (function_exists('ai_debug_log')) {
+          ai_debug_log('API Call Giving Up', [
+            'attempts_made' => $attempt,
+            'final_error' => $e->getMessage(),
+          ]);
+        }
+
         return NULL;
       }
     }
