@@ -74,6 +74,13 @@
       // Adjust logo spans on window resize.
       window.addEventListener('resize', adjustLogoSpans);
 
+      // Adjust logo spans when returning to the tab.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          adjustLogoSpans();
+        }
+      });
+
     }
   };
 
