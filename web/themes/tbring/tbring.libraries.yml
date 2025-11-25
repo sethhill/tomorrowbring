@@ -10,3 +10,5 @@ global:
       css/reports.css: {}
       css/menu.css: {}
       css/theme/print.css: { media: print }
+  dependencies:
+    - core/drupal

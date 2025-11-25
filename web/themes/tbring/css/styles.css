@@ -568,9 +568,9 @@ footer {
 
 #block-tbring-logo {
   font-family: "FitVariable", sans-serif;
-  font-size: 3em;
+  font-size: 4em;
   font-weight: normal;
-  text-align: center;
+  overflow: hidden;
   /* margin-top: 0.5em; */
 
   h1 {
@@ -578,28 +578,45 @@ footer {
     font-weight: normal;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    transform: scaleX(1.01);
+    transform-origin: left top;
+    text-align: center;
+    min-width: 100%;
   }
+
+  h1 > a {
+    display: flex;
+  }
+
+  h1 > a > div {
+    position: relative;
+    flex-basis: 33.3333%;
+    flex-grow: 1;
+  }
+
 
   .l1 {
     color: var(--color-gold);
-    display: inline-block;
+    display: block;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
-    margin-bottom: 0.7svh;
     font-variation-settings: "wdth" 400;
-    /* margin-bottom: -3svh; */
   }
   .l2 {
+    width: 100%;
     color: var(--color-orange);
-    display: inline-block;
+    display: block;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
-    margin-bottom: 0.7svh;
     font-variation-settings: "wdth" 90;
   }
   .l3 {
+    width: 100%;
     color: var(--color-green);
-    display: inline-block;
+    display: block;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     font-variation-settings: "wdth" 140;

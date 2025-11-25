@@ -1,9 +1,9 @@
 .layout-container header + .region--id- {
   text-align: center;
   display: block;
-  width: fit-content;
+  width: 100%;
   margin: 0 auto;
-  border-radius: 5em;
+  /* border-radius: 5em; */
   overflow: hidden;
   margin-bottom: 2em;
   background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
