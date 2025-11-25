@@ -574,7 +574,6 @@ footer {
   width: 100%;
   transform-origin: center top;
   transform: scaleX(1.01);
-  white-space-collapse: collapse;
   /* margin-top: 0.5em; */
 
   h1 {
@@ -592,8 +591,8 @@ footer {
     display: flex;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
-    border-left: 1px solid var(--color-white);
-    border-right: 1px solid var(--color-white);
+    padding-left: 1px;
+    padding-right: 1px;
   }
 
   h1 > a > div {
@@ -610,6 +609,7 @@ footer {
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     font-variation-settings: "wdth" 400;
+    text-align: right;
   }
   .l2 {
     color: var(--color-orange);
