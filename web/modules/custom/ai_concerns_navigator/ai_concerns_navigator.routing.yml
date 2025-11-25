@@ -2,7 +2,7 @@ ai_concerns_navigator.report:
   path: '/analysis/concerns-navigator'
   defaults:
     _controller: '\Drupal\ai_concerns_navigator\Controller\AiConcernsNavigatorController::viewReport'
-    _title: 'Navigating Your AI Concerns'
+    _title: 'Navigating Your Concerns'
   requirements:
     _user_is_logged_in: 'TRUE'
 

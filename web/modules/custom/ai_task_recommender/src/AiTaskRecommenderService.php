@@ -143,6 +143,8 @@ AI Comfort Level: {$current_ai_comfort}/5
 Tasks wanting automation help with: {$help_tasks_str}
 Tasks they want to keep doing themselves: {$keep_tasks_str}
 
+CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
+
 IMPORTANT: For "automatable_tasks", generate 10 specific, concrete example tasks this person could automate based on their role and the tasks they mentioned. These should be realistic, actionable tasks (e.g., "Drafting weekly status update emails to stakeholders" not just "Email management"). Mix tasks from both categories (help and keep).
 
 Respond with JSON (limit to 3-5 tool recommendations):
@@ -185,19 +187,6 @@ Respond with JSON (limit to 3-5 tool recommendations):
       "cost": "free|freemium|paid"
     }
   ],
-  "implementation_roadmap": {
-    "week_1": {
-      "focus": "Which tool/task to start with",
-      "action": "Specific action to take"
-    },
-    "week_2_4": {
-      "focus": "Next tool/task",
-      "action": "Specific action"
-    },
-    "ongoing": {
-      "habits": ["Habit 1 to build", "Habit 2 to build"]
-    }
-  },
   "workflow_integration": {
     "automation_workflows": [
       {
@@ -207,13 +196,10 @@ Respond with JSON (limit to 3-5 tool recommendations):
         "expected_impact": "Brief impact description"
       }
     ]
-  },
-  "skill_development": {
-    "prompt_engineering": "1-2 sentences on learning to write effective AI prompts",
-    "tool_mastery": "1-2 sentences on deepening tool proficiency",
-    "staying_current": "1-2 sentences on keeping up with new tools"
   }
 }
+
+Return ONLY JSON.
 PROMPT;
   }
 
@@ -224,9 +210,7 @@ PROMPT;
     $required_fields = [
       'overview',
       'tool_recommendations',
-      'implementation_roadmap',
       'workflow_integration',
-      'skill_development',
     ];
 
     foreach ($required_fields as $field) {

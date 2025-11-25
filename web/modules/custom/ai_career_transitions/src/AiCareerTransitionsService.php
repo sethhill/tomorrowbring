@@ -112,6 +112,8 @@ Desired Skills: {$desired_skills}
 
 {$industry_instruction}
 
+CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
+
 Respond with JSON (limit to 3-4 viable transitions):
 
 {
@@ -127,43 +129,20 @@ Respond with JSON (limit to 3-4 viable transitions):
       "fit_score": "1-10",
       "why_viable": "1-2 sentences why this is a good fit",
       "transferable_skills": ["skill 1", "skill 2", "skill 3"],
-      "skills_to_acquire": [
-        {
-          "skill": "skill name",
-          "priority": "critical|important|helpful",
-          "time_to_learn": "estimate (e.g., '2-3 months')"
-        }
-      ],
+      "skills_to_acquire": [{"skill": "skill name"}],
       "timeline": "Realistic timeline (e.g., '6-12 months')",
       "first_steps": ["step 1", "step 2", "step 3"]
     }
   ],
-  "ai_advantage": {
-    "how_ai_helps": "1-2 sentences on how AI makes this transition easier now",
-    "ai_skills_needed": ["AI skill 1", "AI skill 2"]
-  },
-  "market_insights": {
-    "demand_trend": "growing|stable|declining",
-    "why": "1 sentence explanation",
-    "salary_outlook": "Brief outlook"
-  },
-  "action_plan": {
-    "immediate": "What to do this week",
-    "month_1_3": "Focus for months 1-3",
-    "month_4_6": "Focus for months 4-6",
-    "beyond": "Long-term focus"
-  },
   "career_confidence": [
     {
       "insight": "Inspiring statement about their career transition potential",
       "evidence": "Supporting detail about why this transition is achievable"
-    },
-    {
-      "insight": "Second inspiring statement about career development",
-      "evidence": "Supporting detail about their strengths"
     }
   ]
 }
+
+Return ONLY JSON.
 PROMPT;
   }
 
@@ -174,9 +153,7 @@ PROMPT;
     $required_fields = [
       'transition_readiness',
       'viable_transitions',
-      'ai_advantage',
-      'market_insights',
-      'action_plan',
+      'career_confidence',
     ];
 
     foreach ($required_fields as $field) {

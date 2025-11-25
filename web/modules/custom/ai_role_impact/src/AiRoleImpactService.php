@@ -114,59 +114,21 @@ TASKS ({$total_tasks} total):
 - Want to KEEP ({$keep_percentage}%): {$tasks_keep_str}
 - UNSURE ({$unsure_percentage}%): {$tasks_unsure_str}
 
+CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
+
 Generate JSON report with these sections (be concise):
 
-1. current_state:
-   - role_category, ai_frequency, ai_comfort
-   - task_profile: {help_me_percentage, keep_it_percentage, unsure_percentage}
-
-2. displacement_risk:
+1. displacement_risk:
    - risk_score (0-100), risk_level (low|medium|high|critical), urgency
-   - task_breakdown: {help: [], keep: [], unsure: []} - list actual tasks with automation_potential
 
-3. skill_evolution:
-   - increasing_value: [3-4 skills with {skill, reason, action}]
-   - emerging_value: [3-4 skills with {skill, reason, action}]
-
-4. evolution_path:
-   - path_name, from_state, to_state, description (2 sentences)
+2. evolution_path:
+   - path_name, from_state, to_state, path_description (2 sentences)
    - positioning_points: [3-4 strings]
    - obstacles: [3-4 strings]
-   - actions: [3-4 strings]
 
-5. value_proposition:
-   - summary (2 sentences)
-   - irreplaceable_skills: [3-4 items with {skill, task}]
-   - ai_multipliers: [3-4 items with {skill, why}]
-
-6. action_plan:
-   - immediate: {title, actions: [3-4 strings]}
-   - thirty_day: {title, actions: [3-4 strings]}
-   - ninety_day: {title, actions: [3-4 strings]}
-   - six_month: {title, actions: [3-4 strings]}
-
-7. learning_path:
-   - recommended_approach (1 sentence)
-   - timeline: {
-       month_1: {focus, activities: [3-4 strings]},
-       month_2_3: {focus, activities: [3-4 strings]},
-       month_4_6: {focus, activities: [3-4 strings]}
-     }
-   - barrier_strategies: {
-       time_management: [2-3 strings],
-       staying_current: [2-3 strings],
-       avoiding_overwhelm: [2-3 strings]
-     }
-
-8. ai_insights:
+3. ai_insights:
    - personalized_narrative (1 paragraph, 3 sentences max)
-   - confidence_boosters: [REQUIRED - exactly 2 items with {insight, evidence}] - specific reasons THIS person should be optimistic based on their data
-   - hidden_opportunities: [3-4 items with {opportunity, description, action}]
-   - tool_recommendations: [3-4 items with {tool, why_for_you, use_cases: [2-3 strings]}]
-   - skill_development_roadmap: {
-       quarter_1: {primary_focus, skills: [3-4 strings], deliverables: [3-4 strings]},
-       quarter_2: {primary_focus, skills: [3-4 strings], deliverables: [3-4 strings]}
-     }
+   - confidence_boosters: [exactly 2 items with {insight, evidence}] - specific reasons THIS person should be optimistic
    - industry_context: {role_evolution, competitive_advantage, watch_out_for} (1 sentence each)
 
 RULES:
@@ -174,6 +136,7 @@ RULES:
 - Be specific to THEIR data, avoid generic advice
 - Keep responses concise - this is about actionable insights, not volume
 - ALWAYS include confidence_boosters - find genuine reasons for optimism in their profile
+- Return ONLY JSON
 PROMPT;
   }
 
@@ -210,13 +173,8 @@ PROMPT;
    */
   protected function validateResponse(array $response): bool {
     $required_fields = [
-      'current_state',
       'displacement_risk',
-      'skill_evolution',
       'evolution_path',
-      'value_proposition',
-      'action_plan',
-      'learning_path',
       'ai_insights',
     ];
 

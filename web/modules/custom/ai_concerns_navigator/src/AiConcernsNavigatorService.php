@@ -95,97 +95,37 @@ Ageism concern level: {$ageism_concern}/5
 AI training likelihood: {$training_likelihood}
 AI as threat vs opportunity (1=threat, 9=opportunity): {$threat_opportunity_scale}/9
 
-Generate a JSON report with these sections:
+CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
+
+Generate a JSON report with these sections (keep responses CONCISE):
 
 1. concern_assessment:
-   - primary_concerns: [3-4 items with {concern, severity, impact_on_action}]
-   - underlying_themes: [2-3 strings identifying patterns in their concerns]
    - opportunity_mindset_score (0-100, based on threat_opportunity_scale and other signals)
-   - readiness_indicators: {positive: [2-3 strings], barriers: [2-3 strings]}
 
 2. ethical_positioning:
    - your_values_summary (2 sentences reflecting their ethical priorities)
-   - concern_responses: [for each of their top concerns, {concern, why_valid, practical_response, empowerment_angle}]
+   - concern_responses: [3-4 items for their top concerns: {concern, why_valid, practical_response, empowerment_angle}]
    - trust_building_strategies: {
        general_approach (1 sentence),
-       specific_actions: [3-4 actionable items with {action, benefit, how_to}]
+       specific_actions: [3-4 items: {action, benefit, how_to}]
      }
-   - ethical_frameworks: [2-3 items with {framework, relevance_to_you, application}]
+   - ethical_frameworks: [2-3 items: {framework, relevance_to_you, application}]
 
-3. concern_to_advantage:
-   - reframe_narrative (1 paragraph showing how their concerns are actually strengths)
-   - competitive_advantages: [3-4 items with {advantage, why, how_to_leverage}]
-   - positioning_statement (2 sentences - how to describe themselves in job market/professional context given their values)
-
-4. future_positioning:
-   - career_trajectory: {
-       current_position (1 sentence),
-       five_year_vision (based on their input, make it concrete),
-       evolution_path: [3-4 milestones with {milestone, timeframe, actions}]
-     }
-   - skill_priorities: {
-       immediate: [3-4 skills with {skill, why_critical, acquisition_path}],
-       medium_term: [3-4 skills with {skill, why_valuable, acquisition_path}]
-     }
-   - ageism_response: {
-       acknowledgment (1 sentence validating concern if present),
-       countermeasures: [3-4 specific strategies],
-       narrative_shift (how to position experience as advantage)
-     }
-
-5. overcoming_barriers:
-   - barrier_analysis: [for each concern/barrier, {barrier, root_cause, resolution_strategy, first_step}]
-   - mindset_shifts: [3-4 items with {from, to, practice}]
-   - support_systems: [3-4 resources/communities/approaches with {what, how_helps, how_to_access}]
-
-6. action_roadmap:
-   - immediate_wins: {
-       title: "This Week",
-       actions: [3-4 specific, achievable actions that address concerns]
-     }
-   - thirty_day_plan: {
-       title: "Building Momentum",
-       actions: [3-4 actions that deepen skills and confidence]
-     }
-   - ninety_day_milestones: {
-       title: "Measurable Progress",
-       goals: [3-4 measurable outcomes with {goal, success_metric}]
-     }
-   - six_month_transformation: {
-       title: "Positioned for Success",
-       outcomes: [3-4 transformation indicators]
-     }
-
-7. personalized_strategies:
-   - training_approach: {
-       recommendation (based on their training_likelihood),
-       specific_programs: [3-4 items with {program, why_suitable, how_addresses_concerns}],
-       alternative_paths: [2-3 options if formal training isn't appealing]
-     }
-   - confidence_building: [3-4 exercises/practices with {practice, frequency, expected_impact}]
-   - networking_guidance: {
-       communities: [3-4 specific communities/groups],
-       conversation_starters: [3-4 ways to engage with AI topics that align with their values],
-       mentor_profile: "description of ideal mentor/peer group"
-     }
-
-8. ai_insights:
+3. ai_insights:
    - personalized_narrative (1 paragraph, 3-4 sentences - empowering and specific to their data)
-   - hidden_strengths: [3-4 items with {strength, evidence_from_data, how_to_amplify}]
-   - optimism_builders: [3-4 concrete reasons for optimism based on their specific profile]
-   - watch_outs: [2-3 items with {risk, early_warning_sign, mitigation}]
-   - success_indicators: [3-4 signs they'll know they're on the right track]
+   - hidden_strengths: [3-4 items: {strength, evidence_from_data, how_to_amplify}]
 
 CRITICAL RULES:
 - Be SPECIFIC to their data - avoid generic advice
 - Address their actual concerns directly, don't dismiss them
 - Show how concerns can become competitive advantages
-- If they're pessimistic (threat_opportunity < 5), focus heavily on concern_to_advantage and optimism_builders
+- If they're pessimistic (threat_opportunity < 5), focus on empowerment angles
 - If they're optimistic (threat_opportunity >= 7), focus on accelerating their momentum
 - If they have high ethical concerns, emphasize how those are valuable differentiators
 - Base opportunity_mindset_score on multiple signals: threat_opportunity_scale, ai_comfort, career_5_years
 - All strategies must be actionable, not theoretical
 - Tone: empowering, practical, evidence-based, respectful of concerns
+- Return ONLY JSON
 PROMPT;
   }
 
@@ -196,11 +136,6 @@ PROMPT;
     $required_fields = [
       'concern_assessment',
       'ethical_positioning',
-      'concern_to_advantage',
-      'future_positioning',
-      'overcoming_barriers',
-      'action_roadmap',
-      'personalized_strategies',
       'ai_insights',
     ];
 

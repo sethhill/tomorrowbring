@@ -1023,29 +1023,43 @@ h3 + .timeline-period {
 .shift {
   display: flex;
   border-bottom: 2px solid var(--color-cream-dark);
-  padding-bottom: 0.25em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 .shift-from,
 .shift-to {
+  font-weight: 600;
   flex: 1;
   justify-self: center;
   text-wrap: balance;
+
+  h3 {
+    background: var(--color-white);
+    color: var(--color-deep-green);
+    font-size: 1.25em;
+    padding: 1em 1.5em;
+    border-radius: 3em;
+    height: 100%;
+    align-content: center;
+    text-align: center;
+  }
 }
 
 .shift-from {
-  flex-basis: 35%;
+  flex-basis: 50%;
 }
 
 .shift-to {
-  flex-basis: 65%;
+  flex-basis: 50%;
 }
 
 .shift-arrow {
   flex: 0 0 2em;
   text-align: center;
   font-size: 2em;
-  color: var(--color-orange);
+  margin-top: 1em;
+  color: var(--color-green);
 }
 
 .shift + h4 {

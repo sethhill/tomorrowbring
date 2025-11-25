@@ -70,13 +70,14 @@ Want to Learn: {$desired_skills}
 Learning Barriers: {$learning_barrier}
 Learning Style: {$learning_style}
 
+CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
+
 Generate JSON report matching this EXACT structure:
 
 1. personalized_learning_path:
    - learning_style_assessment (2-3 sentences about their learning style and approach)
-   - immediate_actions: [3-4 items with {skill, action, time_required, expected_outcome}]
+   - immediate_actions: [3-4 items with {action, time_required, expected_outcome}]
    - thirty_day_sprint: {
-       focus_skill: "primary skill to focus on",
        success_metrics: [3-4 strings of what they'll achieve],
        week_by_week: [
          {week: 1, activities: [3-4 strings], milestone: "what they'll accomplish"},
@@ -87,19 +88,13 @@ Generate JSON report matching this EXACT structure:
      }
    - ninety_day_mastery: {
        target_competencies: [4-5 strings of competencies they'll develop],
-       project_based_learning: [3-4 items with {project, skills_practiced: [strings], portfolio_value}]
+       project_based_learning: [3-4 items with {project, portfolio_value}]
      }
 
 2. learning_resources:
-   - recommended_platforms: [4-5 items with {platform, why_recommended, specific_courses: [3-4 course names]}]
-   - practice_projects: [4-5 items with {project, skills_developed: [strings], time_estimate, difficulty}]
-   - community_resources: [3-4 items with {resource, value, how_to_engage}]
-
-3. action_plan:
-   - immediate (1-2 sentences: what to do this week)
-   - month_1_3 (1-2 sentences: months 1-3 focus)
-   - month_4_6 (1-2 sentences: months 4-6 focus)
-   - beyond (1-2 sentences: long-term vision)
+   - recommended_platforms: [6 items with {platform, why_recommended, specific_courses: [3-4 course names]}]
+   - practice_projects: [6 items with {project, skills_developed: [strings], time_estimate, difficulty}]
+   - community_resources: [4 items with {resource, value, how_to_engage}]
 
 RULES:
 - All resources should be real, current, and accessible
@@ -107,7 +102,7 @@ RULES:
 - Include mix of free and paid resources
 - Focus on practical, actionable learning paths
 - Be specific to their role and desired skills
-- Keep action_plan items concise (1-2 sentences each)
+- Return ONLY JSON
 PROMPT;
   }
 
@@ -118,7 +113,6 @@ PROMPT;
     $required_fields = [
       'personalized_learning_path',
       'learning_resources',
-      'action_plan',
     ];
 
     foreach ($required_fields as $field) {

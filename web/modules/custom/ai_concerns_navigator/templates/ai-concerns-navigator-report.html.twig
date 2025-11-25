@@ -148,7 +148,7 @@
 
 
 			{# AI Insights Section #}
-			{% if report.ai_insights %}
+			{# {% if report.ai_insights %}
 				<section class="report-section ai-insights">
 					<h2>{{ 'Personal Insights'|t }}</h2>
 
@@ -158,14 +158,13 @@
 
 
 				</section>
-			{% endif %}
+			{% endif %} #}
 
 			{# Actions #}
 			<div class="report-footer">
 				<div class="report-actions">
 					<a href="/dashboard" class="button button--return">{{ 'Return to Dashboard'|t }}</a>
-					<a href="/analysis/breakthrough-strategies" class="button button--related">{{ 'View Breakthrough Strategies'|t }}</a>
-					<a href="/analysis/learning-resources" class="button button--next">{{ 'View Learning Resources'|t }}</a>
+					<a href="/analysis/breakthrough-strategies" class="button button--next">{{ 'View Breakthrough Strategies'|t }}</a>
 				</div>
 			</div>
 

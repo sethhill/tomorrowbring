@@ -84,51 +84,18 @@ CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and
 
 Structure (keep responses CONCISE - max 1-2 sentences per text field, 3 items per array):
 
-1. overcoming_barriers:
-   - introduction (1 sentence)
-   - barrier_analysis: [3 items: {barrier, root_cause, resolution_strategy, first_step}]
+1. fear_to_empowerment:
+   - empowerment_narrative (2 sentences about moving from fear to empowerment)
+   - fear_audit: [4 items: {fear, validity_check, reframe, action}]
+
+2. overcoming_barriers:
    - mindset_shifts: [3 items: {from, to, practice, why_this_matters}]
-   - support_systems: [3 items: {what, how_helps, how_to_access}]
 
-2. confidence_building:
-   - current_state (1 sentence)
-   - confidence_blockers: [3 items: {blocker, impact, antidote}]
-   - building_blocks: [3 items: {step, exercise, frequency, expected_outcome}]
-   - reinforcement_strategies: [3 items: {strategy, when_to_use, why_effective}]
+3. confidence_building:
+   - building_blocks: [4 items: {step, exercise, frequency, expected_outcome}]
 
-3. fear_to_empowerment:
-   - fear_audit: [3 items: {fear, validity_check, reframe, action}]
-   - empowerment_narrative (2 sentences)
-   - power_moves: [3 items: {move, why_powerful, how_to_execute, immediate_benefit}]
-   - success_stories: [2 items: {scenario, how_they_overcame, lesson_for_you}]
-
-4. practical_experiments:
-   - experiment_mindset (1 sentence)
-   - low_risk_starts: [3 items: {experiment, time_required, what_youll_learn, success_criteria}]
-   - escalation_path: [3 items: {timeframe, activities, milestone}]
-   - reflection_framework: {questions: [3 questions], journaling_prompts: [2 prompts]}
-
-5. community_and_support:
-   - why_community_matters (1 sentence)
-   - peer_connections: [3 items: {type, where_to_find, what_to_look_for}]
-   - mentor_guidance: {ideal_mentor_profile, where_to_find, how_to_approach}
-   - accountability_structures: [3 items: {structure, how_it_works, best_for}]
-
-6. resilience_toolkit:
-   - setback_strategies: [3 items: {when_to_use, how_to_apply, why_it_works}]
-   - motivation_maintenance: [3 items: {practice, frequency, benefits}]
-   - celebration_rituals: [3 items: {milestone_type, how_to_celebrate, why_important}]
-
-7. personalized_action_plan:
-   - week_one: {focus: "...", daily_actions: [5 actions], end_of_week_reflection: "..."}
-   - weeks_two_to_four: {focus: "...", weekly_goals: [3 goals], practices_to_establish: [3 habits]}
-   - months_two_to_three: {focus: "...", milestones: [3 milestones], new_challenges: [2 goals]}
-
-8. breakthrough_insights:
-   - personal_strengths: [3 items: {strength, evidence_from_data, how_this_helps_breakthrough}]
-   - transformation_narrative (2 sentences)
-   - competitive_advantages: [3 advantages]
-   - optimism_anchors: [3 reasons for confidence]
+4. breakthrough_insights:
+   - transformation_narrative (2 sentences about their transformation potential)
 
 RULES: Be specific and concise. Match advice to threat_opportunity score. Return ONLY JSON.
 PROMPT;
@@ -139,13 +106,9 @@ PROMPT;
    */
   protected function validateResponse(array $response): bool {
     $required_fields = [
+      'fear_to_empowerment',
       'overcoming_barriers',
       'confidence_building',
-      'fear_to_empowerment',
-      'practical_experiments',
-      'community_and_support',
-      'resilience_toolkit',
-      'personalized_action_plan',
       'breakthrough_insights',
     ];
 

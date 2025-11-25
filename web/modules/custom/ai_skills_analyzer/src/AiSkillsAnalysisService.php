@@ -49,6 +49,8 @@ Role: {$role}
 Current Skills: {$current_skills}
 Desired Skills: {$desired_skills}
 
+CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
+
 Respond with JSON (keep it concise, limit arrays to 2-3 items):
 
 {
@@ -57,39 +59,21 @@ Respond with JSON (keep it concise, limit arrays to 2-3 items):
     "critical_gaps": [{"skill": "name", "why_critical": "brief", "impact_without": "brief", "acquisition_difficulty": "easy|moderate|challenging"}],
     "emerging_opportunities": [{"skill": "name", "why_emerging": "brief", "time_to_relevance": "brief"}]
   },
-  "personalized_learning_path": {
-    "learning_style_assessment": "1-2 sentences",
-    "immediate_actions": [{"skill": "name", "action": "brief", "time_required": "brief", "expected_outcome": "brief"}],
-    "thirty_day_sprint": {
-      "focus_skill": "primary skill",
-      "week_by_week": [{"week": 1, "activities": ["activity 1", "activity 2"], "milestone": "brief"}],
-      "success_metrics": ["metric 1", "metric 2"]
-    },
-    "ninety_day_mastery": {
-      "target_competencies": ["comp 1", "comp 2"],
-      "project_based_learning": [{"project": "name", "skills_practiced": ["skill 1", "skill 2"], "portfolio_value": "brief"}]
-    }
-  },
-  "learning_resources": {
-    "recommended_platforms": [{"platform": "name", "why_recommended": "brief", "specific_courses": ["course 1", "course 2"]}],
-    "practice_projects": [{"project": "idea", "skills_developed": ["skill 1"], "difficulty": "beginner|intermediate|advanced", "time_estimate": "brief"}],
-    "community_resources": [{"resource": "name", "value": "brief", "how_to_engage": "brief"}]
-  },
   "skill_synergies": {
     "introduction": "1-2 affirming sentences about their skill combinations",
     "powerful_combinations": [{"skills": ["A", "B"], "why_powerful": "brief", "application": "brief"}],
     "ai_augmentation_opportunities": [{"current_skill": "skill", "ai_tool": "tool", "multiplier_effect": "brief"}]
   },
-  "barrier_strategies": {
-    "identified_barriers": ["barrier 1"],
-    "overcoming_strategies": [{"barrier": "specific", "strategies": ["strategy 1"], "mindset_shift": "brief"}]
+  "ai_advantage": {
+    "how_ai_helps": "1-2 sentences on how AI can amplify their existing strengths",
+    "ai_skills_needed": ["skill 1", "skill 2", "skill 3"]
   },
   "motivational_insights": {
-    "unique_advantages": [{"insight": "inspirational statement about adapting existing skills", "evidence": "supporting detail"}],
-    "quick_wins": ["win 1"],
-    "long_term_vision": "1-2 sentences"
+    "unique_advantages": [{"insight": "inspirational statement about adapting existing skills", "evidence": "supporting detail"}]
   }
 }
+
+Return ONLY JSON.
 PROMPT;
   }
 
@@ -99,10 +83,8 @@ PROMPT;
   protected function validateResponse(array $response): bool {
     $required_fields = [
       'skill_trajectory',
-      'personalized_learning_path',
-      'learning_resources',
       'skill_synergies',
-      'barrier_strategies',
+      'ai_advantage',
       'motivational_insights',
     ];
 
