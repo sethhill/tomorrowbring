@@ -571,6 +571,9 @@ footer {
   font-size: 4em;
   font-weight: normal;
   overflow: hidden;
+  width: 100%;
+  transform-origin: center top;
+  transform: scaleX(1.01);
   /* margin-top: 0.5em; */
 
   h1 {
@@ -579,44 +582,44 @@ footer {
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     white-space: nowrap;
-    display: flex;
     flex-wrap: nowrap;
-    transform: scaleX(1.01);
-    transform-origin: left top;
     text-align: center;
     min-width: 100%;
   }
 
   h1 > a {
     display: flex;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
   }
 
   h1 > a > div {
     position: relative;
     flex-basis: 33.3333%;
     flex-grow: 1;
+    text-box-trim: trim-both;
+    text-box-edge: ex alphabetic;
+    overflow: hidden;
   }
 
 
   .l1 {
     color: var(--color-gold);
-    display: block;
+    display: inline-block;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     font-variation-settings: "wdth" 400;
   }
   .l2 {
-    width: 100%;
     color: var(--color-orange);
-    display: block;
+    display: inline-block;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     font-variation-settings: "wdth" 90;
   }
   .l3 {
-    width: 100%;
     color: var(--color-green);
-    display: block;
+    display: inline-block;
     text-box-trim: trim-both;
     text-box-edge: ex alphabetic;
     font-variation-settings: "wdth" 140;

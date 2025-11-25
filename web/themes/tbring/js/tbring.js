@@ -18,17 +18,23 @@
     logoSpans.forEach(span => {
       const targetWidth = Math.floor(window.innerWidth * 0.333);
 
-      let wdth = 100;
+
+      // Reset any previous transform before calculating.
+      span.style.transform = '';
+
+      let wdth = 10;
       let iterations = 0;
-      const maxIterations = 50;
+      const maxIterations = 20;
 
       // Binary search to find the optimal wdth value.
       let minWdth = 10;
       let maxWdth = 1000;
+      let textWidth = span.scrollWidth;
 
       while (iterations < maxIterations) {
         span.style.fontVariationSettings = `"wdth" ${wdth}`;
-        const textWidth = span.scrollWidth;
+        textWidth = span.scrollWidth;
+
 
         if (Math.abs(textWidth - targetWidth) < 1) {
           break;
@@ -42,6 +48,18 @@
           wdth = (minWdth + wdth) / 2;
         }
         iterations++;
+      }
+
+      textWidth = span.scrollWidth;
+
+      // If we're already at the maximum width, use scaleX to adjust further.
+      // Iterate 3 times to refine the scale value.
+      if (Math.round(wdth) === 1000) {
+        for (let i = 0; i < 3; i++) {
+          textWidth = span.getBoundingClientRect().width;
+          const scale = targetWidth / textWidth;
+          span.style.transform = `scaleX(${scale})`;
+        }
       }
 
     });
