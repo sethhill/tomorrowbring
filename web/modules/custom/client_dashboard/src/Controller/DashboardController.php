@@ -378,15 +378,27 @@ class DashboardController extends ControllerBase {
           'description' => $info['description'],
           'url' => $info['url'],
           'queued_at' => $pending_report->getGeneratedAt(),
+          'viewed' => FALSE,
         ];
       }
       elseif ($existing_report) {
+        // Load the actual entity to check if it's been viewed.
+        $report_storage = $this->entityTypeManager->getStorage('ai_report');
+        $entities = $report_storage->loadByProperties([
+          'uid' => $uid,
+          'type' => $type,
+          'status' => 'published',
+        ]);
+        $report_entity = !empty($entities) ? reset($entities) : NULL;
+        $viewed = $report_entity ? $report_entity->isViewed() : FALSE;
+
         $statuses[$type] = [
           'status' => 'ready',
           'title' => $info['title'],
           'description' => $info['description'],
           'url' => $info['url'],
           'generated_at' => $existing_report['generated_at'],
+          'viewed' => $viewed,
         ];
       }
       else {
@@ -395,6 +407,7 @@ class DashboardController extends ControllerBase {
           'title' => $info['title'],
           'description' => $info['description'],
           'url' => $info['url'],
+          'viewed' => FALSE,
         ];
       }
     }
@@ -494,15 +507,20 @@ class DashboardController extends ControllerBase {
       return FALSE;
     }
 
-    // Check if all reports (excluding summary) have 'ready' status
+    // Check if all reports (excluding summary) have been viewed
     foreach ($report_statuses as $type => $status) {
       // Skip the summary report itself in this check
       if ($type === 'summary') {
         continue;
       }
 
-      // If any non-summary report is not ready, return false
+      // If any non-summary report is not ready AND viewed, return false
       if (!isset($status['status']) || $status['status'] !== 'ready') {
+        return FALSE;
+      }
+
+      // Check if the report has been viewed
+      if (!isset($status['viewed']) || !$status['viewed']) {
         return FALSE;
       }
     }

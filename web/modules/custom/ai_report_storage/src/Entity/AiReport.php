@@ -186,6 +186,28 @@ class AiReport extends ContentEntityBase implements AiReportInterface {
   /**
    * {@inheritdoc}
    */
+  public function getViewedAt() {
+    return $this->get('viewed_at')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setViewedAt($timestamp) {
+    $this->set('viewed_at', $timestamp);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isViewed() {
+    return !empty($this->get('viewed_at')->value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -240,6 +262,11 @@ class AiReport extends ContentEntityBase implements AiReportInterface {
     $fields['source_submissions'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Source Submissions'))
       ->setDescription(t('JSON array of webform submission IDs used to generate the report.'));
+
+    $fields['viewed_at'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Viewed at'))
+      ->setDescription(t('The time when the report was first viewed by the user.'))
+      ->setRequired(FALSE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))

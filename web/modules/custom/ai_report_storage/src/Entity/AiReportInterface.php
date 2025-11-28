@@ -173,4 +173,30 @@ interface AiReportInterface extends ContentEntityInterface, EntityOwnerInterface
    */
   public function setSourceSubmissions(array $submissions);
 
+  /**
+   * Gets the viewed timestamp.
+   *
+   * @return int|null
+   *   The Unix timestamp when the report was first viewed, or NULL if not viewed.
+   */
+  public function getViewedAt();
+
+  /**
+   * Sets the viewed timestamp.
+   *
+   * @param int $timestamp
+   *   The Unix timestamp.
+   *
+   * @return $this
+   */
+  public function setViewedAt($timestamp);
+
+  /**
+   * Checks if the report has been viewed.
+   *
+   * @return bool
+   *   TRUE if the report has been viewed, FALSE otherwise.
+   */
+  public function isViewed();
+
 }

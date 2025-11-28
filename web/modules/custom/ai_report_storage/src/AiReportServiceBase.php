@@ -809,6 +809,9 @@ abstract class AiReportServiceBase {
     // Check for existing entity.
     $latest_entity = $this->loadLatestReport($uid);
     if ($latest_entity && $latest_entity->getStatus() === 'published') {
+      // Mark report as viewed on first access.
+      $this->markReportAsViewed($latest_entity);
+
       $report_data = $latest_entity->getReportData();
       $report_data['generated_at'] = $latest_entity->getGeneratedAt();
       $report_data['uid'] = $uid;
@@ -1052,5 +1055,32 @@ abstract class AiReportServiceBase {
    *   The service ID.
    */
   abstract protected function getServiceId(): string;
+
+  /**
+   * Mark a report as viewed by the current user.
+   *
+   * Only sets the viewed_at timestamp if it hasn't been set already.
+   *
+   * @param \Drupal\ai_report_storage\Entity\AiReportInterface $report
+   *   The report entity to mark as viewed.
+   */
+  protected function markReportAsViewed($report) {
+    // Only mark as viewed if not already viewed.
+    if (!$report->isViewed()) {
+      $report->setViewedAt(time());
+      try {
+        $report->save();
+        $this->logger->info('Report @type marked as viewed for user @uid', [
+          '@type' => $report->getType(),
+          '@uid' => $report->getOwnerId(),
+        ]);
+      }
+      catch (\Exception $e) {
+        $this->logger->error('Failed to mark report as viewed: @error', [
+          '@error' => $e->getMessage(),
+        ]);
+      }
+    }
+  }
 
 }

@@ -274,6 +274,48 @@
   color: #2563eb;
 }
 
+/* Badge for new/unviewed reports */
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 0.375rem;
+  margin-left: 0.5rem;
+}
+
+.badge-new {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-orange));
+  color: white;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+/* Styling for unviewed reports */
+.report-unviewed {
+  border: 2px solid var(--color-orange);
+  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
+}
+
+.report-unviewed h3 {
+  color: var(--color-deep-green);
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .webform-client-dashboard {
     padding: 1rem;

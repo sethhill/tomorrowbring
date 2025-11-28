@@ -21,19 +21,30 @@
 	</div>
 
 	{% if all_modules_completed and report_statuses is not empty %}
-		<div class="dashboard-section dashboard-results">
+		<div class="report-section dashboard-section dashboard-results">
 			<h2>Your Results</h2>
 
 			{% if report_statuses is not empty %}
 				<div class="analysis-reports highlight-grid">
 					{% for type, report_info in report_statuses %}
-						<div class="highlight-card analysis-callout report-{{ type }} report-status-{{ report_info.status }}">
-							<h3>{{ report_info.title }}</h3>
+						<div class="highlight-card analysis-callout report-{{ type }} report-status-{{ report_info.status }} {% if report_info.status == 'ready' and not report_info.viewed %}report-unviewed{% endif %}">
+							<h3>
+								{{ report_info.title }}
+								{% if report_info.status == 'ready' and not report_info.viewed %}
+									<span class="badge badge-new">{{ 'New'|t }}</span>
+								{% endif %}
+							</h3>
 							<p>{{ report_info.description }}</p>
 
 							{% if report_info.status == 'ready' %}
 								<div class="analysis-callout-actions">
-									<a href="{{ report_info.url }}" class="button button-primary aria-label=" view the {{ report_info.title }} report">{{ 'View the Report'|t }}</a>
+									<a href="{{ report_info.url }}" class="button button-primary aria-label=" view the {{ report_info.title }} report">
+										{% if report_info.viewed %}
+											{{ 'View the Report'|t }}
+										{% else %}
+											{{ 'Read the Report'|t }}
+										{% endif %}
+									</a>
 								</div>
 							{% elseif report_info.status == 'pending' %}
 								<div class="analysis-callout-actions">

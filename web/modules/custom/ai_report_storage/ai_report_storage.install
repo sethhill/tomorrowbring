@@ -87,6 +87,12 @@ function ai_report_storage_schema() {
         'type' => 'text',
         'size' => 'normal',
       ],
+      'viewed_at' => [
+        'description' => 'The Unix timestamp when the report was first viewed by the user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ],
       'changed' => [
         'description' => 'The Unix timestamp when the report was last changed.',
         'type' => 'int',
@@ -195,4 +201,24 @@ function ai_report_storage_update_9001() {
   }
 
   return t('Migrated @count cached reports to entity storage.', ['@count' => $migrated_count]);
+}
+
+/**
+ * Add viewed_at field to ai_report table.
+ */
+function ai_report_storage_update_9002() {
+  $schema = Database::getConnection()->schema();
+
+  if (!$schema->fieldExists('ai_report', 'viewed_at')) {
+    $schema->addField('ai_report', 'viewed_at', [
+      'description' => 'The Unix timestamp when the report was first viewed by the user.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => FALSE,
+    ]);
+
+    return t('Added viewed_at field to ai_report table.');
+  }
+
+  return t('viewed_at field already exists.');
 }
