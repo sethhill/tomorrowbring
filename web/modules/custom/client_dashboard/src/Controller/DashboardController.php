@@ -51,6 +51,113 @@ class DashboardController extends ControllerBase {
   }
 
   /**
+   * Get the page title for the dashboard.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The page title.
+   */
+  public function getTitle() {
+    $current_user = $this->currentUser();
+
+    // Load the user's member profile to get their name.
+    $profiles = $this->entityTypeManager
+      ->getStorage('profile')
+      ->loadByProperties([
+        'uid' => $current_user->id(),
+        'type' => 'member',
+      ]);
+
+    if (empty($profiles)) {
+      return $this->t('Welcome!');
+    }
+
+    $profile = reset($profiles);
+
+    // Get the user's name from their profile field.
+    $user_name = '';
+    // @phpstan-ignore-next-line
+    if ($profile->hasField('field_name') && !$profile->get('field_name')->isEmpty()) {
+      // @phpstan-ignore-next-line
+      $user_name = $profile->get('field_name')->value;
+    }
+
+    if (empty($user_name)) {
+      return $this->t('Welcome!');
+    }
+
+    // Check if showing summary (all modules completed and reports viewed).
+    $showing_summary = $this->isShowingSummary($current_user->id());
+
+    if ($showing_summary) {
+      return $this->t('Thank You, @name!', ['@name' => $user_name]);
+    }
+
+    return $this->t('Welcome, @name!', ['@name' => $user_name]);
+  }
+
+  /**
+   * Check if the user should see the summary report.
+   *
+   * @param int $uid
+   *   The user ID.
+   *
+   * @return bool
+   *   TRUE if summary should be shown.
+   */
+  protected function isShowingSummary($uid) {
+    // Get the user's client.
+    $client = $this->clientManager->getCurrentUserClient();
+
+    if (!$client) {
+      return FALSE;
+    }
+
+    // Get enabled Module nodes for this client.
+    $enabled_module_nids = $this->clientManager->getEnabledModules();
+
+    if (empty($enabled_module_nids)) {
+      return FALSE;
+    }
+
+    // Load Module nodes to calculate progress.
+    $module_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($enabled_module_nids);
+
+    // Calculate completion.
+    $total = (int) count($module_nodes);
+    $completed = 0;
+
+    foreach ($module_nodes as $node) {
+      // Get the webform associated with this module.
+      $webform_id = NULL;
+      if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+        $webform_id = $node->get('field_form')->target_id;
+      }
+
+      // Check if user has completed this module.
+      if ($webform_id) {
+        $submission_id = $this->getModuleSubmission($webform_id, $uid);
+        if ($submission_id) {
+          $submission = $this->entityTypeManager->getStorage('webform_submission')->load($submission_id);
+          if ($submission && $submission->get('completed')->value > 0) {
+            $completed++;
+          }
+        }
+      }
+    }
+
+    // Check if all modules are completed.
+    $all_modules_completed = ($total > 0 && (int) $completed === (int) $total);
+
+    if (!$all_modules_completed) {
+      return FALSE;
+    }
+
+    // Check if all reports have been viewed.
+    $report_statuses = $this->getReportStatuses($uid);
+    return $this->allReportsViewed($report_statuses);
+  }
+
+  /**
    * Displays the member dashboard.
    *
    * @return array
