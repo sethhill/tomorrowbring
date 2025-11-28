@@ -629,6 +629,48 @@ footer {
   .li { font-variation-settings: "wdth" 906; }
   .l2 { font-variation-settings: "wdth" 137; }
   .l3 { font-variation-settings: "wdth" 216; }
+
+
+  h1 {
+    width: 100%;
+    overflow: hidden;
+    text-indent: 3000px;
+    white-space: nowrap;
+    background: url("../images/tbring-01.png") no-repeat center center;
+    background-size: 100% 100%;
+  }
+  @media (min-width: 460px) {
+    h1 {
+      background-image: url("../images/tbring-02.png");
+    }
+  }
+
+  @media (min-width: 680px) {
+    h1 {
+      background-image: url("../images/tbring-03.png");
+    }
+  }
+  @media (min-width: 960px) {
+    h1 {
+      background-image: url("../images/tbring-04.png");
+    }
+  }
+  @media (min-width: 1400px) {
+    h1 {
+      background-image: url("../images/tbring-05.png");
+    }
+  }
+  @media (min-width: 1800px) {
+    h1 {
+      background-image: url("../images/tbring-06.png");
+    }
+  }
+  @media (min-width: 2400px) {
+    h1 {
+      background-image: url("../images/tbring-07.png");
+    }
+  }
+
 }
 
 .webform-submission-form > .form-wrapper {
