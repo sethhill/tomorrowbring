@@ -28,6 +28,7 @@ module:
   image: 0
   key: 0
   link: 0
+  login_destination: 0
   media: 0
   menu_link_content: 0
   menu_ui: 0

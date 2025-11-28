@@ -1,0 +1,17 @@
+uuid: 4c762646-799a-4d03-9471-284dab7ef01b
+langcode: en
+status: true
+dependencies: {  }
+name: member
+label: Member
+triggers:
+  login: login
+  one-time-login: one-time-login
+destination_path: 'internal:/dashboard'
+pages_type: 0
+pages: ''
+language: ''
+roles:
+  member: member
+weight: 0
+enabled: true
