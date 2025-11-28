@@ -572,8 +572,6 @@ footer {
   font-weight: normal;
   overflow: hidden;
   width: 100%;
-  transform-origin: center top;
-  transform: scaleX(1.01);
   /* margin-top: 0.5em; */
 
   h1 {
