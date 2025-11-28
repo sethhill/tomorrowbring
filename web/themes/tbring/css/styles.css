@@ -504,10 +504,26 @@ header {
 footer {
   margin-top: 3em;
   background-color: var(--color-deep-green);
-  padding-top: 6em;
-  padding-bottom: 6em;
+  background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
+  padding-top: 1em;
+  padding-bottom: 1em;
   color: var(--color-white);
   text-align: center;
+  font-weight: 600;
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+
+  main {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 #block-tbring-page-title{
