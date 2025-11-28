@@ -1,0 +1,16 @@
+ai_summary.report:
+  path: '/analysis/summary'
+  defaults:
+    _controller: '\Drupal\ai_summary\Controller\AiSummaryController::viewReport'
+    _title: 'Your Journey Forward'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+ai_summary.regenerate:
+  path: '/analysis/summary/regenerate'
+  defaults:
+    _controller: '\Drupal\ai_summary\Controller\AiSummaryController::regenerateReport'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _method: 'POST'
+    _csrf_token: 'TRUE'

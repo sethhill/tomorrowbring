@@ -5,7 +5,8 @@
       "Bash(ddev drush:*)",
       "Bash(cat:*)",
       "Bash(php:*)",
-      "Bash(ddev composer:*)"
+      "Bash(ddev composer:*)",
+      "Bash(ddev php:*)"
     ],
     "deny": [],
     "ask": []

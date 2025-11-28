@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * AI Summary module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function ai_summary_theme($existing, $type, $theme, $path) {
+  return [
+    'ai_summary_report' => [
+      'variables' => ['report' => NULL],
+      'template' => 'ai-summary-report',
+    ],
+  ];
+}

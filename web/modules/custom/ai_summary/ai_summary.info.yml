@@ -1,0 +1,8 @@
+name: AI Summary
+type: module
+description: 'Generates a comprehensive summary report of all AI analysis reports with an optimistic message about AI enablement.'
+package: AI Analysis
+core_version_requirement: ^11
+dependencies:
+  - ai_report_storage
+  - webform

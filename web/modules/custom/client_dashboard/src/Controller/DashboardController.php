@@ -112,6 +112,12 @@ class DashboardController extends ControllerBase {
     $report_statuses = [];
     if ($all_modules_completed) {
       $report_statuses = $this->getReportStatuses($current_user->id());
+
+      // Check if all reports have been viewed (ready status)
+      // If so, show the summary report instead of dashboard
+      if ($this->allReportsViewed($report_statuses)) {
+        return $this->showSummaryReport($current_user->id());
+      }
     }
 
     // Build the view with enabled module NIDs as arguments.
@@ -229,6 +235,12 @@ class DashboardController extends ControllerBase {
         'description' => $this->t('Based on your completed assessments, we have generated a personalized guide to address your concerns about AI and provide balanced perspectives.'),
         'url' => '/analysis/concerns-navigator',
       ],
+      'summary' => [
+        'service_id' => 'ai_summary.service',
+        'title' => $this->t('Your Journey Forward'),
+        'description' => $this->t('Based on all your completed assessments and reports, we have generated a comprehensive summary of your AI journey and path forward.'),
+        'url' => '/analysis/summary',
+      ],
     ];
 
     foreach ($report_types as $type => $info) {
@@ -281,6 +293,114 @@ class DashboardController extends ControllerBase {
     }
 
     return $statuses;
+  }
+
+  /**
+   * Display the summary report on the dashboard.
+   *
+   * @param int $uid
+   *   The user ID.
+   *
+   * @return array
+   *   Render array for the summary report.
+   */
+  protected function showSummaryReport($uid) {
+    // Check if the summary service exists
+    if (!\Drupal::hasService('ai_summary.service')) {
+      // Fallback to regular dashboard if service doesn't exist
+      return [
+        '#markup' => $this->t('Summary report service is not available.'),
+      ];
+    }
+
+    $summaryService = \Drupal::service('ai_summary.service');
+
+    // Check for pending report first.
+    $pending = $summaryService->getPendingReport($uid);
+    if ($pending) {
+      return [
+        '#theme' => 'ai_summary_report',
+        '#report' => [
+          'status' => 'pending',
+          'queued_at' => $pending->getGeneratedAt(),
+        ],
+        '#cache' => ['max-age' => 0],
+        '#attached' => ['library' => ['ai_report_storage/report_polling']],
+      ];
+    }
+
+    // Try to get existing report from cache/database (without generating).
+    $report = $summaryService->getExistingReport($uid);
+
+    // If no report exists, queue generation.
+    if (!$report) {
+      $queue_result = $summaryService->queueReportGeneration($uid);
+
+      if (!$queue_result) {
+        $this->messenger()->addError($this->t('Unable to generate your summary report. AI service may be temporarily unavailable.'));
+        return [
+          '#markup' => $this->t('Unable to load summary report.'),
+        ];
+      }
+
+      return [
+        '#theme' => 'ai_summary_report',
+        '#report' => [
+          'status' => 'pending',
+          'queued_at' => $queue_result['queued_at'],
+        ],
+        '#cache' => ['max-age' => 0],
+        '#attached' => ['library' => ['ai_report_storage/report_polling']],
+      ];
+    }
+
+    // Check if report is an error.
+    if (is_array($report) && isset($report['error'])) {
+      $this->messenger()->addError($report['message'] ?? $this->t('An error occurred generating your report.'));
+      return [
+        '#markup' => $this->t('Unable to load summary report.'),
+      ];
+    }
+
+    return [
+      '#theme' => 'ai_summary_report',
+      '#report' => $report,
+      '#cache' => [
+        'contexts' => ['user'],
+        'tags' => ['webform_submission_list'],
+      ],
+    ];
+  }
+
+  /**
+   * Check if all reports have been viewed (have 'ready' status).
+   *
+   * @param array $report_statuses
+   *   Array of report statuses from getReportStatuses().
+   *
+   * @return bool
+   *   TRUE if all reports are ready, FALSE otherwise.
+   */
+  protected function allReportsViewed(array $report_statuses) {
+    // No reports means none have been viewed
+    if (empty($report_statuses)) {
+      return FALSE;
+    }
+
+    // Check if all reports (excluding summary) have 'ready' status
+    foreach ($report_statuses as $type => $status) {
+      // Skip the summary report itself in this check
+      if ($type === 'summary') {
+        continue;
+      }
+
+      // If any non-summary report is not ready, return false
+      if (!isset($status['status']) || $status['status'] !== 'ready') {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
   }
 
 }

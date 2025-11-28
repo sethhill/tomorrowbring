@@ -11,6 +11,7 @@ module:
   ai_report_storage: 0
   ai_role_impact: 0
   ai_skills_analyzer: 0
+  ai_summary: 0
   ai_task_recommender: 0
   block: 0
   block_content: 0

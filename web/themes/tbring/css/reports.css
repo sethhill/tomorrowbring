@@ -22,7 +22,29 @@
   background: var(--color-white);
   border-start-start-radius: 2em;
   border-end-end-radius: 2em;
+  position: relative;
+  background: var(--color-white);
 
+  /* Create gradient border using pseudo-element */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit; /* Matches parent's border-radius */
+    padding: 3px; /* Border thickness */
+    background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ensure content appears above the border */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 
   ul li {
     padding: 0.5em 0;
@@ -31,6 +53,14 @@
     &:last-child {
       border-bottom: 2px solid var(--color-cream);
     }
+  }
+}
+
+.report-subsection {
+  margin-bottom: 3em;
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -1071,4 +1101,19 @@ h3 + .timeline-period {
 
 .ethical-frameworks h3 {
   text-align: left;
+}
+
+.closing-thought {
+  font-size: 2em;
+  background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+  line-height: 1.2;
+  text-wrap: balance;
+  text-align: center;
+  font-weight: 700;
+  padding: 1em 0;
 }

@@ -636,7 +636,7 @@ footer {
     overflow: hidden;
     text-indent: 3000px;
     white-space: nowrap;
-    background: url("../images/tbring-01.png") no-repeat center center;
+    background: white url("../images/tbring-01.png") no-repeat center center;
     background-size: 100% 100%;
   }
   @media (min-width: 460px) {

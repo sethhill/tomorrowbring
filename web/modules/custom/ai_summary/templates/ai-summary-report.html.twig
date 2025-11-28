@@ -1,0 +1,162 @@
+{#
+/**
+ * @file
+ * Template for AI Summary Report.
+ *
+ * Available variables:
+ * - report: Complete summary report data
+ */
+#}
+
+<div
+	class="ai-summary-report">
+
+	{# Pending state - shown while report is being generated #}
+	{% if report.status == 'pending' %}
+		{% include '@ai_report_storage/report-pending.html.twig' with {
+			'report': report,
+			'report_title': 'Generating Your Summary'|t
+		} %}
+	{% else %}
+
+		{# Journey Recap Section #}
+		{% if report.journey_recap %}
+			<section class="report-section journey-recap">
+				<h2>{{ 'Your Journey with AI'|t }}</h2>
+
+				{% if report.journey_recap.where_you_started %}
+					<div class="report-subsection journey-start">
+						<p class="report-intro">{{ report.journey_recap.where_you_started }}</p>
+					</div>
+				{% endif %}
+
+				{% if report.journey_recap.key_discoveries %}
+					<div class="report-subsection key-discoveries">
+						<h3>{{ 'Key Discoveries Along the Way'|t }}</h3>
+						<div class="confidence-cards">
+							{% for discovery in report.journey_recap.key_discoveries %}
+								<div class="confidence-card">
+									<p>{{ discovery }}</p>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% endif %}
+
+				{% if report.journey_recap.transformation_achieved %}
+					<div class="report-subsection transformation">
+						<h3>{{ 'Your Transformation'|t }}</h3>
+						<p class="report-intro highlight">{{ report.journey_recap.transformation_achieved }}</p>
+					</div>
+				</div>
+			{% endif %}
+		</section>
+	{% endif %}
+
+	{# Comprehensive Summary Section #}
+	{% if report.comprehensive_summary %}
+		<section class="report-section comprehensive-summary">
+			<h2>{{ 'What You’ve Learned'|t }}</h2>
+
+			<ul class="report-list">
+				{% if report.comprehensive_summary.role_evolution_summary %}
+					<li>
+						<h3>{{ 'Your Evolving Role'|t }}</h3>
+						<p>{{ report.comprehensive_summary.role_evolution_summary }}</p>
+					</li>
+				{% endif %}
+
+				{% if report.comprehensive_summary.skills_development_summary %}
+					<li>
+						<h3>{{ 'Skills & Growth'|t }}</h3>
+						<p>{{ report.comprehensive_summary.skills_development_summary }}</p>
+					</li>
+				{% endif %}
+
+				{% if report.comprehensive_summary.automation_opportunities_summary %}
+					<li>
+						<h3>{{ 'Automation Power'|t }}</h3>
+						<p>{{ report.comprehensive_summary.automation_opportunities_summary }}</p>
+					</li>
+				{% endif %}
+
+				{% if report.comprehensive_summary.career_possibilities_summary %}
+					<li>
+						<h3>{{ 'Career Horizons'|t }}</h3>
+						<p>{{ report.comprehensive_summary.career_possibilities_summary }}</p>
+					</li>
+				{% endif %}
+			</ul>
+		</section>
+	{% endif %}
+
+	{# Path Forward Section #}
+	{% if report.path_forward %}
+		<section class="report-section path-forward">
+			<h2>{{ 'Your Path Forward'|t }}</h2>
+
+			<div class="highlight-grid report-subsection">
+				{% if report.path_forward.immediate_next_steps %}
+					<div class="highlight-card">
+						<h3>{{ 'Start This Week'|t }}</h3>
+						<ul class="action-list">
+							{% for step in report.path_forward.immediate_next_steps %}
+								<li>{{ step }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+
+				{% if report.path_forward.medium_term_goals %}
+					<div class="highlight-card">
+						<h3>{{ 'Next 3-6 Months'|t }}</h3>
+						<ul class="action-list">
+							{% for goal in report.path_forward.medium_term_goals %}
+								<li>{{ goal }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			</div>
+			{% if report.path_forward.long_term_vision %}
+				<div class="report-subsection vision">
+					<p class="report-intro vision-statement">{{ report.path_forward.long_term_vision }}</p>
+				</div>
+			{% endif %}
+
+		</section>
+	{% endif %}
+
+	{# AI Enablement Message Section - The optimistic conclusion #}
+	{% if report.ai_enablement_message %}
+		<section class="report-section ai-enablement-message">
+			<h2>{{ 'Becoming More Enabled with AI'|t }}</h2>
+
+			{% if report.ai_enablement_message.empowerment_statement %}
+				<div class="report-subsection empowerment-statement">
+					<p class="report-intro featured">{{ report.ai_enablement_message.empowerment_statement }}</p>
+				</div>
+			{% endif %}
+
+			{% if report.ai_enablement_message.unique_advantages %}
+				<div class="report-subsection unique-advantages">
+					<h3>{{ 'Your Unique Advantages with AI'|t }}</h3>
+					<div class="highlight-grid">
+						{% for advantage in report.ai_enablement_message.unique_advantages %}
+							<div class="highlight-card advantage-card">
+								<p>{{ advantage }}</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			{% endif %}
+		</section>
+	{% endif %}
+
+{% endif %}
+
+{% if report.ai_enablement_message.closing_thought %}
+	<div class="closing-thought">
+		<p>{{ report.ai_enablement_message.closing_thought }}</p>
+	</div>
+{% endif %}</div>
