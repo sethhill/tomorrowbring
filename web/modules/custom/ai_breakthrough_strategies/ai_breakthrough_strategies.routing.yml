@@ -2,7 +2,7 @@ ai_breakthrough_strategies.report:
   path: '/analysis/breakthrough-strategies'
   defaults:
     _controller: '\Drupal\ai_breakthrough_strategies\Controller\AiBreakthroughStrategiesController::viewReport'
-    _title: 'Breakthrough Strategies'
+    _title: 'Strategies for Change'
   requirements:
     _user_is_logged_in: 'TRUE'
 

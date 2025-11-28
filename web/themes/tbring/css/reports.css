@@ -67,8 +67,12 @@
 }
 
 .columns-narrow {
-  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.highlight-grid.columns-narrow,
+.report-columns.columns-narrow {
+    gap: 1rem;
 }
 
 .report-list,
