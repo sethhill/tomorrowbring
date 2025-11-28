@@ -160,9 +160,6 @@ Respond with JSON (limit to 3-5 tool recommendations):
       "Specific example task 5",
       "Specific example task 6",
       "Specific example task 7",
-      "Specific example task 8",
-      "Specific example task 9",
-      "Specific example task 10"
     ],
     "quick_wins": [
       {

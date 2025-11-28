@@ -150,6 +150,59 @@ PROMPT;
   }
 
   /**
+   * Get human-readable label for a concern key.
+   *
+   * @param string $key
+   *   The concern key (e.g., 'bias', 'privacy').
+   *
+   * @return string
+   *   The human-readable label.
+   */
+  protected function getConcernLabel(string $key): string {
+    $labels = [
+      'bias' => 'Bias in AI decisions',
+      'privacy' => 'Privacy / data security',
+      'transparency' => 'Transparency (not knowing how AI makes decisions)',
+      'accountability' => 'Accountability when AI makes mistakes',
+      'displacement' => 'Job displacement',
+      'environment' => 'Environmental impact of AI',
+      'misinformation' => 'Misinformation / deepfakes',
+      'over_reliance' => 'Over-reliance on AI vs. human judgment',
+      'surveillance' => 'AI being used for surveillance',
+      'ip' => 'Intellectual property / copyright issues',
+    ];
+
+    return $labels[$key] ?? ucfirst(str_replace('_', ' ', $key));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function parseResponse($response_text): ?array {
+    $report = parent::parseResponse($response_text);
+
+    if ($report === NULL) {
+      return NULL;
+    }
+
+    // Post-process concern_responses to add human-readable labels.
+    if (isset($report['ethical_positioning']['concern_responses'])) {
+      foreach ($report['ethical_positioning']['concern_responses'] as &$response) {
+        if (isset($response['concern'])) {
+          // Check if the concern looks like a key (lowercase, underscores).
+          $concern = $response['concern'];
+          if (preg_match('/^[a-z_]+$/', $concern)) {
+            // Replace with human-readable label.
+            $response['concern'] = $this->getConcernLabel($concern);
+          }
+        }
+      }
+    }
+
+    return $report;
+  }
+
+  /**
    * Override to collect optional task_analysis and current_ai_usage data.
    */
   public function generateReport($uid = NULL, bool $force_regenerate = FALSE, bool $retry = TRUE) {

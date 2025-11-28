@@ -25,9 +25,15 @@
 				<h2>{{ 'Understanding Your Concerns'|t }}</h2>
 				{% if report.concern_assessment.opportunity_mindset_score %}
 					<div class="mindset-score">
-						<div class="score-display">
-							<span class="score-value">{{ report.concern_assessment.opportunity_mindset_score }}</span>
-							<span class="score-label">{{ '/100 Opportunity Mindset'|t }}</span>
+						<div class="gauge-wrapper">
+							<div class="gauge gauge-large" data-score="{{ report.concern_assessment.opportunity_mindset_score }}" style="--score: {{ report.concern_assessment.opportunity_mindset_score }}">
+								<div class="gauge-fill"></div>
+								<div class="gauge-inner">
+									<span class="gauge-value">{{ report.concern_assessment.opportunity_mindset_score }}</span>
+									<span class="gauge-max">/100</span>
+								</div>
+							</div>
+							<div class="gauge-label">{{ 'Opportunity Mindset'|t }}</div>
 						</div>
 					</div>
 				{% endif %}
