@@ -16,7 +16,8 @@
   font-size: 0.95rem;
 }
 
-.report-section {
+.report-section,
+.dashboard-section {
   margin-bottom: 1.5em;
   padding: 2em 3em 3em 3em;
   background: var(--color-white);
@@ -30,8 +31,8 @@
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: inherit; /* Matches parent's border-radius */
-    padding: 3px; /* Border thickness */
+    border-radius: inherit;
+    padding: 1px;
     background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
