@@ -119,7 +119,7 @@ CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and
 Generate JSON report with these sections (be concise):
 
 1. displacement_risk:
-   - risk_score (0-100), risk_level (low|medium|high|critical), urgency
+   - risk_score (0-100), risk_level (low|medium|high|critical), risk_summary (1-2 sentence assessment of their displacement risk)
 
 2. evolution_path:
    - path_name, from_state, to_state, path_description (2 sentences)

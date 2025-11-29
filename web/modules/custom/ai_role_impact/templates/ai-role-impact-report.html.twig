@@ -67,10 +67,8 @@
 					</div>
 					<div class="gauge-label">{{ 'Risk Score'|t }}</div>
 				</div>
-				<div
-					class="urgency-level">
-					{# <div class="urgency-label">{{ 'Urgency'|t }}</div> #}
-					<div class="urgency-value">{{ report.displacement_risk.urgency }}</div>
+				<div class="risk-summary">
+					<p>{{ report.displacement_risk.risk_summary }}</p>
 				</div>
 			</div>
 

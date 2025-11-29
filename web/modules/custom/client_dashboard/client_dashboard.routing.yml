@@ -5,3 +5,11 @@ client_dashboard.dashboard:
     _title_callback: '\Drupal\client_dashboard\Controller\DashboardController::getTitle'
   requirements:
     _user_is_logged_in: 'TRUE'
+
+client_dashboard.settings:
+  path: '/admin/config/client-dashboard/settings'
+  defaults:
+    _form: '\Drupal\client_dashboard\Form\ClientDashboardSettingsForm'
+    _title: 'Client Dashboard Settings'
+  requirements:
+    _permission: 'administer client dashboard'

@@ -1,0 +1,11 @@
+auto_process_enabled: true
+auto_process_reports:
+  role_impact: false
+  career_transitions: false
+  task_recommendations: false
+  industry_insights: false
+  skills: false
+  learning_resources: false
+  breakthrough_strategies: false
+  concerns_navigator: false
+auto_process_delay: 0

@@ -60,9 +60,10 @@
 									{{ tool.difficulty|capitalize }}</div>
 							</div>
 							<div class="tool-task">
-							<h4>{{ 'Purpose'|t }}</h4>
+								<h4>{{ 'Purpose'|t }}</h4>
 								<p>
-								{{ tool.task }}</p></div>
+									{{ tool.task }}</p>
+							</div>
 							<p class="why">{{ tool.why_recommended }}</p>
 							<p class="getting-started">
 								<strong>{{ 'Getting Started:'|t }}</strong>
@@ -78,18 +79,13 @@
 
 		{% if report.workflow_integration and report.workflow_integration.automation_workflows %}
 			<section class="report-section workflow-integration">
-				<h2>{{ 'Chaining Tools into Workflows'|t }}</h2>
+				<h2>{{ 'Chaining Tools Together'|t }}</h2>
 				<div class="highlight-grid">
 					{% for workflow in report.workflow_integration.automation_workflows %}
 						<div class="highlight-card">
 							<h3>{{ workflow.workflow_name }}</h3>
 							<h4>{{ 'Tools'|t }}</h4>
-							<ul>
-								{% for tool in workflow.tools_combined %}
-									<li>{{ tool }}</li>
-								{% endfor %}
-							</ul>
-
+							<p>{{ workflow.tools_combined|join('<br />')|raw }}</p>
 							<h4>{{ 'Process'|t }}</h4>
 							<ol>
 								{% for step in workflow.process_steps %}

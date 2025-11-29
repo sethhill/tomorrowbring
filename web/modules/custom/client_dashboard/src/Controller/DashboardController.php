@@ -306,7 +306,7 @@ class DashboardController extends ControllerBase {
         'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of career transition opportunities.'),
         'url' => '/analysis/career-transitions',
       ],
-      'task_recommender' => [
+      'task_recommendations' => [
         'service_id' => 'ai_task_recommender.analysis_service',
         'title' => $this->t('Task Automation Recommendations'),
         'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of task automation recommendations.'),
@@ -318,7 +318,7 @@ class DashboardController extends ControllerBase {
         'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of industry insights.'),
         'url' => '/analysis/industry-insights',
       ],
-      'skills_analysis' => [
+      'skills' => [
         'service_id' => 'ai_skills_analyzer.analysis_service',
         'title' => $this->t('Skills Analysis'),
         'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of your skills and development recommendations.'),

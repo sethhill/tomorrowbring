@@ -1,0 +1,38 @@
+client_dashboard.settings:
+  type: config_object
+  label: 'Client Dashboard Settings'
+  mapping:
+    auto_process_enabled:
+      type: boolean
+      label: 'Enable automatic report processing'
+    auto_process_reports:
+      type: mapping
+      label: 'Reports to automatically generate'
+      mapping:
+        role_impact:
+          type: boolean
+          label: 'Role Impact Analysis'
+        career_transitions:
+          type: boolean
+          label: 'Career Transitions'
+        task_recommendations:
+          type: boolean
+          label: 'Task Recommender'
+        industry_insights:
+          type: boolean
+          label: 'Industry Insights'
+        skills:
+          type: boolean
+          label: 'Skills Analysis'
+        learning_resources:
+          type: boolean
+          label: 'Learning Resources'
+        breakthrough_strategies:
+          type: boolean
+          label: 'Breakthrough Strategies'
+        concerns_navigator:
+          type: boolean
+          label: 'Concerns Navigator'
+    auto_process_delay:
+      type: integer
+      label: 'Delay before processing (minutes)'

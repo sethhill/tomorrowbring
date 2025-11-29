@@ -1,0 +1,9 @@
+services:
+  client_dashboard.auto_report_processor:
+    class: Drupal\client_dashboard\Service\AutoReportProcessor
+    arguments:
+      - '@config.factory'
+      - '@entity_type.manager'
+      - '@client_webform.manager'
+      - '@ai_report_storage.manager'
+      - '@logger.factory'

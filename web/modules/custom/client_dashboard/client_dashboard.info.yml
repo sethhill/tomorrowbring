@@ -3,6 +3,7 @@ type: module
 description: 'Provides a member dashboard for client module progress tracking'
 core_version_requirement: ^11
 package: Custom
+configure: client_dashboard.settings
 dependencies:
   - drupal:user
   - drupal:views

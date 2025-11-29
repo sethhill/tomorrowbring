@@ -1,0 +1,4 @@
+administer client dashboard:
+  title: 'Administer Client Dashboard'
+  description: 'Configure Client Dashboard settings including automatic report processing.'
+  restrict access: true
