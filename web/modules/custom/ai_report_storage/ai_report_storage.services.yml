@@ -1,4 +1,8 @@
 services:
+  logger.channel.ai_report_storage:
+    parent: logger.channel_base
+    arguments: ['ai_report_storage']
+
   ai_report_storage.manager:
     class: Drupal\ai_report_storage\AiReportManager
     arguments:
@@ -10,3 +14,12 @@ services:
   ai_report_storage.extended_timeout_http_client:
     class: Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient
     public: false
+
+  ai_report_storage.commands:
+    class: Drupal\ai_report_storage\Commands\AiReportStorageCommands
+    arguments:
+      - '@queue'
+      - '@plugin.manager.queue_worker'
+      - '@logger.channel.ai_report_storage'
+    tags:
+      - { name: drush.command }

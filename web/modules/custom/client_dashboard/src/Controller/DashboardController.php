@@ -293,41 +293,44 @@ class DashboardController extends ControllerBase {
     $statuses = [];
 
     // Define all available report types with their service IDs and metadata.
+    // Note: The 'summary' report type is excluded from the list as it's
+    // considered separate content and displayed independently after all
+    // other reports are viewed.
     $report_types = [
-      'role_impact' => [
-        'service_id' => 'ai_role_impact.analysis_service',
-        'title' => $this->t('Role Impact Analysis'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of how AI will impact your role and what you should do about it.'),
-        'url' => '/analysis/role-impact',
-      ],
-      'career_transitions' => [
-        'service_id' => 'ai_career_transitions.analysis_service',
-        'title' => $this->t('Career Transition Opportunities'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of career transition opportunities.'),
-        'url' => '/analysis/career-transitions',
-      ],
-      'task_recommendations' => [
-        'service_id' => 'ai_task_recommender.analysis_service',
-        'title' => $this->t('Task Automation Recommendations'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of task automation recommendations.'),
-        'url' => '/analysis/task-recommendations',
-      ],
       'industry_insights' => [
         'service_id' => 'ai_industry_insights.analysis_service',
         'title' => $this->t('Industry Insights'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of industry insights.'),
+        'description' => $this->t('Insights to help you understand the current state of your industry and what the future holds'),
         'url' => '/analysis/industry-insights',
+      ],
+      'role_impact' => [
+        'service_id' => 'ai_role_impact.analysis_service',
+        'title' => $this->t('Evolution of Your Role'),
+        'description' => $this->t('How AI will impact your role and what you should do about it'),
+        'url' => '/analysis/role-impact',
       ],
       'skills' => [
         'service_id' => 'ai_skills_analyzer.analysis_service',
-        'title' => $this->t('Skills Analysis'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized analysis of your skills and development recommendations.'),
+        'title' => $this->t('Improving Your Skills'),
+        'description' => $this->t('Skills to help you stay ahead of the curve'),
         'url' => '/analysis/skills',
+      ],
+      'task_recommendations' => [
+        'service_id' => 'ai_task_recommender.analysis_service',
+        'title' => $this->t('Automating Tasks'),
+        'description' => $this->t('Ideas to help you automate tasks and improve your efficiency'),
+        'url' => '/analysis/task-recommendations',
+      ],
+      'career_transitions' => [
+        'service_id' => 'ai_career_transitions.analysis_service',
+        'title' => $this->t('Career Opportunities'),
+        'description' => $this->t('Finding new career opportunities in your industry'),
+        'url' => '/analysis/career-transitions',
       ],
       'learning_resources' => [
         'service_id' => 'ai_learning_resources.analysis_service',
         'title' => $this->t('Learning Resources'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized list of learning resources to help you develop the skills you need.'),
+        'description' => $this->t('Learning resources to support your journey'),
         'url' => '/analysis/learning-resources',
       ],
       'breakthrough_strategies' => [
@@ -341,12 +344,6 @@ class DashboardController extends ControllerBase {
         'title' => $this->t('Concerns Navigator'),
         'description' => $this->t('Based on your completed assessments, we have generated a personalized guide to address your concerns about AI and provide balanced perspectives.'),
         'url' => '/analysis/concerns-navigator',
-      ],
-      'summary' => [
-        'service_id' => 'ai_summary.service',
-        'title' => $this->t('Your Journey Forward'),
-        'description' => $this->t('Based on all your completed assessments and reports, we have generated a comprehensive summary of your AI journey and path forward.'),
-        'url' => '/analysis/summary',
       ],
     ];
 

@@ -420,6 +420,12 @@ label {
   background-color: var(--color-gold);
 }
 
+.webform-progress-tracker.progress-step:not(.is-active) .progress-marker::before,
+.webform-progress-tracker .progress-step:hover .progress-marker::before,
+.webform-progress-tracker .progress-step .progress-marker::after {
+  background-color: var(--color-white);
+}
+
 .webform-progress-tracker
   .progress-step.is-complete:hover
   .progress-marker::before,

@@ -7,3 +7,5 @@ services:
       - '@client_webform.manager'
       - '@ai_report_storage.manager'
       - '@logger.factory'
+      - '@queue'
+      - '@plugin.manager.queue_worker'

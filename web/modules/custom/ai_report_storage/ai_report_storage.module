@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Contains ai_report_storage.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ai_report_storage_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.ai_report_storage':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Stores and manages AI-generated reports with versioning and history.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Automatically processes the AI report generation queue during cron runs.
+ */
+function ai_report_storage_cron() {
+  $queue_factory = \Drupal::service('queue');
+  $queue_manager = \Drupal::service('plugin.manager.queue_worker');
+  $logger = \Drupal::logger('ai_report_storage');
+
+  $queue = $queue_factory->get('generate_ai_report');
+  $queue_worker = $queue_manager->createInstance('generate_ai_report');
+
+  $processed = 0;
+  $failed = 0;
+  $max_items = 10; // Process up to 10 items per cron run.
+
+  $logger->info('Starting automatic queue processing. Queue size: @count', [
+    '@count' => $queue->numberOfItems(),
+  ]);
+
+  // Process queue items.
+  while ($processed < $max_items && ($item = $queue->claimItem())) {
+    try {
+      $queue_worker->processItem($item->data);
+      $queue->deleteItem($item);
+      $processed++;
+
+      $logger->info('Successfully processed queue item for user @uid, report type @type', [
+        '@uid' => $item->data['uid'] ?? 'unknown',
+        '@type' => $item->data['service_id'] ?? 'unknown',
+      ]);
+    }
+    catch (\Exception $e) {
+      $failed++;
+      // Release the item back to the queue on failure.
+      $queue->releaseItem($item);
+
+      $logger->error('Queue processing failed for user @uid: @error', [
+        '@uid' => $item->data['uid'] ?? 'unknown',
+        '@error' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  if ($processed > 0 || $failed > 0) {
+    $logger->info('Automatic queue processing complete. Processed: @processed, Failed: @failed, Remaining: @remaining', [
+      '@processed' => $processed,
+      '@failed' => $failed,
+      '@remaining' => $queue->numberOfItems(),
+    ]);
+  }
+}
+

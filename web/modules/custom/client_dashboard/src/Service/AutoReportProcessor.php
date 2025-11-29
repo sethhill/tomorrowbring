@@ -7,6 +7,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\client_webform\WebformClientManager;
 use Drupal\ai_report_storage\AiReportManager;
+use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Queue\QueueWorkerManagerInterface;
 
 /**
  * Service for automatically processing reports when modules are completed.
@@ -49,6 +51,20 @@ class AutoReportProcessor {
   protected $logger;
 
   /**
+   * The queue factory.
+   *
+   * @var \Drupal\Core\Queue\QueueFactory
+   */
+  protected $queueFactory;
+
+  /**
+   * The queue worker manager.
+   *
+   * @var \Drupal\Core\Queue\QueueWorkerManagerInterface
+   */
+  protected $queueManager;
+
+  /**
    * Report types available for auto-processing.
    *
    * @var array
@@ -77,19 +93,27 @@ class AutoReportProcessor {
    *   The AI report manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The logger factory.
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   The queue factory.
+   * @param \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_manager
+   *   The queue worker manager.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     EntityTypeManagerInterface $entity_type_manager,
     WebformClientManager $client_manager,
     AiReportManager $report_manager,
-    LoggerChannelFactoryInterface $logger_factory
+    LoggerChannelFactoryInterface $logger_factory,
+    QueueFactory $queue_factory,
+    QueueWorkerManagerInterface $queue_manager
   ) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->clientManager = $client_manager;
     $this->reportManager = $report_manager;
     $this->logger = $logger_factory->get('client_dashboard');
+    $this->queueFactory = $queue_factory;
+    $this->queueManager = $queue_manager;
   }
 
   /**
@@ -265,6 +289,55 @@ class AutoReportProcessor {
       $this->logger->info('Auto-queued @count reports for user @uid', [
         '@count' => $queued_count,
         '@uid' => $uid,
+      ]);
+
+      // Trigger immediate queue processing.
+      $this->triggerQueueProcessing();
+    }
+  }
+
+  /**
+   * Trigger immediate queue processing.
+   *
+   * This processes one queue item immediately to start the process.
+   * Subsequent items will be picked up either by continued processing
+   * or by cron. This avoids the user having to wait for cron to run.
+   */
+  protected function triggerQueueProcessing() {
+    try {
+      $queue = $this->queueFactory->get('generate_ai_report');
+      $queue_worker = $this->queueManager->createInstance('generate_ai_report');
+
+      // Process just one item immediately to kick things off.
+      // This gives the user immediate feedback that processing has started.
+      if ($item = $queue->claimItem()) {
+        try {
+          $this->logger->info('Processing first queue item immediately for user @uid', [
+            '@uid' => $item->data['uid'] ?? 'unknown',
+          ]);
+
+          $queue_worker->processItem($item->data);
+          $queue->deleteItem($item);
+
+          $this->logger->info('Successfully processed first queue item. Remaining: @remaining', [
+            '@remaining' => $queue->numberOfItems(),
+          ]);
+        }
+        catch (\Exception $e) {
+          // Release the item back to the queue on failure.
+          $queue->releaseItem($item);
+
+          $this->logger->error('Failed to process first queue item: @message', [
+            '@message' => $e->getMessage(),
+          ]);
+        }
+      }
+    }
+    catch (\Exception $e) {
+      // Log errors but don't fail the overall process.
+      // Cron will pick up the queue items later.
+      $this->logger->warning('Failed to trigger immediate queue processing: @message', [
+        '@message' => $e->getMessage(),
       ]);
     }
   }
