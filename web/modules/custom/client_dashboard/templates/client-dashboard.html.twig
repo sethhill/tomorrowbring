@@ -20,48 +20,8 @@
 		{% endif %}
 	</div>
 
-	{% if all_modules_completed and report_statuses is not empty %}
-		<div class="report-section dashboard-section dashboard-results">
-			<h2>{{ 'Your Results'|t }}</h2>
-			<p class="report-intro">{{ 'Based on your profile and responses, here are your personalized analysis reports.'|t }}</p>
-
-			{% if report_statuses is not empty %}
-				<ol class="analysis-reports results-list">
-					{% for type, report_info in report_statuses %}
-						<li class="results-list__item report-{{ type }} report-status-{{ report_info.status }} {% if report_info.status == 'ready' and not report_info.viewed %}report-unviewed{% endif %}">
-							{% if report_info.status == 'pending' %}
-								<div class="results-list__content results-list__content--disabled">
-									<h3>
-										{{ report_info.title }}
-									</h3>
-									<p>{{ report_info.description }}</p>
-									<span class="results-list__status-text">{{ 'Report Generating...'|t }}</span>
-								</div>
-							{% else %}
-								<a href="{{ report_info.url }}" class="results-list__link" aria-label="Read the {{ report_info.title }} report">
-									<div class="results-list__content">
-										<h3>
-											{{ report_info.title }}
-											{% if report_info.status == 'ready' and not report_info.viewed %}
-												<span class="badge badge-new">{{ 'New'|t }}</span>
-											{% endif %}
-										</h3>
-										<p>{{ report_info.description }}</p>
-									</div>
-								</a>
-							{% endif %}
-						</li>
-					{% endfor %}
-				</ol>
-			{% else %}
-				<div class="analysis-callout">
-					<p>{{ 'Congratulations on completing all the modules! Your personalized analysis reports are being prepared. Please check back shortly.'|t }}</p>
-				</div>
-			{% endif %}
-
-		</div>
-	{% else %}
-
+	{# Show module progress section if modules aren't all completed #}
+	{% if not all_modules_completed %}
 		<div class="dashboard-section dashboard-learning">
 
 			<h2>{{ 'Complete Your Profile'|t }}</h2>
@@ -84,6 +44,61 @@
 			<div class="dashboard-modules">
 				{{ modules_view }}
 			</div>
+
+		</div>
+	{% endif %}
+
+	{# Always show report section if there are any reports #}
+	{% if report_statuses is not empty %}
+		<div class="report-section dashboard-section dashboard-results">
+			<h2>{{ 'Your Results'|t }}</h2>
+			<p class="report-intro">{{ 'Based on your profile and responses, here are your personalized analysis reports.'|t }}</p>
+
+			<ol class="analysis-reports results-list">
+				{% for type, report_info in report_statuses %}
+					<li class="results-list__item report-{{ type }} report-status-{{ report_info.status }} {% if report_info.status == 'ready' and not report_info.viewed %}report-unviewed{% endif %}">
+						{% if report_info.status == 'pending' %}
+							<div class="results-list__content results-list__content--disabled">
+								<h3>
+									{{ report_info.title }}
+								</h3>
+								<p>{{ report_info.description }}</p>
+								<span class="results-list__status-text">{{ 'Report Generating...'|t }}</span>
+							</div>
+						{% elseif report_info.status == 'locked' %}
+							<div class="results-list__content results-list__content--disabled">
+								<h3>
+									{{ report_info.title }}
+								</h3>
+								<p>{{ report_info.description }}</p>
+								<span class="results-list__status-text">{{ 'Complete all sections to unlock'|t }}</span>
+							</div>
+						{% elseif report_info.status == 'available' %}
+							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Generate the {{ report_info.title }} report">
+								<div class="results-list__content">
+									<h3>
+										{{ report_info.title }}
+									</h3>
+									<p>{{ report_info.description }}</p>
+									<span class="results-list__status-text">{{ 'Click to generate'|t }}</span>
+								</div>
+							</a>
+						{% else %}
+							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Read the {{ report_info.title }} report">
+								<div class="results-list__content">
+									<h3>
+										{{ report_info.title }}
+										{% if report_info.status == 'ready' and not report_info.viewed %}
+											<span class="badge badge-new">{{ 'New'|t }}</span>
+										{% endif %}
+									</h3>
+									<p>{{ report_info.description }}</p>
+								</div>
+							</a>
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ol>
 
 		</div>
 	{% endif %}

@@ -215,16 +215,13 @@ class DashboardController extends ControllerBase {
     // Check if all modules are completed
     $all_modules_completed = ($total > 0 && (int) $completed === (int) $total);
 
-    // Get report statuses for all available report types
-    $report_statuses = [];
-    if ($all_modules_completed) {
-      $report_statuses = $this->getReportStatuses($current_user->id());
+    // Always get report statuses for all available report types
+    $report_statuses = $this->getReportStatuses($current_user->id());
 
-      // Check if all reports have been viewed (ready status)
-      // If so, show the summary report instead of dashboard
-      if ($this->allReportsViewed($report_statuses)) {
-        return $this->showSummaryReport($current_user->id());
-      }
+    // Add the summary report ("Your Journey") as the last item
+    $summary_status = $this->getSummaryReportStatus($current_user->id(), $all_modules_completed, $report_statuses);
+    if ($summary_status) {
+      $report_statuses['summary'] = $summary_status;
     }
 
     // Build the view with enabled module NIDs as arguments.
@@ -335,13 +332,13 @@ class DashboardController extends ControllerBase {
       ],
       'breakthrough_strategies' => [
         'service_id' => 'ai_breakthrough_strategies.service',
-        'title' => $this->t('Breakthrough Strategies'),
+        'title' => $this->t('Strategies for Change'),
         'description' => $this->t('Based on your completed assessments, we have generated personalized strategies to help you overcome barriers and build confidence with AI adoption.'),
         'url' => '/analysis/breakthrough-strategies',
       ],
       'concerns_navigator' => [
         'service_id' => 'ai_concerns_navigator.service',
-        'title' => $this->t('Concerns Navigator'),
+        'title' => $this->t('Navigating Your Concerns'),
         'description' => $this->t('Based on your completed assessments, we have generated a personalized guide to address your concerns about AI and provide balanced perspectives.'),
         'url' => '/analysis/concerns-navigator',
       ],
@@ -523,6 +520,96 @@ class DashboardController extends ControllerBase {
     }
 
     return TRUE;
+  }
+
+  /**
+   * Get the status of the summary report ("Your Journey").
+   *
+   * @param int $uid
+   *   The user ID.
+   * @param bool $all_modules_completed
+   *   Whether all modules are completed.
+   * @param array $report_statuses
+   *   Array of other report statuses.
+   *
+   * @return array|null
+   *   Summary report status array or NULL if not applicable.
+   */
+  protected function getSummaryReportStatus($uid, $all_modules_completed, array $report_statuses) {
+    // Check if the summary service exists
+    if (!\Drupal::hasService('ai_summary.service')) {
+      return NULL;
+    }
+
+    $summaryService = \Drupal::service('ai_summary.service');
+
+    // If modules aren't completed, show as disabled/locked
+    if (!$all_modules_completed) {
+      return [
+        'status' => 'locked',
+        'title' => $this->t('Continuing Onward'),
+        'description' => $this->t('A comprehensive summary of all your reports and next steps'),
+        'url' => '#',
+        'viewed' => FALSE,
+      ];
+    }
+
+    // Check for pending report
+    $pending = $summaryService->getPendingReport($uid);
+    if ($pending) {
+      return [
+        'status' => 'pending',
+        'title' => $this->t('Continuing Onward'),
+        'description' => $this->t('A comprehensive summary of all your reports and next steps'),
+        'url' => '#',
+        'queued_at' => $pending->getGeneratedAt(),
+        'viewed' => FALSE,
+      ];
+    }
+
+    // Try to get existing report
+    $report = $summaryService->getExistingReport($uid);
+
+    if ($report && !isset($report['error'])) {
+      // Load the actual entity to check if it's been viewed
+      $report_storage = $this->entityTypeManager->getStorage('ai_report');
+      $entities = $report_storage->loadByProperties([
+        'uid' => $uid,
+        'type' => 'summary',
+        'status' => 'published',
+      ]);
+      $report_entity = !empty($entities) ? reset($entities) : NULL;
+      $viewed = $report_entity ? $report_entity->isViewed() : FALSE;
+
+      return [
+        'status' => 'ready',
+        'title' => $this->t('Continuing Onward'),
+        'description' => $this->t('A comprehensive summary of all your reports and next steps'),
+        'url' => '/analysis/summary',
+        'generated_at' => $report['generated_at'] ?? NULL,
+        'viewed' => $viewed,
+      ];
+    }
+
+    // If all other reports are viewed, show as available to generate
+    if ($this->allReportsViewed($report_statuses)) {
+      return [
+        'status' => 'available',
+        'title' => $this->t('Continuing Onward'),
+        'description' => $this->t('A comprehensive summary of all your reports and next steps'),
+        'url' => '/analysis/summary',
+        'viewed' => FALSE,
+      ];
+    }
+
+    // Otherwise, show as locked (waiting for other reports to be viewed)
+    return [
+      'status' => 'locked',
+      'title' => $this->t('Continuing Onward'),
+      'description' => $this->t('A comprehensive summary of all your reports and next steps'),
+      'url' => '#',
+      'viewed' => FALSE,
+    ];
   }
 
 }

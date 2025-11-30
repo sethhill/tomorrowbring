@@ -2,7 +2,7 @@ ai_summary.report:
   path: '/analysis/summary'
   defaults:
     _controller: '\Drupal\ai_summary\Controller\AiSummaryController::viewReport'
-    _title: 'Your Journey Forward'
+    _title: 'Continuing Onward'
   requirements:
     _user_is_logged_in: 'TRUE'
 

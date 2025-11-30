@@ -337,13 +337,20 @@
 .results-list__item::before {
   content: counter(results-counter);
   position: absolute;
-  left: 1em;
-  top: 1.5em;
+  left: 1rem;
+  top: 0.75rem;
   font-size: 1.5em;
   font-weight: 900;
   color: var(--color-orange);
   line-height: 1;
   transition: color 0.2s ease;
+  background: var(--color-white);
+  border-radius: 2em;
+  display: flex;
+  width: 2em;
+  height: 2em;
+  justify-content: center;
+  align-items: center;
 }
 
 .results-list__item:hover {
@@ -352,12 +359,13 @@
 }
 
 .results-list__item:hover::before {
-  color: var(--color-deep-green);
+  color: var(--color-white);
+  background-color: var(--color-orange);
 }
 
 .results-list__link {
   display: block;
-  padding: 1.5em 1.5em 1.5em 4em;
+  padding: 1.5em 1.5em 1.5em 5em;
   text-decoration: none;
   color: inherit;
 }
@@ -376,10 +384,11 @@
   margin-top: 0;
   margin-bottom: 0.5em;
   font-size: 1.25em;
-  font-weight: 600;
+  font-weight: 900;
   color: var(--color-orange);
   text-align: left;
   transition: color 0.2s ease;
+  margin-bottom: 0;
 }
 
 .results-list__item:hover .results-list__content h3 {
@@ -389,6 +398,7 @@
 .results-list__content p {
   margin-bottom: 0;
   color: var(--color-deep-green);
+  display: none;
 }
 
 .results-list__status-text {
