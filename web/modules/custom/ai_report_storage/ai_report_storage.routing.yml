@@ -51,3 +51,11 @@ ai_report_storage.process_queue:
     _controller: '\Drupal\ai_report_storage\Controller\QueueProcessorController::process'
   requirements:
     _permission: 'administer ai reports'
+
+ai_report_storage.settings:
+  path: '/admin/config/ai-reports/settings'
+  defaults:
+    _form: '\Drupal\ai_report_storage\Form\AiReportSettingsForm'
+    _title: 'AI Reports Settings'
+  requirements:
+    _permission: 'administer site configuration'

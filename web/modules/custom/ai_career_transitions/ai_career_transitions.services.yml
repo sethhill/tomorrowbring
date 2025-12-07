@@ -1,4 +1,4 @@
 services:
   ai_career_transitions.analysis_service:
     class: Drupal\ai_career_transitions\AiCareerTransitionsService
-    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']
+    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default', '@config.factory']

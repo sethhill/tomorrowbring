@@ -222,3 +222,61 @@ function ai_report_storage_update_9002() {
 
   return t('viewed_at field already exists.');
 }
+
+/**
+ * Migrate model_used field values to new provider/model format.
+ */
+function ai_report_storage_update_9003() {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $storage = $entity_type_manager->getStorage('ai_report');
+
+  // Mapping of old model IDs to new provider/model format.
+  $model_mapping = [
+    'claude-sonnet-4-5-20250929' => 'anthropic / claude-sonnet-4-5-20250929',
+    'claude-opus-4-5-20251101' => 'anthropic / claude-opus-4-5-20251101',
+    'claude-3-5-sonnet-latest' => 'anthropic / claude-3-5-sonnet-latest',
+    'claude-3-7-sonnet-latest' => 'anthropic / claude-3-7-sonnet-latest',
+    'claude-3-opus-latest' => 'anthropic / claude-3-opus-latest',
+    'claude-3-sonnet-latest' => 'anthropic / claude-3-sonnet-latest',
+    'claude-3-haiku-latest' => 'anthropic / claude-3-haiku-latest',
+  ];
+
+  $updated_count = 0;
+
+  // Load all reports in batches to avoid memory issues.
+  $query = $storage->getQuery()
+    ->accessCheck(FALSE);
+  $entity_ids = $query->execute();
+
+  if (empty($entity_ids)) {
+    return t('No reports found to migrate.');
+  }
+
+  foreach (array_chunk($entity_ids, 50) as $chunk) {
+    $entities = $storage->loadMultiple($chunk);
+
+    foreach ($entities as $entity) {
+      $old_model = $entity->getModelUsed();
+
+      // Skip if already in new format (contains '/').
+      if (!empty($old_model) && strpos($old_model, '/') !== FALSE) {
+        continue;
+      }
+
+      if (isset($model_mapping[$old_model])) {
+        // Use mapped value.
+        $entity->setModelUsed($model_mapping[$old_model]);
+        $entity->save();
+        $updated_count++;
+      }
+      elseif (!empty($old_model)) {
+        // Model not in mapping but needs migration - add anthropic prefix.
+        $entity->setModelUsed('anthropic / ' . $old_model);
+        $entity->save();
+        $updated_count++;
+      }
+    }
+  }
+
+  return t('Updated @count report entities with new provider/model format.', ['@count' => $updated_count]);
+}

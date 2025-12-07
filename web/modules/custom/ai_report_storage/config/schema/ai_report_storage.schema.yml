@@ -1,0 +1,45 @@
+ai_report_storage.settings:
+  type: config_object
+  label: 'AI Report Storage Settings'
+  mapping:
+    simple_reports:
+      type: mapping
+      label: 'Simple Report Configuration'
+      mapping:
+        operation_type:
+          type: string
+          label: 'Operation Type'
+        provider_model:
+          type: string
+          label: 'Provider and Model (format: provider_id__model_id)'
+    complex_reports:
+      type: mapping
+      label: 'Complex Report Configuration'
+      mapping:
+        operation_type:
+          type: string
+          label: 'Operation Type'
+        provider_model:
+          type: string
+          label: 'Provider and Model (format: provider_id__model_id)'
+    timeout:
+      type: integer
+      label: 'API Timeout (seconds)'
+    max_tokens:
+      type: integer
+      label: 'Maximum Output Tokens'
+    system_prompt:
+      type: text
+      label: 'System Prompt Template'
+    report_complexity_rules:
+      type: sequence
+      label: 'Report Type Complexity Mapping'
+      sequence:
+        type: mapping
+        mapping:
+          report_type:
+            type: string
+            label: 'Report Type'
+          complexity:
+            type: string
+            label: 'Complexity Level (simple or complex)'

@@ -1,4 +1,4 @@
 services:
   ai_task_recommender.analysis_service:
     class: Drupal\ai_task_recommender\AiTaskRecommenderService
-    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']
+    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default', '@config.factory']

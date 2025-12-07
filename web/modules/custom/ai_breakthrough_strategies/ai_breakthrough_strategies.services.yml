@@ -1,4 +1,4 @@
 services:
   ai_breakthrough_strategies.service:
     class: Drupal\ai_breakthrough_strategies\AiBreakthroughStrategiesService
-    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default']
+    arguments: ['@entity_type.manager', '@current_user', '@client_webform.manager', '@ai.provider', '@logger.factory', '@cache.default', '@config.factory']

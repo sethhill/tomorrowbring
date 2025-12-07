@@ -1,0 +1,6 @@
+ai_report_storage.settings:
+  title: 'AI Reports'
+  description: 'Configure AI provider and model settings for report generation'
+  route_name: ai_report_storage.settings
+  parent: system.admin_config_system
+  weight: 10

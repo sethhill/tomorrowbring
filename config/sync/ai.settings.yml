@@ -1,17 +1,17 @@
 default_providers:
   chat:
     provider_id: anthropic
-    model_id: claude-sonnet-4-latest
+    model_id: claude-sonnet-4-5-20250929
   chat_with_complex_json:
     provider_id: anthropic
-    model_id: claude-opus-4-1-latest
+    model_id: claude-opus-4-5-20251101
   chat_with_image_vision:
     provider_id: anthropic
-    model_id: claude-sonnet-4-latest
+    model_id: claude-sonnet-4-5-20250929
   chat_with_structured_response:
     provider_id: anthropic
-    model_id: claude-opus-4-1-latest
+    model_id: claude-sonnet-4-5-20250929
   chat_with_tools:
     provider_id: anthropic
-    model_id: claude-opus-4-1-latest
+    model_id: claude-sonnet-4-5-20250929
 default_vdb_provider: ''

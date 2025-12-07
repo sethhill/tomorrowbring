@@ -10,6 +10,7 @@ use Drupal\ai\OperationType\Chat\ChatInput;
 use Drupal\ai\OperationType\Chat\ChatMessage;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Base service class for AI-generated reports with unified entity storage.
@@ -22,6 +23,7 @@ abstract class AiReportServiceBase {
   protected $aiProvider;
   protected $logger;
   protected $cache;
+  protected $configFactory;
   protected $reportStorage;
 
   /**
@@ -33,7 +35,8 @@ abstract class AiReportServiceBase {
     WebformClientManager $client_manager,
     AiProviderPluginManager $ai_provider,
     LoggerChannelFactoryInterface $logger_factory,
-    CacheBackendInterface $cache
+    CacheBackendInterface $cache,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
@@ -41,6 +44,7 @@ abstract class AiReportServiceBase {
     $this->aiProvider = $ai_provider;
     $this->logger = $logger_factory->get($this->getModuleName());
     $this->cache = $cache;
+    $this->configFactory = $config_factory;
     $this->reportStorage = $entity_type_manager->getStorage('ai_report');
   }
 
@@ -89,6 +93,46 @@ abstract class AiReportServiceBase {
    *   TRUE if valid, FALSE otherwise.
    */
   abstract protected function validateResponse(array $response): bool;
+
+  /**
+   * Determine if this report is complex based on configuration.
+   *
+   * @return bool
+   *   TRUE if complex, FALSE if simple.
+   */
+  protected function isComplexReport(): bool {
+    $config = $this->configFactory->get('ai_report_storage.settings');
+    $rules = $config->get('report_complexity_rules') ?? [];
+
+    $report_type = $this->getReportType();
+    foreach ($rules as $rule) {
+      if ($rule['report_type'] === $report_type) {
+        return $rule['complexity'] === 'complex';
+      }
+    }
+
+    // Default to simple if not found in rules.
+    return FALSE;
+  }
+
+  /**
+   * Get the configured provider and model for this report.
+   *
+   * @return array
+   *   Array with 'operation_type' and 'provider_model' keys.
+   */
+  protected function getProviderAndModel(): array {
+    $config = $this->configFactory->get('ai_report_storage.settings');
+    $complexity = $this->isComplexReport() ? 'complex_reports' : 'simple_reports';
+
+    $operation_type = $config->get("{$complexity}.operation_type") ?? 'chat';
+    $provider_model = $config->get("{$complexity}.provider_model") ?? 'anthropic__claude-sonnet-4-5-20250929';
+
+    return [
+      'operation_type' => $operation_type,
+      'provider_model' => $provider_model,
+    ];
+  }
 
   /**
    * Get webform submission data for a user.
@@ -209,6 +253,10 @@ abstract class AiReportServiceBase {
     $latest = $this->loadLatestReport($uid);
     $version = $latest ? $latest->getVersion() + 1 : 1;
 
+    // Get model used from configuration.
+    $provider_config = $this->getProviderAndModel();
+    $model_used = str_replace('__', ' / ', $provider_config['provider_model']);
+
     // Create the new report entity.
     $entity = $this->reportStorage->create([
       'type' => $this->getReportType(),
@@ -217,7 +265,7 @@ abstract class AiReportServiceBase {
       'status' => 'published',
       'generated_at' => time(),
       'generation_time' => $duration,
-      'model_used' => 'claude-sonnet-4-5-20250929',
+      'model_used' => $model_used,
       'source_data_hash' => $source_hash,
     ]);
 
@@ -272,7 +320,7 @@ abstract class AiReportServiceBase {
   }
 
   /**
-   * Call the Anthropic API with retry logic and streaming support.
+   * Call the AI API with retry logic and streaming support.
    *
    * @param string $prompt
    *   The prompt to send.
@@ -284,7 +332,7 @@ abstract class AiReportServiceBase {
    * @return string|null
    *   The response text, or NULL on failure.
    */
-  protected function callAnthropicApi(string $prompt, bool $retry = TRUE, int $timeout = 600): ?string {
+  protected function callAiApi(string $prompt, bool $retry = TRUE, int $timeout = 600): ?string {
     $max_attempts = $retry ? 2 : 1;
     $attempt = 0;
 
@@ -298,7 +346,7 @@ abstract class AiReportServiceBase {
       ];
 
       try {
-        $this->logger->info('Calling Anthropic API with streaming (attempt @attempt of @max) with @timeout s timeout', [
+        $this->logger->info('Calling AI API with streaming (attempt @attempt of @max) with @timeout s timeout', [
           '@attempt' => $attempt,
           '@max' => $max_attempts,
           '@timeout' => $timeout,
@@ -319,121 +367,93 @@ abstract class AiReportServiceBase {
         set_time_limit($timeout + 30);
         $timing['checkpoints']['execution_timeout_set'] = microtime(TRUE) - $timing['start'];
 
-        // Set default socket timeout for cURL operations.
-        // This affects the underlying HTTP client used by the Anthropic SDK.
-        ini_set('default_socket_timeout', (string) $timeout);
-        $timing['checkpoints']['socket_timeout_set'] = microtime(TRUE) - $timing['start'];
+        // Get provider and model configuration.
+        $provider_config = $this->getProviderAndModel();
+        $operation_type = $provider_config['operation_type'];
+        $provider_model = $provider_config['provider_model'];
 
-        // TROUBLESHOOTING: Log current PHP timeout settings
-        if (function_exists('ai_debug_log')) {
-          ai_debug_log('PHP Timeout Settings', [
-            'max_execution_time' => ini_get('max_execution_time'),
-            'default_socket_timeout' => ini_get('default_socket_timeout'),
-            'max_input_time' => ini_get('max_input_time'),
-          ]);
+        // Load provider instance from Drupal AI.
+        $provider = $this->aiProvider->loadProviderFromSimpleOption($provider_model);
+        if (!$provider) {
+          throw new \Exception('Failed to load AI provider from configuration');
         }
 
-        // Use the Anthropic SDK directly with streaming
-        // Get the key name from config, then load the actual key value
-        $key_name = \Drupal::config('ai_provider_anthropic.settings')->get('api_key');
-        if (empty($key_name)) {
-          throw new \Exception('Anthropic API key not configured');
-        }
+        $model_id = $this->aiProvider->getModelNameFromSimpleOption($provider_model);
+        $timing['checkpoints']['provider_loaded'] = microtime(TRUE) - $timing['start'];
 
-        // Load the actual API key value from the Key module
-        $key_repository = \Drupal::service('key.repository');
-        $key = $key_repository->getKey($key_name);
-        if (!$key || !($api_key = $key->getKeyValue())) {
-          throw new \Exception('Could not load the Anthropic API key, please check your environment settings or your setup key.');
-        }
+        // Get configuration settings.
+        $config = $this->configFactory->get('ai_report_storage.settings');
+        $system_prompt = $config->get('system_prompt') ?? 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
+        $max_tokens = $config->get('max_tokens') ?? 8096;
 
-        // Create Anthropic client with streaming support
-        $client = new \Anthropic\Client(
-          apiKey: $api_key
-        );
+        // Build ChatInput with messages array.
+        $messages = [new ChatMessage('user', $prompt)];
+        $chat_input = new ChatInput($messages);
+        $chat_input->setSystemPrompt($system_prompt);
 
-        // Inject our custom HTTP client with extended timeout using reflection
-        $http_client = new \Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient();
-        $reflection = new \ReflectionClass($client);
-        $transporter_property = $reflection->getProperty('transporter');
-        $transporter_property->setAccessible(TRUE);
-        $transporter_property->setValue($client, $http_client);
+        // Configure provider for streaming.
+        $provider->setConfiguration([
+          'max_tokens' => $max_tokens,
+          'temperature' => 0.7,
+        ]);
 
-        $timing['checkpoints']['client_created'] = microtime(TRUE) - $timing['start'];
-
-        // TROUBLESHOOTING: Log client creation
-        if (function_exists('ai_debug_log')) {
-          ai_debug_log('Anthropic Client Created', [
-            'elapsed_ms' => round($timing['checkpoints']['client_created'] * 1000, 2),
-          ]);
-        }
-
-        $system_prompt = 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
+        $timing['checkpoints']['provider_configured'] = microtime(TRUE) - $timing['start'];
 
         // TROUBLESHOOTING: Log before making the actual API call
         if (function_exists('ai_debug_log')) {
-          ai_debug_log('Making Streaming API Request', [
+          ai_debug_log('Making Streaming API Request via Drupal AI', [
             'elapsed_ms' => round((microtime(TRUE) - $timing['start']) * 1000, 2),
-            'model' => 'claude-sonnet-4-5-20250929',
+            'model' => $model_id,
+            'provider_model' => $provider_model,
           ]);
         }
 
-        // Use createStream() to enable streaming and prevent timeouts
-        $stream = $client->messages->createStream(
-          maxTokens: 8096,
-          messages: [
-            \Anthropic\Messages\MessageParam::with(
-              role: 'user',
-              content: $prompt
-            ),
-          ],
-          model: 'claude-sonnet-4-5-20250929',
-          system: $system_prompt
-        );
+        // Make the API call with streaming through Drupal AI.
+        $response = $provider->chat($chat_input, $model_id, [
+          'report_type' => $this->getReportType(),
+          'timeout' => $timeout,
+          'stream' => TRUE,
+        ]);
 
-        $timing['checkpoints']['stream_started'] = microtime(TRUE) - $timing['start'];
+        $timing['checkpoints']['api_called'] = microtime(TRUE) - $timing['start'];
 
-        // Collect the full response from the stream
+        // Handle streaming response.
         $full_response = '';
         $chunk_count = 0;
 
-        foreach ($stream as $event) {
-          $chunk_count++;
+        $normalized = $response->getNormalized();
 
-          // Log progress periodically
-          if ($chunk_count % 10 === 0 && function_exists('ai_debug_log')) {
-            ai_debug_log('Stream Progress', [
-              'chunks_received' => $chunk_count,
-              'elapsed_seconds' => round(microtime(TRUE) - $timing['start'], 2),
-              'response_length' => strlen($full_response),
-            ]);
-          }
+        // Check if response is streamed (implements StreamedChatMessageIteratorInterface).
+        if ($normalized instanceof \Drupal\ai\OperationType\Chat\StreamedChatMessageIteratorInterface) {
+          // Iterate over streamed chunks.
+          foreach ($normalized as $chunk) {
+            $chunk_count++;
 
-          // Process different event types from the stream
-          if (isset($event->type)) {
-            switch ($event->type) {
-              case 'content_block_delta':
-                if (isset($event->delta->text)) {
-                  $full_response .= $event->delta->text;
-                }
-                break;
-
-              case 'message_start':
-                $this->logger->info('Stream started');
-                break;
-
-              case 'message_stop':
-                $this->logger->info('Stream completed');
-                break;
+            // Log progress periodically.
+            if ($chunk_count % 10 === 0 && function_exists('ai_debug_log')) {
+              ai_debug_log('Stream Progress', [
+                'chunks_received' => $chunk_count,
+                'elapsed_seconds' => round(microtime(TRUE) - $timing['start'], 2),
+                'response_length' => strlen($full_response),
+              ]);
             }
+
+            $full_response .= $chunk->getText();
           }
+
+          $this->logger->info('Stream completed');
+        }
+        else {
+          // Non-streamed response - normalized is a ChatMessage.
+          $full_response = $normalized->getText();
+          $this->logger->info('Non-streamed response received');
         }
 
         $timing['checkpoints']['stream_completed'] = microtime(TRUE) - $timing['start'];
 
         // TROUBLESHOOTING: Log successful response
         if (function_exists('ai_debug_log')) {
-          ai_debug_log('API Stream Completed', [
+          ai_debug_log('API Call Completed', [
             'chunks_received' => $chunk_count,
             'elapsed_ms' => round($timing['checkpoints']['stream_completed'] * 1000, 2),
             'total_seconds' => round($timing['checkpoints']['stream_completed'], 2),
@@ -441,7 +461,7 @@ abstract class AiReportServiceBase {
           ]);
         }
 
-        $this->logger->info('API streaming call successful on attempt @attempt (took @seconds seconds, @chunks chunks)', [
+        $this->logger->info('AI API call successful on attempt @attempt (took @seconds seconds, @chunks chunks)', [
           '@attempt' => $attempt,
           '@seconds' => round($timing['checkpoints']['stream_completed'], 2),
           '@chunks' => $chunk_count,
@@ -497,7 +517,7 @@ abstract class AiReportServiceBase {
           continue;
         }
 
-        $this->logger->error('Anthropic API call failed after @attempt attempts: @error', [
+        $this->logger->error('AI API call failed after @attempt attempts: @error', [
           '@attempt' => $attempt,
           '@error' => $e->getMessage(),
         ]);
@@ -722,7 +742,7 @@ abstract class AiReportServiceBase {
 
     try {
       $prompt = $this->buildPrompt($submission_data);
-      $response = $this->callAnthropicApi($prompt, $retry);
+      $response = $this->callAiApi($prompt, $retry);
 
       if ($response === NULL) {
         return [
@@ -946,7 +966,7 @@ abstract class AiReportServiceBase {
 
     try {
       $prompt = $this->buildPrompt($submission_data);
-      $response = $this->callAnthropicApi($prompt, TRUE);
+      $response = $this->callAiApi($prompt, TRUE);
 
       if ($response === NULL) {
         $entity->setStatus('failed');
@@ -974,12 +994,16 @@ abstract class AiReportServiceBase {
       $latest = $this->loadLatestReport($uid);
       $version = $latest ? $latest->getVersion() + 1 : 1;
 
+      // Get model used from configuration.
+      $provider_config = $this->getProviderAndModel();
+      $model_used = str_replace('__', ' / ', $provider_config['provider_model']);
+
       // Update the entity with the generated report.
       $entity->setReportData($report);
       $entity->setStatus('published');
       $entity->setGenerationTime($duration);
       $entity->setGeneratedAt(time());
-      $entity->setModelUsed('claude-sonnet-4-5-20250929');
+      $entity->setModelUsed($model_used);
       $source_hash = $this->getSourceDataHash($submission_data);
       $entity->setSourceDataHash($source_hash);
       $entity->setSourceSubmissions($submission_ids);
