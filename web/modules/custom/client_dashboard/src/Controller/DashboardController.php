@@ -246,7 +246,11 @@ class DashboardController extends ControllerBase {
       ],
       '#cache' => [
         'contexts' => ['user'],
-        'tags' => ['webform_submission_list', 'ai_report_list'],
+        'tags' => [
+          'webform_submission_list',
+          'ai_report_list',
+          "ai_report_list:user:{$current_user->id()}",
+        ],
       ],
     ];
   }

@@ -73,4 +73,36 @@ function ai_report_storage_cron() {
   }
 }
 
+/**
+ * Implements hook_entity_update().
+ *
+ * Invalidate dashboard cache when report viewed status changes.
+ */
+function ai_report_storage_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+  // Only act on ai_report entities.
+  if ($entity->getEntityTypeId() !== 'ai_report' || !$entity->hasField('viewed_at')) {
+    return;
+  }
+
+  $original = $entity->original ?? NULL;
+
+  // If viewed_at changed from empty to set, invalidate cache.
+  if ($original &&
+      empty($original->get('viewed_at')->value) &&
+      !empty($entity->get('viewed_at')->value)) {
+
+    $uid = $entity->getOwnerId();
+    $tags = [
+      'ai_report_list',
+      "ai_report_list:user:{$uid}",
+    ];
+
+    \Drupal::service('cache_tags.invalidator')->invalidateTags($tags);
+
+    \Drupal::logger('ai_report_storage')->info(
+      'Dashboard cache invalidated for user @uid due to report view status change',
+      ['@uid' => $uid]
+    );
+  }
+}
 

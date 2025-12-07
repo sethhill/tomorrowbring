@@ -625,6 +625,8 @@ abstract class AiReportServiceBase {
     $this->cache->set($cid, $data, CacheBackendInterface::CACHE_PERMANENT, [
       "user:{$uid}",
       'webform_submission_list',
+      'ai_report_list',
+      "ai_report_list:user:{$uid}",
       "{$this->getModuleName()}:{$uid}",
       "ai_report:{$this->getReportType()}:{$uid}",
     ]);
@@ -1094,9 +1096,18 @@ abstract class AiReportServiceBase {
       $report->setViewedAt(time());
       try {
         $report->save();
-        $this->logger->info('Report @type marked as viewed for user @uid', [
+
+        // Invalidate dashboard cache tags for this user.
+        $uid = $report->getOwnerId();
+        $tags = [
+          'ai_report_list',
+          "ai_report_list:user:{$uid}",
+        ];
+        \Drupal::service('cache_tags.invalidator')->invalidateTags($tags);
+
+        $this->logger->info('Report @type marked as viewed for user @uid, cache invalidated', [
           '@type' => $report->getType(),
-          '@uid' => $report->getOwnerId(),
+          '@uid' => $uid,
         ]);
       }
       catch (\Exception $e) {
