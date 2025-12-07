@@ -51,13 +51,14 @@
 	{# Always show report section if there are any reports #}
 	{% if report_statuses is not empty %}
 		<div class="report-section dashboard-section dashboard-results">
-			<h2>{{ 'Your Results'|t }}</h2>
+			<h2>{{ 'Your Reports'|t }}</h2>
 			<p class="report-intro">{{ 'Based on your profile and responses, here are your personalized analysis reports.'|t }}</p>
 
 			<ol class="analysis-reports results-list">
 				{% for type, report_info in report_statuses %}
 					<li class="results-list__item report-{{ type }} report-status-{{ report_info.status }} {% if report_info.status == 'ready' and not report_info.viewed %}report-unviewed{% endif %}">
 						{% if report_info.status == 'pending' %}
+							<div class="results-list__image"></div>
 							<div class="results-list__content results-list__content--disabled">
 								<h3>
 									{{ report_info.title }}
@@ -66,6 +67,7 @@
 								<span class="results-list__status-text">{{ 'Report Generating...'|t }}</span>
 							</div>
 						{% elseif report_info.status == 'locked' %}
+							<div class="results-list__image"></div>
 							<div class="results-list__content results-list__content--disabled">
 								<h3>
 									{{ report_info.title }}
@@ -75,6 +77,7 @@
 							</div>
 						{% elseif report_info.status == 'available' %}
 							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Generate the {{ report_info.title }} report">
+								<div class="results-list__image"></div>
 								<div class="results-list__content">
 									<h3>
 										{{ report_info.title }}
@@ -85,6 +88,7 @@
 							</a>
 						{% else %}
 							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Read the {{ report_info.title }} report">
+								<div class="results-list__image"></div>
 								<div class="results-list__content">
 									<h3>
 										{{ report_info.title }}
