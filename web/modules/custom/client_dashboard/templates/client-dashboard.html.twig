@@ -14,17 +14,17 @@
  */
 #}
 <div class="webform-client-dashboard">
-	<div class="dashboard-header">
-		{% if client_name %}
-			<p class="dashboard-subtitle">{{ client_name }}</p>
-		{% endif %}
-	</div>
+	{# <div class="dashboard-header">
+			{% if client_name %}
+				<p class="dashboard-subtitle">{{ client_name }}</p>
+			{% endif %}
+		</div> #}
 
 	{# Show module progress section if modules aren't all completed #}
-	{% if not all_modules_completed %}
-		<div class="dashboard-section dashboard-learning">
+		{% if not all_modules_completed %}
+			<div class="dashboard-section dashboard-learning"> <h2>{{ 'Complete Your Profile'|t }}</h2>
 
-			<h2>{{ 'Complete Your Profile'|t }}</h2>
+			<p class="report-intro">{{ 'The more you share, the more we can personalize your experience. Each question you answer unlocks deeper insights and custom reports built just for you.'|t }}</p>
 
 			<div class="dashboard-progress">
 				<div class="progress-info">

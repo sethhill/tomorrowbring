@@ -87,10 +87,11 @@
 }
 
 .dashboard-progress {
-  /* background: white;
-  padding: 1em 1.5em;
+  /* background: white; */
+  background: var(--color-gold-light);
+  padding: 1.5em;
   border-start-start-radius: 1em;
-  border-end-end-radius: 1em; */
+  border-end-end-radius: 1em;
   margin-bottom: 2em;
 }
 
@@ -104,7 +105,7 @@
 .progress-text {
   font-weight: 600;
   font-size: 1.25rem;
-  color: var(--color-deep-green);
+  color: var(--color-orange);
 }
 
 .progress-count {
@@ -114,6 +115,7 @@
 .progress-bar {
   height: 9px;
   background: #e5e7eb;
+  background: var(--color-white);
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 0.25em;
@@ -174,7 +176,7 @@
 
 .module-card__title {
   font-size: 1.25em;
-  font-weight: normal;
+  font-weight: 600;
   margin: 0;
 }
 

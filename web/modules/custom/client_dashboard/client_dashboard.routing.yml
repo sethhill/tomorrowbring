@@ -10,7 +10,7 @@ client_dashboard.reports:
   path: '/dashboard/reports'
   defaults:
     _controller: '\Drupal\client_dashboard\Controller\DashboardController::reports'
-    _title: 'Your Reports'
+    _title: 'Your Personalized Reports'
   requirements:
     _user_is_logged_in: 'TRUE'
 

@@ -89,10 +89,10 @@ class DashboardController extends ControllerBase {
     $showing_summary = $this->isShowingSummary($current_user->id());
 
     if ($showing_summary) {
-      return $this->t('Thank You, @name!', ['@name' => $user_name]);
+      // return $this->t('Thank You, @name!', ['@name' => $user_name]);
     }
 
-    return $this->t('Welcome, @name!', ['@name' => $user_name]);
+    return $this->t('Hello, @name!', ['@name' => $user_name]);
   }
 
   /**
