@@ -524,7 +524,7 @@ footer {
     content: "";
     display: block;
     background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
-    height: 9px;
+    height: 12px;
     margin-top: 1em;
   }
 }

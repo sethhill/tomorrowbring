@@ -862,15 +862,15 @@ h3 + .timeline-period {
   mask: radial-gradient(
     circle,
     transparent 0%,
-    transparent 60%,
-    black 60%,
+    transparent 50%,
+    black 50%,
     black 100%
   );
   -webkit-mask: radial-gradient(
     circle,
     transparent 0%,
-    transparent 60%,
-    black 60%,
+    transparent 50%,
+    black 50%,
     black 100%
   );
 }
