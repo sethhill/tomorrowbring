@@ -26,24 +26,24 @@
   left: 0;
   background: conic-gradient(
     from 270deg,
-    var(--color-indicator-green) 0deg 60deg,
-    var(--color-indicator-orange) 60deg 120deg,
-    var(--color-indicator-red) 120deg 180deg,
+    var(--color-green) 0deg 60deg,
+    var(--color-gold) 60deg 120deg,
+    var(--color-pink) 120deg 180deg,
     transparent 180deg
   );
   -webkit-mask: radial-gradient(
     circle,
     transparent 0,
-    transparent 70px,
-    black 70px,
+    transparent 20px,
+    black 20px,
     black 90px,
     transparent 90px
   );
   mask: radial-gradient(
     circle,
     transparent 0,
-    transparent 70px,
-    black 70px,
+    transparent 20px,
+    black 20px,
     black 90px,
     transparent 90px
   );

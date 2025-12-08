@@ -43,3 +43,68 @@ ai_report_storage.settings:
           complexity:
             type: string
             label: 'Complexity Level (simple or complex)'
+
+ai_report_storage.type_images:
+  type: config_object
+  label: 'Report Type Images'
+  mapping:
+    types:
+      type: mapping
+      label: 'Report Types'
+      mapping:
+        industry_insights:
+          type: mapping
+          label: 'Industry Insights'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        role_impact:
+          type: mapping
+          label: 'Role Impact'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        skills:
+          type: mapping
+          label: 'Skills'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        task_recommendations:
+          type: mapping
+          label: 'Task Recommendations'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        career_transitions:
+          type: mapping
+          label: 'Career Transitions'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        learning_resources:
+          type: mapping
+          label: 'Learning Resources'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        breakthrough_strategies:
+          type: mapping
+          label: 'Breakthrough Strategies'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'
+        concerns_navigator:
+          type: mapping
+          label: 'Concerns Navigator'
+          mapping:
+            media_id:
+              type: integer
+              label: 'Media ID'

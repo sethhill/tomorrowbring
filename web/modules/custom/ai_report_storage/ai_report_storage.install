@@ -280,3 +280,32 @@ function ai_report_storage_update_9003() {
 
   return t('Updated @count report entities with new provider/model format.', ['@count' => $updated_count]);
 }
+
+/**
+ * Add report_image field to ai_report entity.
+ */
+function ai_report_storage_update_9004() {
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  // Get the field storage definition.
+  $field_storage_definition = \Drupal\Core\Field\BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('Report Image'))
+    ->setDescription(t('Optional image to display with this report.'))
+    ->setSetting('target_type', 'media')
+    ->setSetting('handler', 'default:media')
+    ->setSetting('handler_settings', [
+      'target_bundles' => ['image' => 'image'],
+    ])
+    ->setCardinality(1)
+    ->setRequired(FALSE);
+
+  // Install the new field.
+  $entity_definition_update_manager->installFieldStorageDefinition(
+    'report_image',
+    'ai_report',
+    'ai_report_storage',
+    $field_storage_definition
+  );
+
+  return t('Added report_image field to ai_report entity.');
+}

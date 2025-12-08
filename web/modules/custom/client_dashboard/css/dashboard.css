@@ -361,7 +361,6 @@
   align-items: center;
 }
 
-
 .results-list__link:hover .results-list__content::before {
   color: var(--color-white);
   background-color: var(--color-orange);
@@ -375,44 +374,52 @@
 
 .results-list__image {
   aspect-ratio: 16/9;
-  background: url('/themes/custom/tbring/images/icon-01.svg') no-repeat center center;
+  background: url("/themes/custom/tbring/images/icon-01.svg") no-repeat center
+    center;
   background-size: contain;
 }
 
-.results-list__item:nth-child(9n+1) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-01.svg');
+.results-list__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5em;
 }
 
-.results-list__item:nth-child(9n+2) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-02.svg');
+.results-list__item:nth-child(9n + 1) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-01.svg");
 }
 
-.results-list__item:nth-child(9n+3) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-03.svg');
+.results-list__item:nth-child(9n + 2) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-02.svg");
 }
 
-.results-list__item:nth-child(9n+4) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-04.svg');
+.results-list__item:nth-child(9n + 3) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-03.svg");
 }
 
-.results-list__item:nth-child(9n+5) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-06.svg');
+.results-list__item:nth-child(9n + 4) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-04.svg");
 }
 
-.results-list__item:nth-child(9n+6) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-05.svg');
+.results-list__item:nth-child(9n + 5) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-06.svg");
 }
 
-.results-list__item:nth-child(9n+7) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-09.svg');
+.results-list__item:nth-child(9n + 6) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-05.svg");
 }
 
-.results-list__item:nth-child(9n+8) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-07.svg');
+.results-list__item:nth-child(9n + 7) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-09.svg");
 }
 
-.results-list__item:nth-child(9n+9) .results-list__image {
-  background-image: url('/themes/custom/tbring/images/icon-08.svg');
+.results-list__item:nth-child(9n + 8) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-07.svg");
+}
+
+.results-list__item:nth-child(9n + 9) .results-list__image {
+  background-image: url("/themes/custom/tbring/images/icon-08.svg");
 }
 
 .results-list__content {

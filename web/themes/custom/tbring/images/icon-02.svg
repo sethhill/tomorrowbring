@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270">
+<svg id="a" xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270">
   <defs>
     <style>
       .b, .c {
         fill: none;
-      }
-
-      .d {
-        fill: #f9dedb;
       }
 
       .c {
@@ -17,15 +13,19 @@
         stroke-width: 8px;
       }
 
-      .e {
+      .d {
         fill: #0e3e5a;
+      }
+
+      .e {
+        fill: #f2a39b;
       }
     </style>
   </defs>
   <rect class="b" width="480" height="270"/>
   <g>
     <line class="c" x1="240.607" y1="229.2816" x2="240.607" y2="152.0488"/>
-    <circle class="d" cx="240.607" cy="100.5603" r="64.3607"/>
-    <circle class="e" cx="240.607" cy="100.5603" r="25.7443"/>
+    <circle class="e" cx="240.607" cy="100.5603" r="64.3607"/>
+    <circle class="d" cx="240.607" cy="100.5603" r="25.7443"/>
   </g>
 </svg>

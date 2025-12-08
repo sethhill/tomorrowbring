@@ -1,0 +1,9 @@
+simple_reports:
+  operation_type: chat
+  provider_model: anthropic__claude-sonnet-4-5-20250929
+complex_reports:
+  operation_type: chat
+  provider_model: anthropic__claude-opus-4-5-20251101
+timeout: 600
+max_tokens: 8000
+system_prompt: 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.'

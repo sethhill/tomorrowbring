@@ -18,7 +18,7 @@
 
 .report-section,
 .dashboard-section {
-  margin-bottom: 1.5em;
+  margin-bottom: 3em;
   padding: 2em 3em 3em 3em;
   background: var(--color-white);
   border-start-start-radius: 2em;
@@ -27,7 +27,7 @@
   background: var(--color-white);
 
   /* Create gradient border using pseudo-element */
-  &::before {
+  /*&::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -39,7 +39,7 @@
     mask-composite: exclude;
     pointer-events: none;
     z-index: 0;
-  }
+  }*/
 
   /* Ensure content appears above the border */
   > * {
@@ -469,7 +469,7 @@
 
 .arrow {
   font-size: 3rem;
-  color: var(--color-green);
+  color: var(--color-pink);
   align-content: center;
 }
 
@@ -1093,7 +1093,7 @@ h3 + .timeline-period {
   text-align: center;
   font-size: 3rem;
   margin-top: 0.5em;
-  color: var(--color-green);
+  color: var(--color-pink);
 }
 
 .shift + h4 {

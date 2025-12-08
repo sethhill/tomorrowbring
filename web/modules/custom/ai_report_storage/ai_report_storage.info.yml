@@ -6,3 +6,5 @@ package: 'Custom'
 dependencies:
   - drupal:user
   - drupal:system
+  - drupal:media
+  - drupal:image

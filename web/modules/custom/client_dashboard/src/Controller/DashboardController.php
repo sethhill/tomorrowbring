@@ -377,6 +377,7 @@ class DashboardController extends ControllerBase {
           'url' => $info['url'],
           'queued_at' => $pending_report->getGeneratedAt(),
           'viewed' => FALSE,
+          'image_url' => $this->getReportTypeImageUrl($type),
         ];
       }
       elseif ($existing_report) {
@@ -397,6 +398,7 @@ class DashboardController extends ControllerBase {
           'url' => $info['url'],
           'generated_at' => $existing_report['generated_at'],
           'viewed' => $viewed,
+          'image_url' => $this->getReportTypeImageUrl($type),
         ];
       }
       else {
@@ -406,11 +408,40 @@ class DashboardController extends ControllerBase {
           'description' => $info['description'],
           'url' => $info['url'],
           'viewed' => FALSE,
+          'image_url' => $this->getReportTypeImageUrl($type),
         ];
       }
     }
 
     return $statuses;
+  }
+
+  /**
+   * Get the default image URL for a report type.
+   *
+   * @param string $type
+   *   The report type.
+   *
+   * @return string|null
+   *   The image URL or NULL.
+   */
+  protected function getReportTypeImageUrl($type) {
+    $config = \Drupal::config('ai_report_storage.type_images');
+    $media_id = $config->get("types.{$type}.media_id");
+
+    if (!$media_id) {
+      return NULL;
+    }
+
+    $media = $this->entityTypeManager->getStorage('media')->load($media_id);
+    if (!$media || !$media->hasField('field_media_image') || $media->get('field_media_image')->isEmpty()) {
+      return NULL;
+    }
+
+    $file_uri = $media->get('field_media_image')->entity->getFileUri();
+    $image_style = \Drupal\image\Entity\ImageStyle::load('medium');
+
+    return $image_style ? $image_style->buildUrl($file_uri) : NULL;
   }
 
   /**

@@ -65,9 +65,25 @@
     });
   }
 
+  /**
+   * Randomizes the icon in page titles.
+   */
+  function randomizePageTitleIcon() {
+    const pageTitle = document.querySelector('#block-tbring-page-title h1');
+    if (!pageTitle) return;
+
+    // Generate random number between 1 and 9
+    const randomNum = Math.floor(Math.random() * 9) + 1;
+    const paddedNum = String(randomNum).padStart(2, '0');
+
+    // Set CSS custom property for the random icon
+    pageTitle.style.setProperty('--random-icon', `url("../images/icon-${paddedNum}.svg")`);
+  }
+
   Drupal.behaviors.tbring = {
     attach (context, settings) {
-
+      // Randomize page title icon on page load
+      randomizePageTitleIcon();
     }
   };
 

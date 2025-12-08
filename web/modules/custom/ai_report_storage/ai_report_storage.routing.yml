@@ -59,3 +59,11 @@ ai_report_storage.settings:
     _title: 'AI Reports Settings'
   requirements:
     _permission: 'administer site configuration'
+
+ai_report_storage.type_images:
+  path: '/admin/config/ai-reports/type-images'
+  defaults:
+    _form: '\Drupal\ai_report_storage\Form\ReportTypeImagesForm'
+    _title: 'Report Type Images'
+  requirements:
+    _permission: 'administer ai reports'

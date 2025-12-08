@@ -29,6 +29,7 @@
         "drupal/pathauto": "^1.14",
         "drupal/profile": "^1.13",
         "drupal/range_slider": "^3.0@alpha",
+        "drupal/svg_image": "^3.2",
         "drupal/webform": "^6.3@beta",
         "drush/drush": "^13.6"
     },

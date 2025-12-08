@@ -6,7 +6,8 @@
   /* border-radius: 5em; */
   overflow: hidden;
   margin-bottom: 2em;
-  background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
+  display: flex;
+  justify-content: space-between;
 
   nav {
     display: inline-block;
@@ -32,7 +33,7 @@
     border-radius: 5em;
     background: transparent;
     font-weight: 600;
-    color: var(--color-white);
+    color: var(--color-deep-blue);
 
     &.is-active {
     }
@@ -40,7 +41,8 @@
 
   li:has(.is-active) button,
   li:has(.is-active) a {
+    /* background-color: var(--color-white); */
+    /* color: var(--color-deep-green); */
     background-color: var(--color-white);
-    color: var(--color-deep-green);
   }
 }
