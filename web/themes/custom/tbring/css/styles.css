@@ -34,7 +34,7 @@
 :root {
   --color-cream: rgba(255, 236, 180, 1);
   --color-cream-2: rgba(255, 242, 202, 1);
-  --color-cream-light: rgba(255, 247, 225);
+  --color-cream-light: hsl(44, 100%, 96%);
   --color-cream-dark: #ffe3a6;
   --color-deep-green: rgb(26, 60, 52);
   --color-deep-blue: #0f3d59;
@@ -72,12 +72,11 @@ body {
   padding: 0;
   box-sizing: border-box;
 
-  background: linear-gradient(to bottom, var(--color-cream-light), var(--color-cream-2));
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  background-blend-mode: multiply;
+  /* background: linear-gradient(to bottom, var(--color-cream-light), var(--color-cream-2)); */
+  /* background-size: 100% 100%; */
+  /* background-repeat: no-repeat; */
+  /* background-position: center; */
+  /* background-attachment: fixed; */
 }
 
 xxxsection {
@@ -609,16 +608,16 @@ footer {
 }
 
 #block-tbring-page-title {
-  margin-bottom: 1.5em;
+  margin-bottom: 2.5em;
 }
 
 /* Report-specific icons for page titles */
 .path-analysis-industry-insights #block-tbring-page-title h1::before {
-  background-image: url("../images/icon-01.svg");
+  background-image: url("../images/icon-02.svg");
 }
 
 .path-analysis-role-impact #block-tbring-page-title h1::before {
-  background-image: url("../images/icon-02.svg");
+  background-image: url("../images/icon-01.svg");
 }
 
 .path-analysis-skills #block-tbring-page-title h1::before {

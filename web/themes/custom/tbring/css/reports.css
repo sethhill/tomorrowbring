@@ -638,6 +638,12 @@ h3 + .timeline-period {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .report-section,
+  .dashboard-section {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+  }
+
   .role-impact-report {
     padding: 1rem;
   }

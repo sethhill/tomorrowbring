@@ -439,10 +439,6 @@
 }
 
 @media (max-width: 768px) {
-  .webform-client-dashboard {
-    padding: 1rem;
-  }
-
   .dashboard-title {
     font-size: 2rem;
   }
