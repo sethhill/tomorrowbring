@@ -6,7 +6,10 @@
       "Bash(cat:*)",
       "Bash(php:*)",
       "Bash(ddev composer:*)",
-      "Bash(ddev php:*)"
+      "Bash(ddev php:*)",
+      "Bash(for file in web/modules/custom/ai_*/templates/*-report.html.twig)",
+      "Bash(do echo \"=== $file ===\" head -30 \"$file\")",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

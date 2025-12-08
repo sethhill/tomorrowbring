@@ -5,6 +5,8 @@ ai_career_transitions.report:
     _title: 'Career Opportunities'
   requirements:
     _user_is_logged_in: 'TRUE'
+  options:
+    _menu_parent: 'client_dashboard.reports_menu'
 
 ai_career_transitions.regenerate:
   path: '/analysis/career-transitions/regenerate'

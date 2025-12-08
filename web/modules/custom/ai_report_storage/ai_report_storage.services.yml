@@ -15,6 +15,13 @@ services:
     class: Drupal\ai_report_storage\Http\ExtendedTimeoutHttpClient
     public: false
 
+  ai_report_storage.http_client_discovery_subscriber:
+    class: Drupal\ai_report_storage\EventSubscriber\HttpClientDiscoverySubscriber
+    arguments:
+      - '@config.factory'
+    tags:
+      - { name: event_subscriber }
+
   ai_report_storage.commands:
     class: Drupal\ai_report_storage\Commands\AiReportStorageCommands
     arguments:

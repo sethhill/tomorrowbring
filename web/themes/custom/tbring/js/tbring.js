@@ -83,7 +83,7 @@
   Drupal.behaviors.tbring = {
     attach (context, settings) {
       // Randomize page title icon on page load
-      randomizePageTitleIcon();
+      // randomizePageTitleIcon();
     }
   };
 

@@ -5,6 +5,8 @@ ai_skills_analyzer.report:
     _title: 'Improving Your Skills'
   requirements:
     _user_is_logged_in: 'TRUE'
+  options:
+    _menu_parent: 'client_dashboard.reports_menu'
 
 ai_skills_analyzer.regenerate:
   path: '/analysis/skills/regenerate'

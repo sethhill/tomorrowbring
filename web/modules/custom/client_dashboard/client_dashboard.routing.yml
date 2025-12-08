@@ -6,6 +6,14 @@ client_dashboard.dashboard:
   requirements:
     _user_is_logged_in: 'TRUE'
 
+client_dashboard.reports:
+  path: '/dashboard/reports'
+  defaults:
+    _controller: '\Drupal\client_dashboard\Controller\DashboardController::reports'
+    _title: 'Your Reports'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
 client_dashboard.settings:
   path: '/admin/config/client-dashboard/settings'
   defaults:

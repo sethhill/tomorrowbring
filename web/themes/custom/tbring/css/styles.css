@@ -419,11 +419,12 @@ label {
 
 .progress-step.is-active .progress-marker::before {
   background-color: var(--color-orange);
-  background:linear-gradient(to right, var(--color-gold), var(--color-orange));
+  /* background:linear-gradient(to right, var(--color-gold), var(--color-orange)); */
 }
 
 .webform-progress-tracker .progress-step.is-complete .progress-marker::before {
   background-color: var(--color-gold);
+  background-color: var(--color-orange);
 }
 
 .webform-progress-tracker.progress-step:not(.is-active) .progress-marker::before,
@@ -567,7 +568,7 @@ footer {
       margin-right: auto;
       width: 3em;
       height: 3em;
-      background: var(--random-icon, url("../images/icon-01.svg")) no-repeat center center;
+      background: var(--random-icon, url("../images/icon-00.svg")) no-repeat center center;
       background-size: cover;
       margin-bottom: -0.25em;
     }
@@ -609,6 +610,43 @@ footer {
 
 #block-tbring-page-title {
   margin-bottom: 1.5em;
+}
+
+/* Report-specific icons for page titles */
+.path-analysis-industry-insights #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-01.svg");
+}
+
+.path-analysis-role-impact #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-02.svg");
+}
+
+.path-analysis-skills #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-03.svg");
+}
+
+.path-analysis-task-recommendations #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-04.svg");
+}
+
+.path-analysis-career-transitions #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-06.svg");
+}
+
+.path-analysis-learning-resources #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-05.svg");
+}
+
+.path-analysis-breakthrough-strategies #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-09.svg");
+}
+
+.path-analysis-concerns-navigator #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-07.svg");
+}
+
+.path-analysis-summary #block-tbring-page-title h1::before {
+  background-image: url("../images/icon-08.svg");
 }
 
 #block-tbring-logo {

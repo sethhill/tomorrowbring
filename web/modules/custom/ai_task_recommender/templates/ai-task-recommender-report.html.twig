@@ -16,6 +16,13 @@
 		} %}
 	{% else %}
 
+		{# Report header with image #}
+		{% if report_image_url %}
+			<div class="report-header">
+				<img src="{{ report_image_url }}" alt="{{ 'Task Recommendations'|t }}" class="report-header__image">
+			</div>
+		{% endif %}
+
 		{# Pending state - shown while report is being generated #}
 		{% if report.status == 'pending' %}
 			{% include '/report-pending.html.twig' with {

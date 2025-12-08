@@ -5,6 +5,8 @@ ai_breakthrough_strategies.report:
     _title: 'Strategies for Change'
   requirements:
     _user_is_logged_in: 'TRUE'
+  options:
+    _menu_parent: 'client_dashboard.reports_menu'
 
 ai_breakthrough_strategies.regenerate:
   path: '/analysis/breakthrough-strategies/regenerate'

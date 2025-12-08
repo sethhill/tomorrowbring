@@ -5,6 +5,8 @@ ai_role_impact.report:
     _title: 'Evolution of Your Role'
   requirements:
     _user_is_logged_in: 'TRUE'
+  options:
+    _menu_parent: 'client_dashboard.reports_menu'
 
 ai_role_impact.regenerate:
   path: '/analysis/role-impact/regenerate'

@@ -5,6 +5,8 @@ ai_summary.report:
     _title: 'Continuing Onward'
   requirements:
     _user_is_logged_in: 'TRUE'
+  options:
+    _menu_parent: 'client_dashboard.reports_menu'
 
 ai_summary.regenerate:
   path: '/analysis/summary/regenerate'

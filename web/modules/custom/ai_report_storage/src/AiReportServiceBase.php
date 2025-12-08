@@ -386,15 +386,19 @@ abstract class AiReportServiceBase {
         $system_prompt = $config->get('system_prompt') ?? 'You are an expert career analyst. Provide realistic, actionable career guidance based on AI displacement research. Always respond with valid JSON matching the exact structure requested. Be concise and specific - quality over quantity.';
         $max_tokens = $config->get('max_tokens') ?? 8096;
 
+        // Get the configured timeout from ai_report_storage config or use default.
+        $configured_timeout = $config->get('timeout') ?? 600;
+
         // Build ChatInput with messages array.
         $messages = [new ChatMessage('user', $prompt)];
         $chat_input = new ChatInput($messages);
         $chat_input->setSystemPrompt($system_prompt);
 
-        // Configure provider for streaming.
+        // Configure provider with timeout and other settings.
         $provider->setConfiguration([
           'max_tokens' => $max_tokens,
           'temperature' => 0.7,
+          'timeout' => $configured_timeout,
         ]);
 
         $timing['checkpoints']['provider_configured'] = microtime(TRUE) - $timing['start'];
@@ -405,13 +409,15 @@ abstract class AiReportServiceBase {
             'elapsed_ms' => round((microtime(TRUE) - $timing['start']) * 1000, 2),
             'model' => $model_id,
             'provider_model' => $provider_model,
+            'timeout_configured' => $configured_timeout,
           ]);
         }
 
         // Make the API call with streaming through Drupal AI.
+        // Pass timeout in the options array for the provider to use.
         $response = $provider->chat($chat_input, $model_id, [
           'report_type' => $this->getReportType(),
-          'timeout' => $timeout,
+          'timeout' => $configured_timeout,
           'stream' => TRUE,
         ]);
 

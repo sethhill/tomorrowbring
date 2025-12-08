@@ -199,22 +199,4 @@ interface AiReportInterface extends ContentEntityInterface, EntityOwnerInterface
    */
   public function isViewed();
 
-  /**
-   * Gets the report image media entity.
-   *
-   * @return \Drupal\media\MediaInterface|null
-   *   The media entity or NULL if none set.
-   */
-  public function getReportImage();
-
-  /**
-   * Sets the report image media entity.
-   *
-   * @param \Drupal\media\MediaInterface|int|null $media
-   *   The media entity or media ID, or NULL to clear.
-   *
-   * @return $this
-   */
-  public function setReportImage($media);
-
 }

@@ -208,24 +208,6 @@ class AiReport extends ContentEntityBase implements AiReportInterface {
   /**
    * {@inheritdoc}
    */
-  public function getReportImage() {
-    if ($this->get('report_image')->isEmpty()) {
-      return NULL;
-    }
-    return $this->get('report_image')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setReportImage($media) {
-    $this->set('report_image', $media);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
@@ -284,34 +266,6 @@ class AiReport extends ContentEntityBase implements AiReportInterface {
     $fields['viewed_at'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Viewed at'))
       ->setDescription(t('The time when the report was first viewed by the user.'))
-      ->setRequired(FALSE);
-
-    $fields['report_image'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Report Image'))
-      ->setDescription(t('Optional image to display with this report.'))
-      ->setSetting('target_type', 'media')
-      ->setSetting('handler', 'default:media')
-      ->setSetting('handler_settings', [
-        'target_bundles' => ['image' => 'image'],
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'media_library_widget',
-        'weight' => 10,
-        'settings' => [
-          'media_types' => ['image'],
-        ],
-      ])
-      ->setDisplayOptions('view', [
-        'type' => 'entity_reference_entity_view',
-        'weight' => 0,
-        'label' => 'hidden',
-        'settings' => [
-          'view_mode' => 'default',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setCardinality(1)
       ->setRequired(FALSE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')

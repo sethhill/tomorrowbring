@@ -1,3 +1,15 @@
+client_dashboard.home:
+  title: 'Home'
+  route_name: client_dashboard.dashboard
+  menu_name: main
+  weight: -50
+
+client_dashboard.reports_menu:
+  title: 'Reports'
+  route_name: client_dashboard.reports
+  menu_name: main
+  weight: -49
+
 client_dashboard.settings:
   title: 'Client Dashboard Settings'
   description: 'Configure automatic report processing and other Client Dashboard settings.'

@@ -358,6 +358,16 @@ $settings['update_free_access'] = FALSE;
 $settings['http_client_config']['timeout'] = 600;
 $settings['http_client_config']['connect_timeout'] = 600;
 
+// Add cURL-specific options to ensure timeouts are properly applied.
+// CURLOPT_TIMEOUT sets the maximum time for the entire request.
+// CURLOPT_CONNECTTIMEOUT sets the maximum time for connection phase.
+$settings['http_client_config']['curl'] = [
+  CURLOPT_TIMEOUT => 600,
+  CURLOPT_CONNECTTIMEOUT => 600,
+  CURLOPT_TIMEOUT_MS => 600000,  // 600 seconds in milliseconds
+  CURLOPT_CONNECTTIMEOUT_MS => 600000,
+];
+
 /**
  * PHP default socket timeout for AI API calls.
  *
@@ -365,6 +375,9 @@ $settings['http_client_config']['connect_timeout'] = 600;
  * This affects cURL operations system-wide.
  */
 ini_set('default_socket_timeout', '600');
+
+// Also set the cURL-specific timeout at the PHP level.
+ini_set('curl.timeout', '600');
 
 /**
  * Additional timeout settings for troubleshooting AI API calls.

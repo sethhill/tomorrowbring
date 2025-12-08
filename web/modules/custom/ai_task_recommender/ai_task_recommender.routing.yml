@@ -5,6 +5,8 @@ ai_task_recommender.report:
     _title: 'Automating Tasks'
   requirements:
     _user_is_logged_in: 'TRUE'
+  options:
+    _menu_parent: 'client_dashboard.reports_menu'
 
 ai_task_recommender.regenerate:
   path: '/analysis/task-recommendations/regenerate'

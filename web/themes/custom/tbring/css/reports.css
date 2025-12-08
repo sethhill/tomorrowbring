@@ -5,6 +5,13 @@
   border-bottom: 2px solid #e0e0e0;
 }
 
+.report-header__image {
+  max-width: 200px;
+  height: auto;
+  margin: 0 auto 1.5rem;
+  display: block;
+}
+
 .report-header h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
@@ -228,7 +235,7 @@
 
 /* Risk Section */
 .risk-header {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   gap: 3em;
   padding: 0 1.5em;
@@ -1092,7 +1099,7 @@ h3 + .timeline-period {
   flex: 0 0 2em;
   text-align: center;
   font-size: 3rem;
-  margin-top: 0.5em;
+  align-self: center;
   color: var(--color-pink);
 }
 

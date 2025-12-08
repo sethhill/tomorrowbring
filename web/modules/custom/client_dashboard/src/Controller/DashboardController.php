@@ -158,6 +158,91 @@ class DashboardController extends ControllerBase {
   }
 
   /**
+   * Displays the reports page.
+   *
+   * @return array
+   *   A render array.
+   */
+  public function reports() {
+    $current_user = $this->currentUser();
+
+    // Get the user's client.
+    $client = $this->clientManager->getCurrentUserClient();
+
+    if (!$client) {
+      return [
+        '#markup' => $this->t('You have not been assigned to a client. Please contact an administrator.'),
+      ];
+    }
+
+    // Get enabled Module nodes for this client.
+    $enabled_module_nids = $this->clientManager->getEnabledModules();
+
+    if (empty($enabled_module_nids)) {
+      return [
+        '#markup' => $this->t('No modules have been assigned to your client yet.'),
+      ];
+    }
+
+    // Load Module nodes to calculate progress.
+    $module_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($enabled_module_nids);
+
+    // Calculate completion.
+    $total = (int) count($module_nodes);
+    $completed = 0;
+
+    foreach ($module_nodes as $node) {
+      // Get the webform associated with this module.
+      $webform_id = NULL;
+      if ($node->hasField('field_form') && !$node->get('field_form')->isEmpty()) {
+        $webform_id = $node->get('field_form')->target_id;
+      }
+
+      // Check if user has completed this module.
+      if ($webform_id) {
+        $submission_id = $this->getModuleSubmission($webform_id, $current_user->id());
+        if ($submission_id) {
+          $submission = $this->entityTypeManager->getStorage('webform_submission')->load($submission_id);
+          if ($submission && $submission->get('completed')->value > 0) {
+            $completed++;
+          }
+        }
+      }
+    }
+
+    // Check if all modules are completed.
+    $all_modules_completed = ($total > 0 && (int) $completed === (int) $total);
+
+    // Get report statuses for all available report types.
+    $report_statuses = $this->getReportStatuses($current_user->id());
+
+    // Add the summary report ("Your Journey") as the last item.
+    $summary_status = $this->getSummaryReportStatus($current_user->id(), $all_modules_completed, $report_statuses);
+    if ($summary_status) {
+      $report_statuses['summary'] = $summary_status;
+    }
+
+    return [
+      '#theme' => 'client_dashboard_reports',
+      '#client_name' => $client->getTitle(),
+      '#report_statuses' => $report_statuses,
+      '#attached' => [
+        'library' => [
+          'client_dashboard/dashboard',
+        ],
+      ],
+      '#cache' => [
+        'contexts' => ['user'],
+        'tags' => [
+          'webform_submission_list',
+          'ai_report_list',
+          "ai_report_list:user:{$current_user->id()}",
+        ],
+      ],
+    ];
+  }
+
+  /**
    * Displays the member dashboard.
    *
    * @return array
@@ -426,22 +511,26 @@ class DashboardController extends ControllerBase {
    *   The image URL or NULL.
    */
   protected function getReportTypeImageUrl($type) {
-    $config = \Drupal::config('ai_report_storage.type_images');
-    $media_id = $config->get("types.{$type}.media_id");
+    // Get the active theme path.
+    $theme_path = \Drupal::service('extension.list.theme')->getPath('tbring');
+    $json_file = DRUPAL_ROOT . '/' . $theme_path . '/config/report-images.json';
 
-    if (!$media_id) {
+    // Check if JSON file exists.
+    if (!file_exists($json_file)) {
       return NULL;
     }
 
-    $media = $this->entityTypeManager->getStorage('media')->load($media_id);
-    if (!$media || !$media->hasField('field_media_image') || $media->get('field_media_image')->isEmpty()) {
+    // Read and decode JSON.
+    $json_content = file_get_contents($json_file);
+    $image_map = json_decode($json_content, TRUE);
+
+    // Check if this report type has an image configured.
+    if (!isset($image_map[$type])) {
       return NULL;
     }
 
-    $file_uri = $media->get('field_media_image')->entity->getFileUri();
-    $image_style = \Drupal\image\Entity\ImageStyle::load('medium');
-
-    return $image_style ? $image_style->buildUrl($file_uri) : NULL;
+    // Return the full URL to the image.
+    return '/' . $theme_path . '/' . $image_map[$type];
   }
 
   /**
@@ -586,6 +675,7 @@ class DashboardController extends ControllerBase {
         'description' => $this->t('A comprehensive summary of all your reports and next steps'),
         'url' => '#',
         'viewed' => FALSE,
+        'image_url' => $this->getReportTypeImageUrl('summary'),
       ];
     }
 
@@ -599,6 +689,7 @@ class DashboardController extends ControllerBase {
         'url' => '#',
         'queued_at' => $pending->getGeneratedAt(),
         'viewed' => FALSE,
+        'image_url' => $this->getReportTypeImageUrl('summary'),
       ];
     }
 
@@ -623,6 +714,7 @@ class DashboardController extends ControllerBase {
         'url' => '/analysis/summary',
         'generated_at' => $report['generated_at'] ?? NULL,
         'viewed' => $viewed,
+        'image_url' => $this->getReportTypeImageUrl('summary'),
       ];
     }
 
@@ -634,6 +726,7 @@ class DashboardController extends ControllerBase {
         'description' => $this->t('A comprehensive summary of all your reports and next steps'),
         'url' => '/analysis/summary',
         'viewed' => FALSE,
+        'image_url' => $this->getReportTypeImageUrl('summary'),
       ];
     }
 
@@ -644,6 +737,7 @@ class DashboardController extends ControllerBase {
       'description' => $this->t('A comprehensive summary of all your reports and next steps'),
       'url' => '#',
       'viewed' => FALSE,
+      'image_url' => $this->getReportTypeImageUrl('summary'),
     ];
   }
 

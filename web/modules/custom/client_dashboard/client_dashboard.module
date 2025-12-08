@@ -25,6 +25,12 @@ function client_dashboard_theme($existing, $type, $theme, $path) {
         'report_statuses' => [],
       ],
     ],
+    'client_dashboard_reports' => [
+      'variables' => [
+        'client_name' => NULL,
+        'report_statuses' => [],
+      ],
+    ],
   ];
 }
 

@@ -19,6 +19,13 @@
 		} %}
 	{% else %}
 
+		{# Report header with image #}
+		{% if report_image_url %}
+			<div class="report-header">
+				<img src="{{ report_image_url }}" alt="{{ 'Skills Analysis'|t }}" class="report-header__image">
+			</div>
+		{% endif %}
+
 		{# Skill Trajectory Section #}
 		{% if report.skill_trajectory %}
 			<section class="report-section skill-trajectory">

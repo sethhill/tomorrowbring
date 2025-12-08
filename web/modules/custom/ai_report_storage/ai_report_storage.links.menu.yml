@@ -4,10 +4,3 @@ ai_report_storage.settings:
   route_name: ai_report_storage.settings
   parent: system.admin_config_system
   weight: 10
-
-ai_report_storage.type_images:
-  title: 'Report Type Images'
-  description: 'Configure default images for each report type'
-  route_name: ai_report_storage.type_images
-  parent: system.admin_config_system
-  weight: 11

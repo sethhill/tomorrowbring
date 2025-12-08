@@ -11,7 +11,30 @@ declare(strict_types=1);
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
 function tbring_preprocess_html(array &$variables): void {
+  // Add path-based body classes.
+  $current_path = \Drupal::service('path.current')->getPath();
 
+  // Get the path alias if one exists.
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+
+  // Use the alias for generating classes, fall back to current path.
+  $path_to_use = $alias !== $current_path ? $alias : $current_path;
+
+  // Remove leading slash and convert to class format.
+  $path_to_use = ltrim($path_to_use, '/');
+
+  if (!empty($path_to_use)) {
+    // Split path into segments.
+    $path_segments = explode('/', $path_to_use);
+
+    // Add cumulative path classes (e.g., "path-analysis" and "path-analysis-industry-insights").
+    $cumulative_path = '';
+    foreach ($path_segments as $segment) {
+      $segment = str_replace('_', '-', $segment);
+      $cumulative_path .= ($cumulative_path ? '-' : '') . $segment;
+      $variables['attributes']['class'][] = 'path-' . $cumulative_path;
+    }
+  }
 }
 
 /**
@@ -60,4 +83,61 @@ function tbring_preprocess_block(array &$variables): void {
 function tbring_preprocess_region(array &$variables): void {
   $variables['attributes']['class'][] = 'region--id-';
   $variables['attributes']['class'][] = 'region--label-';
+}
+
+/**
+ * Helper function to get report image URL from JSON config.
+ *
+ * @param string $report_type
+ *   The report type machine name.
+ *
+ * @return string|null
+ *   The image URL or NULL if not found.
+ */
+function tbring_get_report_image_url(string $report_type): ?string {
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('tbring');
+  $json_file = DRUPAL_ROOT . '/' . $theme_path . '/config/report-images.json';
+
+  if (!file_exists($json_file)) {
+    return NULL;
+  }
+
+  $json_content = file_get_contents($json_file);
+  $image_map = json_decode($json_content, TRUE);
+
+  if (!isset($image_map[$report_type])) {
+    return NULL;
+  }
+
+  return '/' . $theme_path . '/' . $image_map[$report_type];
+}
+
+/**
+ * Implements template_preprocess_HOOK() for all AI report templates.
+ */
+function tbring_preprocess(array &$variables, string $hook): void {
+  // Check if this is an AI report template.
+  $report_hooks = [
+    'ai_industry_insights_report',
+    'ai_role_impact_report',
+    'ai_skills_analysis_report',
+    'ai_task_recommendations_report',
+    'ai_career_transitions_report',
+    'ai_learning_resources_report',
+    'ai_breakthrough_strategies_report',
+    'ai_concerns_navigator_report',
+    'ai_summary_report',
+  ];
+
+  if (in_array($hook, $report_hooks)) {
+    // Extract report type from hook name.
+    $report_type = str_replace(['_report', 'ai_'], '', $hook);
+
+    // Get the image URL for this report type.
+    $image_url = tbring_get_report_image_url($report_type);
+
+    // Add to template variables.
+    $variables['report_image_url'] = $image_url;
+    $variables['report_type'] = $report_type;
+  }
 }
