@@ -19,6 +19,8 @@ module:
   brevo_mailer: 0
   client_dashboard: 0
   client_webform: 0
+  config: 0
+  config_ignore: 0
   dblog: 0
   dynamic_page_cache: 0
   entity: 0
