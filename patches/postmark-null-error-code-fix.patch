@@ -1,0 +1,20 @@
+--- a/src/PostmarkHandler.php
++++ b/src/PostmarkHandler.php
+@@ -118,7 +118,7 @@ class PostmarkHandler {
+         [
+           '%from' => $sender_signature,
+           '%to' => $params['to'],
+-          '@code' => $e->postmarkApiErrorCode,
++          '@code' => $e->postmarkApiErrorCode ?? 'N/A',
+           '@message' => $e->message,
+         ]
+       );
+@@ -131,7 +131,7 @@ class PostmarkHandler {
+         [
+           '%from' => $sender_signature,
+           '%to' => $params['to'],
+-          '@code' => $e->getCode(),
++          '@code' => $e->getCode() ?: 'N/A',
+           '@message' => $e->getMessage(),
+         ]
+       );

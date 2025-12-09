@@ -17,6 +17,7 @@
     "require": {
         "anthropic-ai/sdk": "^0.1.0",
         "composer/installers": "^2.3",
+        "cweagans/composer-patches": "^2.0",
         "drupal/ai": "^1.2",
         "drupal/ai_provider_anthropic": "^1.2",
         "drupal/core-composer-scaffold": "^11.2",
@@ -50,7 +51,8 @@
             "phpstan/extension-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "php-http/discovery": true,
-            "php-tuf/composer-integration": true
+            "php-tuf/composer-integration": true,
+            "cweagans/composer-patches": true
         },
         "sort-packages": true
     },
@@ -99,7 +101,7 @@
             ],
             "post-create-project-cmd-message": [
                 "<bg=blue;fg=white>                                                         </>",
-                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
+                "<bg=blue;fg=white>  Congratulations, you've installed the Drupal codebase  </>",
                 "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
                 "<bg=blue;fg=white>                                                         </>",
                 "",
@@ -112,6 +114,11 @@
                 "  * Remove the plugin that prints this message:",
                 "      composer remove drupal/core-project-message"
             ]
+        },
+        "patches": {
+            "drupal/postmark": {
+                "Fix null error code causing TypeError in watchdog": "patches/postmark-null-error-code-fix.patch"
+            }
         }
     }
 }
