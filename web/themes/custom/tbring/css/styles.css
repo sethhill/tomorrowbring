@@ -789,6 +789,11 @@ input[type="submit"].webform-button--next {
   background-repeat: no-repeat;
   background-position: right 0.75em center;
   background-size: 1.5em 1.5em;
+  appearance: none;
+
+  &:hover {
+    background-position: right 0.625em center;
+  }
 }
 
 .button--return,
@@ -798,6 +803,10 @@ input[type="submit"].webform-button--previous {
   background-repeat: no-repeat;
   background-position: left 0.75em center;
   background-size: 1.5em 1.5em;
+
+  &:hover {
+    background-position: left 0.625em center;
+  }
 }
 
 h2 {

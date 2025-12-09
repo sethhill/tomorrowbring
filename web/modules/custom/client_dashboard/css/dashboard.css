@@ -277,48 +277,9 @@
   color: #2563eb;
 }
 
-/* Badge for new/unviewed reports */
-.badge {
-  display: inline-block;
-  padding: 0.25em 0.6em;
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  border-radius: 0.375rem;
-  margin-left: 0.5rem;
-}
+/* Badge styles removed - no longer displaying "New" indicator */
 
-.badge-new {
-  background: linear-gradient(135deg, var(--color-gold), var(--color-orange));
-  color: white;
-  animation: pulse-badge 2s ease-in-out infinite;
-}
-
-@keyframes pulse-badge {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.05);
-  }
-}
-
-/* Styling for unviewed reports */
-.report-unviewed {
-  border: 2px solid var(--color-orange);
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
-}
-
-.report-unviewed h3 {
-  color: var(--color-deep-green);
-  font-weight: 700;
-}
+/* Styling for unviewed reports removed - tracking continues but no visual indicator */
 
 /* Results list styling */
 .results-list {
@@ -340,6 +301,11 @@
   counter-increment: results-counter;
   transition: all 0.2s ease;
   overflow: hidden;
+}
+
+.results-list__item:not(:has(.results-list__content--disabled)):hover {
+
+  transform: translateY(-0.25em);
 }
 
 .results-list__item::before {
@@ -394,8 +360,27 @@
 }
 
 .results-list__content--disabled {
-  opacity: 0.7;
+  opacity: 0.85;
   cursor: not-allowed;
+}
+
+/* Disabled report styling */
+.results-list__item.report-status-disabled {
+  opacity: 0.85;
+  filter: grayscale(100%);
+}
+
+.results-list__item.report-status-disabled::before {
+  color: var(--color-gray-medium);
+  background: var(--color-white);
+}
+
+.results-list__item.report-status-disabled .results-list__image {
+  opacity: 0.5;
+}
+
+.results-list__item.report-status-disabled h3 {
+  color: var(--color-gray-medium);
 }
 
 .results-list__content h3 {
@@ -425,20 +410,7 @@
   color: var(--color-gray-medium);
 }
 
-/* Adjust unviewed styling for list items */
-.results-list__item.report-unviewed {
-  border: 2px solid var(--color-orange);
-  box-shadow: 0 0 0 3px rgba(255, 138, 0, 0.1);
-}
-
-.results-list__item.report-unviewed h3 {
-  color: var(--color-deep-green);
-  font-weight: 700;
-}
-
-.results-list__item.report-unviewed::before {
-  color: var(--color-deep-green);
-}
+/* Unviewed styling removed - tracking continues but no visual indicator */
 
 @media (max-width: 768px) {
   .dashboard-title {

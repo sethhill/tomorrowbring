@@ -20,11 +20,11 @@ elements: |-
       '#type': radios
       '#title': 'How would you rate your current skill level with AI tools?'
       '#options':
-        never_used: 'Never used them / Complete beginner'
-        beginner: 'Beginner - I’ve tried them a few times'
-        intermediate: 'Intermediate - I use them regularly'
-        advanced: 'Advanced - I’m comfortable and creative with them'
         expert: 'Expert - I could train others'
+        advanced: 'Advanced - I’m comfortable and creative with them'
+        intermediate: 'Intermediate - I use them regularly'
+        beginner: 'Beginner - I’ve tried them a few times'
+        never_used: 'Never used them / Complete beginner'
       '#required': true
   2:
     '#type': webform_wizard_page
@@ -93,10 +93,10 @@ elements: |-
       '#type': radios
       '#title': 'Realistically, how much time per week can you dedicate to learning AI tools?'
       '#options':
-        less_1: 'Less than 1 hour'
-        range_1_2: '1–2 hours'
-        range_3_5: '3–5 hours'
         more_5: '5+ hours'
+        range_3_5: '3–5 hours'
+        range_1_2: '1–2 hours'
+        less_1: 'Less than 1 hour'
         no_time: 'Honestly, no time right now'
       '#required': true
   6:

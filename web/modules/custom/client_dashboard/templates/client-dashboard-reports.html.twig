@@ -23,7 +23,7 @@
 			<ol class="analysis-reports results-list">
 				{% for type, report_info in report_statuses %}
 					<li class="results-list__item report-{{ type }} report-status-{{ report_info.status }} {% if report_info.status == 'ready' and not report_info.viewed %}report-unviewed{% endif %}">
-						{% if report_info.status == 'pending' %}
+						{% if report_info.status == 'disabled' %}
 							{% if report_info.image_url %}
 								<div class="results-list__image">
 									<img src="{{ report_info.image_url }}" alt="{{ report_info.title }}">
@@ -36,7 +36,22 @@
 									{{ report_info.title }}
 								</h3>
 								<p>{{ report_info.description }}</p>
-								<span class="results-list__status-text">{{ 'Report Generating...'|t }}</span>
+								<span class="results-list__status-text">{{ 'Complete more profile sections to unlock this report'|t }}</span>
+							</div>
+						{% elseif report_info.status == 'pending' %}
+							{% if report_info.image_url %}
+								<div class="results-list__image">
+									<img src="{{ report_info.image_url }}" alt="{{ report_info.title }}">
+								</div>
+							{% else %}
+								<div class="results-list__image"></div>
+							{% endif %}
+							<div class="results-list__content results-list__content--disabled">
+								<h3>
+									{{ report_info.title }}
+								</h3>
+								<p>{{ report_info.description }}</p>
+								<span class="results-list__status-text">{{ 'Report is being generated, please be patient...'|t }}</span>
 							</div>
 						{% elseif report_info.status == 'locked' %}
 							{% if report_info.image_url %}
@@ -82,9 +97,6 @@
 								<div class="results-list__content">
 									<h3>
 										{{ report_info.title }}
-										{% if report_info.status == 'ready' and not report_info.viewed %}
-											<span class="badge badge-new">{{ 'New'|t }}</span>
-										{% endif %}
 									</h3>
 									<p>{{ report_info.description }}</p>
 								</div>

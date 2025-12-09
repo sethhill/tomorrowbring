@@ -422,13 +422,13 @@ class DashboardController extends ControllerBase {
       'breakthrough_strategies' => [
         'service_id' => 'ai_breakthrough_strategies.service',
         'title' => $this->t('Strategies for Change'),
-        'description' => $this->t('Based on your completed assessments, we have generated personalized strategies to help you overcome barriers and build confidence with AI adoption.'),
+        'description' => $this->t('Strategies to help you overcome barriers and build confidence with AI adoption'),
         'url' => '/analysis/breakthrough-strategies',
       ],
       'concerns_navigator' => [
         'service_id' => 'ai_concerns_navigator.service',
         'title' => $this->t('Navigating Your Concerns'),
-        'description' => $this->t('Based on your completed assessments, we have generated a personalized guide to address your concerns about AI and provide balanced perspectives.'),
+        'description' => $this->t('A personalized guide to address your concerns about AI and provide balanced perspectives'),
         'url' => '/analysis/concerns-navigator',
       ],
     ];
@@ -443,8 +443,16 @@ class DashboardController extends ControllerBase {
       // Check if the service has minimum data
       $has_minimum_data = $service->hasMinimumData($uid);
 
-      // If no minimum data, skip this report type entirely
+      // If no minimum data, show as disabled
       if (!$has_minimum_data) {
+        $statuses[$type] = [
+          'status' => 'disabled',
+          'title' => $info['title'],
+          'description' => $info['description'],
+          'url' => '#',
+          'viewed' => FALSE,
+          'image_url' => $this->getReportTypeImageUrl($type),
+        ];
         continue;
       }
 
@@ -667,10 +675,13 @@ class DashboardController extends ControllerBase {
 
     $summaryService = \Drupal::service('ai_summary.service');
 
-    // If modules aren't completed, show as disabled/locked
-    if (!$all_modules_completed) {
+    // Check if the service has minimum data (just like other reports)
+    $has_minimum_data = $summaryService->hasMinimumData($uid);
+
+    // If no minimum data, show as disabled
+    if (!$has_minimum_data) {
       return [
-        'status' => 'locked',
+        'status' => 'disabled',
         'title' => $this->t('Continuing Onward'),
         'description' => $this->t('A comprehensive summary of all your reports and next steps'),
         'url' => '#',
@@ -718,24 +729,12 @@ class DashboardController extends ControllerBase {
       ];
     }
 
-    // If all other reports are viewed, show as available to generate
-    if ($this->allReportsViewed($report_statuses)) {
-      return [
-        'status' => 'available',
-        'title' => $this->t('Continuing Onward'),
-        'description' => $this->t('A comprehensive summary of all your reports and next steps'),
-        'url' => '/analysis/summary',
-        'viewed' => FALSE,
-        'image_url' => $this->getReportTypeImageUrl('summary'),
-      ];
-    }
-
-    // Otherwise, show as locked (waiting for other reports to be viewed)
+    // Otherwise, show as not generated (available to generate)
     return [
-      'status' => 'locked',
+      'status' => 'not_generated',
       'title' => $this->t('Continuing Onward'),
       'description' => $this->t('A comprehensive summary of all your reports and next steps'),
-      'url' => '#',
+      'url' => '/analysis/summary',
       'viewed' => FALSE,
       'image_url' => $this->getReportTypeImageUrl('summary'),
     ];
