@@ -1,0 +1,11 @@
+_core:
+  default_config_hash: IhwTepsVwtbtbcT5GzQKhCXDCRvbk3MNkWqPiuiZ10s
+theme: current
+defaults:
+  sender: mailjet_mail
+  formatter: php_mail
+modules:
+  mailgun:
+    d57b570a1c5dfe321c7fa67dad01a0d2-04af4ed8-bbbccac5:
+      sender: mailgun_mail
+      formatter: mailgun_mail

@@ -26,6 +26,8 @@
         "drupal/gin": "^5.0",
         "drupal/gin_login": "^2.1",
         "drupal/login_destination": "^2.0@beta",
+        "drupal/mailjet": "4.0.x-dev@dev",
+        "drupal/mailsystem": "^4.5",
         "drupal/pathauto": "^1.14",
         "drupal/profile": "^1.13",
         "drupal/range_slider": "^3.0@alpha",
