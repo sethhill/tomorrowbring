@@ -921,7 +921,7 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # $settings['migrate_file_private_path'] = '';
 
 // Get the settings file outside the webroot.
-$settings_file = __DIR__ . '/../../../keys/secrets.php';
+$settings_file = __DIR__ . '/../../../settings.tbring.php';
 if (file_exists($settings_file)) {
   include $settings_file;
 }
