@@ -1,0 +1,17 @@
+{
+    "_hash": "72914c36df6bd8fce85e0110808de4de8a38acbff32ae6880ad1f67840a7cc0c",
+    "patches": {
+        "drupal/postmark": [
+            {
+                "package": "drupal/postmark",
+                "description": "Fix null error code causing TypeError in watchdog",
+                "url": "patches/postmark-null-error-code-fix.patch",
+                "sha256": "c17c62ac7ac42e3dcc20df2e6eddb71f8e21989a0b4d01403a2448a22acdcd61",
+                "depth": 1,
+                "extra": {
+                    "provenance": "root"
+                }
+            }
+        ]
+    }
+}
