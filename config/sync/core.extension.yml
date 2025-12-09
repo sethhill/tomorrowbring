@@ -39,6 +39,7 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
+  postmark: 0
   profile: 0
   range_slider: 0
   svg_image: 0

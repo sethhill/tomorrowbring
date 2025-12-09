@@ -29,6 +29,7 @@
         "drupal/mailjet": "4.0.x-dev@dev",
         "drupal/mailsystem": "^4.5",
         "drupal/pathauto": "^1.14",
+        "drupal/postmark": "^1.4",
         "drupal/profile": "^1.13",
         "drupal/range_slider": "^3.0@alpha",
         "drupal/svg_image": "^3.2",
