@@ -48,6 +48,7 @@
   --color-green-light: rgba(163, 167, 72, 0.1);
   --color-green-dark: #62642b;
   --color-green-dark: #53642b;
+  --color-green-dark: #607a22;
   --color-gold-light: rgba(244, 161, 39, 0.1);
   --color-gray-medium: #666;
   --color-gray-medium-light: #ccc;
@@ -383,11 +384,11 @@ label {
   content: "";
   width: 100%;
   border-radius: 0;
-  height: 9px;
+  height: 1.75em;
 }
 
 .progress-step .progress-marker::before {
-  background-color: var(--color-white);
+  background-color: var(--color-cream);
 }
 
 .progress-step.is-active .progress-marker:before {
@@ -410,12 +411,12 @@ label {
 }
 
 .progress-marker:after {
-  background-color: white;
+  background-color: var(--color-cream);
   display: none;
 }
 
 .webform-progress-tracker .progress-step .progress-marker::after {
-  background-color: var(--color-white);
+  background-color: var(--color-cream);
   background-color: transparent;
   height: 3px;
 }
@@ -433,7 +434,7 @@ label {
 .webform-progress-tracker.progress-step:not(.is-active) .progress-marker::before,
 .webform-progress-tracker .progress-step:hover .progress-marker::before,
 .webform-progress-tracker .progress-step .progress-marker::after {
-  background-color: var(--color-white);
+  background-color: var(--color-cream);
 }
 
 .webform-progress-tracker

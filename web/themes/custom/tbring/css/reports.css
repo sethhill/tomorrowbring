@@ -1145,20 +1145,7 @@ h3 + .timeline-period {
 }
 
 .report-section.report-favorable.closing-thought {
-  h3 {
-    font-size: 1.75em;
-    line-height: 1.2;
-    padding: 1em 0;
-    margin: 0;
-
-    &::before {
-      margin-top: -2.25em;
-      margin-bottom: 1em;
-    }
-  }
-
   p {
-    font-size: 1.25em;
     font-weight: 900;
   }
 }
