@@ -459,12 +459,32 @@ class DashboardController extends ControllerBase {
       // Check for existing published report
       $existing_report = $service->getExistingReport($uid);
 
-      // Check for pending report
+      // Check for pending or processing report
       $pending_report = $service->getPendingReport($uid);
 
-      if ($pending_report) {
+      // Also check for processing status
+      $report_storage = $this->entityTypeManager->getStorage('ai_report');
+      $processing_reports = $report_storage->loadByProperties([
+        'uid' => $uid,
+        'type' => $type,
+        'status' => 'processing',
+      ]);
+      $processing_report = !empty($processing_reports) ? reset($processing_reports) : NULL;
+
+      if ($processing_report) {
         $statuses[$type] = [
-          'status' => 'pending',
+          'status' => 'processing',
+          'title' => $info['title'],
+          'description' => $info['description'],
+          'url' => $info['url'],
+          'queued_at' => $processing_report->getGeneratedAt(),
+          'viewed' => FALSE,
+          'image_url' => $this->getReportTypeImageUrl($type),
+        ];
+      }
+      elseif ($pending_report) {
+        $statuses[$type] = [
+          'status' => 'queued',
           'title' => $info['title'],
           'description' => $info['description'],
           'url' => $info['url'],
@@ -690,11 +710,32 @@ class DashboardController extends ControllerBase {
       ];
     }
 
+    // Check for processing report first
+    $report_storage = $this->entityTypeManager->getStorage('ai_report');
+    $processing_reports = $report_storage->loadByProperties([
+      'uid' => $uid,
+      'type' => 'summary',
+      'status' => 'processing',
+    ]);
+    $processing = !empty($processing_reports) ? reset($processing_reports) : NULL;
+
+    if ($processing) {
+      return [
+        'status' => 'processing',
+        'title' => $this->t('Continuing Onward'),
+        'description' => $this->t('A comprehensive summary of all your reports and next steps'),
+        'url' => '#',
+        'queued_at' => $processing->getGeneratedAt(),
+        'viewed' => FALSE,
+        'image_url' => $this->getReportTypeImageUrl('summary'),
+      ];
+    }
+
     // Check for pending report
     $pending = $summaryService->getPendingReport($uid);
     if ($pending) {
       return [
-        'status' => 'pending',
+        'status' => 'queued',
         'title' => $this->t('Continuing Onward'),
         'description' => $this->t('A comprehensive summary of all your reports and next steps'),
         'url' => '#',

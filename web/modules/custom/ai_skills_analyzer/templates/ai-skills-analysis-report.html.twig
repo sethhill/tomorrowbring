@@ -159,14 +159,13 @@
 
 	{# Motivational Insights #}
 	{% if report.motivational_insights %}
-		<section class="report-section motivational-insights">
+		<section class="report-section report-favorable">
 			<h2>{{ 'Your Unique Advantages'|t }}</h2>
 
 			{% if report.motivational_insights.unique_advantages %}
-				<div class="advantages">
-					<div class="confidence-cards">
+					<div class="highlight-grid">
 						{% for advantage in report.motivational_insights.unique_advantages %}
-							<div class="confidence-card">
+							<div class="highlight-card">
 								<h3>{{ advantage.insight|default(advantage.advantage|default(advantage)) }}</h3>
 								{% if advantage.evidence %}
 									<p>{{ advantage.evidence }}</p>
@@ -174,7 +173,6 @@
 							</div>
 						{% endfor %}
 					</div>
-				</div>
 			{% endif %}
 		</section>
 	{% endif %}

@@ -85,7 +85,7 @@
 		{% endif %}
 
 		{% if report.workflow_integration and report.workflow_integration.automation_workflows %}
-			<section class="report-section workflow-integration">
+			<section class="report-section">
 				<h2>{{ 'Chaining Tools Together'|t }}</h2>
 				<div class="highlight-grid">
 					{% for workflow in report.workflow_integration.automation_workflows %}
@@ -108,7 +108,7 @@
 		{% endif %}
 
 		{% if report.overview.quick_wins %}
-			<div class="report-section quick-wins">
+			<div class="report-section report-favorable">
 				<h2>{{ 'Quick Wins'|t }}</h2>
 				<div class="confidence-cards">
 					{% for win in report.overview.quick_wins %}

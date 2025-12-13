@@ -26,8 +26,8 @@
   left: 0;
   background: conic-gradient(
     from 270deg,
-    var(--color-green) 0deg 60deg,
-    var(--color-gold) 60deg 120deg,
+    var(--color-gold) 0deg 60deg,
+    var(--color-green) 60deg 120deg,
     var(--color-pink) 120deg 180deg,
     transparent 180deg
   );

@@ -100,6 +100,10 @@ class GenerateAiReportWorker extends QueueWorkerBase implements ContainerFactory
         return;
       }
 
+      // Mark as processing so the UI can show accurate status.
+      $entity->setStatus('processing');
+      $entity->save();
+
       // Get the report service.
       $service = \Drupal::service($service_id);
       if (!$service) {

@@ -1058,17 +1058,31 @@ abstract class AiReportServiceBase {
   /**
    * Check if there is a pending report for the user.
    *
+   * This includes both 'pending' (queued) and 'processing' (actively generating) reports.
+   *
    * @param int|null $uid
    *   The user ID, or NULL for current user.
    *
    * @return \Drupal\ai_report_storage\Entity\AiReportInterface|null
-   *   The pending report entity, or NULL if none exists.
+   *   The pending or processing report entity, or NULL if none exists.
    */
   public function getPendingReport($uid = NULL) {
     if ($uid === NULL) {
       $uid = $this->currentUser->id();
     }
 
+    // Check for processing reports first (higher priority).
+    $processing_reports = $this->reportStorage->loadByProperties([
+      'uid' => $uid,
+      'type' => $this->getReportType(),
+      'status' => 'processing',
+    ]);
+
+    if (!empty($processing_reports)) {
+      return reset($processing_reports);
+    }
+
+    // Then check for pending (queued) reports.
     $pending_reports = $this->reportStorage->loadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),

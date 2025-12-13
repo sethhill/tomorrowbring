@@ -38,7 +38,7 @@
 								<p>{{ report_info.description }}</p>
 								<span class="results-list__status-text">{{ 'Complete more profile sections to unlock this report'|t }}</span>
 							</div>
-						{% elseif report_info.status == 'pending' %}
+						{% elseif report_info.status == 'queued' %}
 							{% if report_info.image_url %}
 								<div class="results-list__image">
 									<img src="{{ report_info.image_url }}" alt="{{ report_info.title }}">
@@ -51,7 +51,22 @@
 									{{ report_info.title }}
 								</h3>
 								<p>{{ report_info.description }}</p>
-								<span class="results-list__status-text">{{ 'Report is being generated, please be patient...'|t }}</span>
+								<span class="results-list__status-text">{{ 'This report is queued for generation, please wait'|t }}</span>
+							</div>
+						{% elseif report_info.status == 'processing' %}
+							{% if report_info.image_url %}
+								<div class="results-list__image">
+									<img src="{{ report_info.image_url }}" alt="{{ report_info.title }}">
+								</div>
+							{% else %}
+								<div class="results-list__image"></div>
+							{% endif %}
+							<div class="results-list__content results-list__content--disabled">
+								<h3>
+									{{ report_info.title }}
+								</h3>
+								<p>{{ report_info.description }}</p>
+								<span class="results-list__status-text">{{ 'This report is being generated, please wait'|t }}</span>
 							</div>
 						{% elseif report_info.status == 'locked' %}
 							{% if report_info.image_url %}
@@ -68,7 +83,7 @@
 								<p>{{ report_info.description }}</p>
 								<span class="results-list__status-text">{{ 'Complete all sections to unlock'|t }}</span>
 							</div>
-						{% elseif report_info.status == 'available' %}
+						{% elseif report_info.status == 'not_generated' %}
 							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Generate the {{ report_info.title }} report">
 								{% if report_info.image_url %}
 									<div class="results-list__image">
@@ -82,11 +97,30 @@
 										{{ report_info.title }}
 									</h3>
 									<p>{{ report_info.description }}</p>
-									<span class="results-list__status-text">{{ 'Click to generate'|t }}</span>
+									<span class="results-list__status-text">{{ 'Click to view your report'|t }}</span>
+								</div>
+							</a>
+						{% elseif report_info.status == 'ready' %}
+							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Read the {{ report_info.title }} report">
+								{% if report_info.image_url %}
+									<div class="results-list__image">
+										<img src="{{ report_info.image_url }}" alt="{{ report_info.title }}">
+									</div>
+								{% else %}
+									<div class="results-list__image"></div>
+								{% endif %}
+								<div class="results-list__content">
+									<h3>
+										{{ report_info.title }}
+									</h3>
+									<p>{{ report_info.description }}</p>
+									{% if not report_info.viewed %}
+										<span class="results-list__status-text">{{ 'New report ready to view'|t }}</span>
+									{% endif %}
 								</div>
 							</a>
 						{% else %}
-							<a href="{{ report_info.url }}" class="results-list__link" aria-label="Read the {{ report_info.title }} report">
+							<a href="{{ report_info.url }}" class="results-list__link" aria-label="View the {{ report_info.title }} report">
 								{% if report_info.image_url %}
 									<div class="results-list__image">
 										<img src="{{ report_info.image_url }}" alt="{{ report_info.title }}">

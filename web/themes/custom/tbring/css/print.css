@@ -1,0 +1,44 @@
+/**
+ * Print Styles
+ */
+
+html,
+body {
+  font-size: 9pt;
+}
+
+.inner {
+  max-width: none;
+}
+
+.report-lists,
+.report-cards {
+  padding: 0;
+}
+
+.report-list,
+.transition-card,
+.confidence-card,
+.action-card,
+.highlight-card {
+  page-break-inside: avoid;
+  padding: 0;
+  background: none !important;
+  margin-bottom: 1.5em;
+}
+
+.report-section {
+  page-break-before: always;
+
+  &:first-of-type {
+    page-break-before: auto;
+  }
+}
+
+.shift-from,
+.shift-to,
+.from-state .value,
+.to-state .value {
+  border: 2px solid var(--color-pink);
+  border-radius: 5em;
+}

@@ -156,7 +156,12 @@
 {% endif %}
 
 {% if report.ai_enablement_message.closing_thought %}
-	<div class="closing-thought">
-		<p>{{ report.ai_enablement_message.closing_thought }}</p>
+	<div class="report-section report-favorable closing-thought">
+	<div class="highlight-grid">
+		<div class="highlight-card">
+		<h3>{{ report.ai_enablement_message.closing_thought }}</h3>
+		<p>{{ 'Thank you for using Tomorrowbring!'|t }}</p>
+	</div>
+	</div>
 	</div>
 {% endif %}</div>

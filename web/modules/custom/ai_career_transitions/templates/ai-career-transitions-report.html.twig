@@ -104,11 +104,11 @@
 	{% endif %}
 
 	{% if report.career_confidence %}
-		<section class="report-section career-confidence">
-			<h2>{{ 'Favorable Outlooks'|t }}</h2>
-			<div class="confidence-cards">
+		<section class="report-section report-favorable">
+			<h2>{{ 'A Favorable Outlook'|t }}</h2>
+			<div class="highlight-grid">
 				{% for item in report.career_confidence %}
-					<div class="confidence-card">
+					<div class="highlight-card">
 						<h3>{{ item.insight }}</h3>
 						{% if item.evidence %}
 							<p>{{ item.evidence }}</p>

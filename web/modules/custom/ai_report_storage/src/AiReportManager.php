@@ -100,6 +100,19 @@ class AiReportManager {
   }
 
   /**
+   * Alias for getReportService() for backward compatibility.
+   *
+   * @param string $type
+   *   The report type.
+   *
+   * @return object|null
+   *   The service object, or NULL if not found.
+   */
+  public function getService(string $type) {
+    return $this->getReportService($type);
+  }
+
+  /**
    * Get all reports for a user.
    *
    * @param int|null $uid

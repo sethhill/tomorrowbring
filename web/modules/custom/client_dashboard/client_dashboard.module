@@ -35,21 +35,29 @@ function client_dashboard_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_insert() for webform_submission.
+ */
+function client_dashboard_webform_submission_insert(WebformSubmission $submission) {
+  // Only process completed submissions.
+  if ($submission->get('completed')->value > 0) {
+    $uid = $submission->getOwnerId();
+
+    // Queue any reports that are now eligible.
+    $auto_processor = \Drupal::service('client_dashboard.auto_report_processor');
+    $auto_processor->queueEligibleReports($uid);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_update() for webform_submission.
  */
 function client_dashboard_webform_submission_update(WebformSubmission $submission) {
   // Check if the submission's completed field changed to > 0.
   if ($submission->get('completed')->value > 0) {
-    // Get the user ID from the submission.
     $uid = $submission->getOwnerId();
 
-    // Get the auto report processor service.
+    // Queue any reports that are now eligible.
     $auto_processor = \Drupal::service('client_dashboard.auto_report_processor');
-
-    // Check if we should auto-process for this user.
-    if ($auto_processor->shouldAutoProcess($uid)) {
-      // Queue all enabled reports.
-      $auto_processor->queueAllReports($uid);
-    }
+    $auto_processor->queueEligibleReports($uid);
   }
 }

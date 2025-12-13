@@ -297,46 +297,129 @@ class AutoReportProcessor {
   }
 
   /**
-   * Trigger immediate queue processing.
+   * Queue only the eligible reports for a user.
    *
-   * This processes one queue item immediately to start the process.
-   * Subsequent items will be picked up either by continued processing
-   * or by cron. This avoids the user having to wait for cron to run.
+   * Unlike queueAllReports(), this checks each report individually
+   * and only queues those that have minimum data but don't exist yet.
+   * This allows incremental report generation as users complete modules.
+   *
+   * @param int $uid
+   *   The user ID.
+   *
+   * @return int
+   *   Number of reports queued.
+   */
+  public function queueEligibleReports($uid) {
+    $config = $this->configFactory->get('client_dashboard.settings');
+
+    // Check if auto-processing is enabled.
+    if (!$config->get('auto_process_enabled')) {
+      return 0;
+    }
+
+    $enabled_reports = $config->get('auto_process_reports') ?? [];
+    $queued_count = 0;
+
+    foreach ($this->reportTypes as $report_type) {
+      // Skip if this report type is not enabled.
+      if (empty($enabled_reports[$report_type])) {
+        continue;
+      }
+
+      // Get the report service.
+      $service = $this->reportManager->getService($report_type);
+      if (!$service) {
+        $this->logger->warning('Could not load service for report type: @type', [
+          '@type' => $report_type,
+        ]);
+        continue;
+      }
+
+      // Check if user has minimum required data.
+      if (!$service->hasMinimumData($uid)) {
+        continue;
+      }
+
+      // Check if report already exists or is pending.
+      $existing = $service->getExistingReport($uid, FALSE);
+      if ($existing) {
+        continue;
+      }
+
+      $pending = $service->getPendingReport($uid);
+      if ($pending) {
+        continue;
+      }
+
+      // Queue the report.
+      try {
+        $service->queueReportGeneration($uid);
+        $queued_count++;
+
+        $this->logger->info('Auto-queued @type report for user @uid after module completion', [
+          '@type' => $report_type,
+          '@uid' => $uid,
+        ]);
+      }
+      catch (\Exception $e) {
+        $this->logger->error('Failed to queue @type report for user @uid: @message', [
+          '@type' => $report_type,
+          '@uid' => $uid,
+          '@message' => $e->getMessage(),
+        ]);
+      }
+    }
+
+    if ($queued_count > 0) {
+      $this->logger->info('Auto-queued @count new reports for user @uid', [
+        '@count' => $queued_count,
+        '@uid' => $uid,
+      ]);
+
+      // Trigger async queue processing.
+      $this->triggerQueueProcessing();
+    }
+
+    return $queued_count;
+  }
+
+  /**
+   * Trigger queue processing.
+   *
+   * Process queue items immediately (up to 1 item) to provide responsive feedback.
+   * Remaining items will be processed by cron.
    */
   protected function triggerQueueProcessing() {
     try {
       $queue = $this->queueFactory->get('generate_ai_report');
       $queue_worker = $this->queueManager->createInstance('generate_ai_report');
 
-      // Process just one item immediately to kick things off.
-      // This gives the user immediate feedback that processing has started.
+      // Process just the first item immediately to show responsiveness
+      // This runs in a shutdown function to not block the user's request
       if ($item = $queue->claimItem()) {
-        try {
-          $this->logger->info('Processing first queue item immediately for user @uid', [
-            '@uid' => $item->data['uid'] ?? 'unknown',
-          ]);
+        // Register shutdown function to process after response is sent
+        drupal_register_shutdown_function(function() use ($queue, $queue_worker, $item) {
+          try {
+            $queue_worker->processItem($item->data);
+            $queue->deleteItem($item);
+            \Drupal::logger('client_dashboard')->info('Processed queue item in shutdown function');
+          }
+          catch (\Exception $e) {
+            \Drupal::logger('client_dashboard')->error('Queue processing in shutdown failed: @error', [
+              '@error' => $e->getMessage(),
+            ]);
+          }
+        });
 
-          $queue_worker->processItem($item->data);
-          $queue->deleteItem($item);
-
-          $this->logger->info('Successfully processed first queue item. Remaining: @remaining', [
-            '@remaining' => $queue->numberOfItems(),
-          ]);
-        }
-        catch (\Exception $e) {
-          // Release the item back to the queue on failure.
-          $queue->releaseItem($item);
-
-          $this->logger->error('Failed to process first queue item: @message', [
-            '@message' => $e->getMessage(),
-          ]);
-        }
+        $this->logger->info('Scheduled immediate queue processing for 1 item. Remaining: @remaining', [
+          '@remaining' => $queue->numberOfItems(),
+        ]);
       }
     }
     catch (\Exception $e) {
       // Log errors but don't fail the overall process.
       // Cron will pick up the queue items later.
-      $this->logger->warning('Failed to trigger immediate queue processing: @message', [
+      $this->logger->debug('Could not trigger queue processing (queue will process via cron): @message', [
         '@message' => $e->getMessage(),
       ]);
     }

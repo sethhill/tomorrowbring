@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "994ea03bcde577789b69d28e1ba293af",
+    "content-hash": "fe848c9b17f14f56a93b3368e4064715",
     "packages": [
         {
             "name": "anthropic-ai/sdk",
@@ -2512,72 +2512,6 @@
             }
         },
         {
-            "name": "drupal/mailjet",
-            "version": "dev-4.0.x",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/Mailjet.git",
-                "reference": "f5fdc5a4fb4507f07babe8699697ce1edf12ed91"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10 || ^11",
-                "guzzlehttp/guzzle": "^7.0",
-                "mailjet/mailjet-apiv3-php": "^1.5",
-                "phpmailer/phpmailer": "^6.0.7"
-            },
-            "require-dev": {
-                "drupal/coder": "^8.3",
-                "drupal/commerce_order": "*",
-                "drupal/message": "*",
-                "drupal/state_machine": "*",
-                "drupal/token": "*",
-                "slevomat/coding-standard": "^8.0@dev",
-                "squizlabs/php_codesniffer": "^3.9.1"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-4.0.x": "4.0.x-dev"
-                },
-                "drupal": {
-                    "version": "4.0.4+11-dev",
-                    "datestamp": "1764406722",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "abramm",
-                    "homepage": "https://www.drupal.org/user/3216035"
-                },
-                {
-                    "name": "bohart",
-                    "homepage": "https://www.drupal.org/user/289861"
-                },
-                {
-                    "name": "mailjet plugins",
-                    "homepage": "https://www.drupal.org/user/1599668"
-                },
-                {
-                    "name": "mihaskep",
-                    "homepage": "https://www.drupal.org/user/3818522"
-                }
-            ],
-            "description": "Send your emails by your Mailjet API.",
-            "homepage": "https://www.drupal.org/project/mailjet",
-            "support": {
-                "source": "https://git.drupalcode.org/project/mailjet.git",
-                "issues": "https://www.drupal.org/project/issues/mailjet"
-            }
-        },
-        {
             "name": "drupal/mailsystem",
             "version": "4.5.0",
             "source": {
@@ -2724,65 +2658,6 @@
                 "source": "https://cgit.drupalcode.org/pathauto",
                 "issues": "https://www.drupal.org/project/issues/pathauto",
                 "documentation": "https://www.drupal.org/docs/8/modules/pathauto"
-            }
-        },
-        {
-            "name": "drupal/postmark",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/postmark.git",
-                "reference": "8.x-1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/postmark-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "0986dcf35ad87af24910ca0c80b925c819618c51"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9 || ^10 || ^11",
-                "drupal/mailsystem": "*",
-                "html2text/html2text": "^4.3",
-                "wildbit/postmark-php": "^4.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1761768879",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "heylookalive",
-                    "homepage": "https://www.drupal.org/user/431193"
-                },
-                {
-                    "name": "i-trokhanenko",
-                    "homepage": "https://www.drupal.org/user/3546872"
-                },
-                {
-                    "name": "john.oltman",
-                    "homepage": "https://www.drupal.org/user/699926"
-                },
-                {
-                    "name": "luketsimmons",
-                    "homepage": "https://www.drupal.org/user/140091"
-                }
-            ],
-            "description": "Integrate the third party Postmark mail service with Drupal.",
-            "homepage": "https://www.drupal.org/project/postmark",
-            "support": {
-                "source": "https://git.drupalcode.org/project/postmark"
             }
         },
         {
@@ -4298,67 +4173,6 @@
                 }
             ],
             "time": "2023-07-12T21:21:09+00:00"
-        },
-        {
-            "name": "mailjet/mailjet-apiv3-php",
-            "version": "v1.6.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mailjet/mailjet-apiv3-php.git",
-                "reference": "c31917a8fcf5eb04363aa2af933ab560b0a934ea"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mailjet/mailjet-apiv3-php/zipball/c31917a8fcf5eb04363aa2af933ab560b0a934ea",
-                "reference": "c31917a8fcf5eb04363aa2af933ab560b0a934ea",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^7.4.4",
-                "php": "^8.1",
-                "psr/http-client": "^1.0",
-                "symfony/validator": "^6.3|^7.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.4",
-                "php-coveralls/php-coveralls": "^2.0",
-                "phpcompatibility/php-compatibility": "*",
-                "phpstan/phpstan": "^2.0",
-                "phpunit/phpunit": "^11.4.0",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Mailjet": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mailjet",
-                    "email": "dev@mailjet.com",
-                    "homepage": "https://dev.mailjet.com"
-                }
-            ],
-            "description": "PHP wrapper for the Mailjet API",
-            "homepage": "https://github.com/mailjet/mailjet-apiv3-php/",
-            "keywords": [
-                "Mailjet",
-                "api",
-                "email",
-                "php",
-                "v3"
-            ],
-            "support": {
-                "issues": "https://github.com/mailjet/mailjet-apiv3-php/issues",
-                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.6.5"
-            },
-            "time": "2025-04-19T16:48:36+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -8869,44 +8683,6 @@
             "time": "2025-05-03T07:21:55+00:00"
         },
         {
-            "name": "wildbit/postmark-php",
-            "version": "v4.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ActiveCampaign/postmark-php.git",
-                "reference": "b71efba061de7cf7e1f853d211b1c5edce4e3c5b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ActiveCampaign/postmark-php/zipball/b71efba061de7cf7e1f853d211b1c5edce4e3c5b",
-                "reference": "b71efba061de7cf7e1f853d211b1c5edce4e3c5b",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0|^7.0",
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.0.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Postmark\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "The officially supported client for Postmark (http://postmarkapp.com)",
-            "support": {
-                "issues": "https://github.com/ActiveCampaign/postmark-php/issues",
-                "source": "https://github.com/ActiveCampaign/postmark-php/tree/v4.0.5"
-            },
-            "time": "2023-02-03T15:00:17+00:00"
-        },
-        {
             "name": "yethee/tiktoken",
             "version": "0.5.1",
             "source": {
@@ -8963,7 +8739,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "drupal/login_destination": 10,
-        "drupal/mailjet": 20,
         "drupal/range_slider": 15,
         "drupal/webform": 10
     },

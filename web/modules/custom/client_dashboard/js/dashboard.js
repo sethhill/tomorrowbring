@@ -14,8 +14,8 @@
         return;
       }
 
-      // Check if there are any pending reports
-      const pendingReports = dashboard.querySelectorAll('.report-status-pending');
+      // Check if there are any queued or processing reports
+      const pendingReports = dashboard.querySelectorAll('.report-status-queued, .report-status-processing');
 
       if (pendingReports.length > 0) {
         // Poll for status updates every 10 seconds
@@ -30,7 +30,7 @@
       function checkReportStatus() {
         // Reload the page to get updated report statuses
         // In a more sophisticated implementation, we could use AJAX to fetch just the status
-        const currentPending = dashboard.querySelectorAll('.report-status-pending');
+        const currentPending = dashboard.querySelectorAll('.report-status-queued, .report-status-processing');
 
         if (currentPending.length > 0) {
           // Fetch updated status via AJAX
@@ -47,8 +47,8 @@
             const currentDashboardResults = dashboard.querySelector('.dashboard-results');
 
             if (newDashboard && currentDashboardResults) {
-              // Check if any pending reports are now ready
-              const newPending = newDashboard.querySelectorAll('.report-status-pending');
+              // Check if any queued/processing reports are now ready
+              const newPending = newDashboard.querySelectorAll('.report-status-queued, .report-status-processing');
 
               if (newPending.length < currentPending.length) {
                 // Some reports have finished - reload the page to show updated state
@@ -63,7 +63,7 @@
             console.error('Error checking report status:', error);
           });
         } else {
-          // No more pending reports, stop polling
+          // No more queued/processing reports, stop polling
           const intervalId = dashboard.dataset.pollInterval;
           if (intervalId) {
             clearInterval(parseInt(intervalId));

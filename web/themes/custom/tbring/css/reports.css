@@ -110,7 +110,7 @@
 
 .highlight-grid.columns-narrow,
 .report-columns.columns-narrow {
-    gap: 1rem;
+  gap: 1rem;
 }
 
 .report-list,
@@ -145,7 +145,6 @@
   text-align: center;
   font-size: 1.25em;
 }
-
 
 /* Current State */
 .stat-grid {
@@ -457,7 +456,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-gold-light);
+  background-color: var(--color-pink-light);
   border-radius: 2em;
 }
 
@@ -634,8 +633,6 @@ h3 + .timeline-period {
   text-align: center;
 }
 
-
-
 /* Responsive */
 @media (max-width: 768px) {
   .report-section,
@@ -764,7 +761,38 @@ h3 + .timeline-period {
       opacity: 0.6;
     }
   }
+}
 
+.report-favorable .transition-card,
+.report-favorable .confidence-card,
+.report-favorable .action-card,
+.report-favorable .highlight-card {
+  background: var(--color-green-light);
+  text-wrap: balance;
+  text-align: center;
+
+  h3 {
+    color: var(--color-green-dark);
+    text-wrap: balance;
+    text-align: center;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 2em;
+      height: 1em;
+      background: url(/themes/custom/tbring/images/icon-10.svg) no-repeat center
+        center;
+      background-size: 250%;
+      position: relative;
+      margin-top: -1.625em;
+      margin-bottom: 0.5em;
+    }
+  }
+}
+
+.mindset-shifts .highlight-card {
+  background-color: var(--color-pink-light);
 }
 
 .analysis-callout-actions {
@@ -787,8 +815,7 @@ h3 + .timeline-period {
   margin-top: 1.5em;
 }
 
-
-  /* .skill {
+/* .skill {
     padding-left: 2em;
 
     &.priority-critical:before {
@@ -1117,17 +1144,21 @@ h3 + .timeline-period {
   text-align: left;
 }
 
-.closing-thought {
-  font-size: 2em;
-  background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  display: inline-block;
-  line-height: 1.2;
-  text-wrap: balance;
-  text-align: center;
-  font-weight: 700;
-  padding: 1em 0;
+.report-section.report-favorable.closing-thought {
+  h3 {
+    font-size: 1.75em;
+    line-height: 1.2;
+    padding: 1em 0;
+    margin: 0;
+
+    &::before {
+      margin-top: -2.25em;
+      margin-bottom: 1em;
+    }
+  }
+
+  p {
+    font-size: 1.25em;
+    font-weight: 900;
+  }
 }

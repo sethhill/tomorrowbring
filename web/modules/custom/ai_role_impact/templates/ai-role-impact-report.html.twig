@@ -139,14 +139,14 @@
 		</section>
 
 		<section
-			class="report-section confidence-boosters">
+			class="report-section report-favorable">
 			{# Confidence Boosters #}
 			{% if report.ai_insights.confidence_boosters %}
 				<div class="confidence-boosters">
 					<h2>{{ 'Reasons to Be Optimistic'|t }}</h2>
-					<div class="confidence-cards">
+					<div class="highlight-grid">
 						{% for item in report.ai_insights.confidence_boosters %}
-							<div class="confidence-card">
+							<div class="highlight-card">
 								<h3>{{ item.insight|default(item.booster|default(item.reason)) }}</h3>
 								{% if item.evidence %}
 									<p>{{ item.evidence }}</p>

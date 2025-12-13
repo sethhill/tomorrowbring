@@ -45,11 +45,15 @@
   --color-white: rgb(255, 255, 255);
   --color-black: rgb(0, 0, 0);
   --color-green-light: rgb(199, 195, 126);
+  --color-green-light: rgba(163, 167, 72, 0.1);
+  --color-green-dark: #62642b;
+  --color-green-dark: #53642b;
   --color-gold-light: rgba(244, 161, 39, 0.1);
   --color-gray-medium: #666;
   --color-gray-medium-light: #ccc;
   --color-gray-light: rgb(240, 240, 240);
   --color-pink: rgb(242, 163, 155);
+  --color-pink-light: rgba(242, 163, 155, 0.1);
 
   --color-indicator-green: rgb(107, 167, 72);
   --color-indicator-green: var(--color-green);
