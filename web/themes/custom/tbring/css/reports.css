@@ -883,8 +883,8 @@ h3 + .timeline-period {
     from -90deg,
     var(--color-orange) 0%,
     var(--color-orange) calc(var(--score) * 1%),
-    var(--color-gray-light) calc(var(--score) * 1%),
-    var(--color-gray-light) 100%
+    var(--color-cream) calc(var(--score) * 1%),
+    var(--color-cream) 100%
   );
   mask: radial-gradient(
     circle,
@@ -940,8 +940,8 @@ h3 + .timeline-period {
     from -90deg,
     var(--color-orange) 0%,
     var(--color-orange) calc(var(--score) * 1%),
-    var(--color-gray-light) calc(var(--score) * 1%),
-    var(--color-gray-light) 100%
+    var(--color-cream) calc(var(--score) * 1%),
+    var(--color-cream) 100%
   );
   mask: radial-gradient(
     circle,
@@ -993,8 +993,8 @@ h3 + .timeline-period {
     from -90deg,
     var(--color-indicator-green) 0%,
     var(--color-indicator-green) calc(var(--score) * 1%),
-    var(--color-gray-light) calc(var(--score) * 1%),
-    var(--color-gray-light) 100%
+    var(--color-cream) calc(var(--score) * 1%),
+    var(--color-cream) 100%
   );
 }
 
@@ -1003,8 +1003,8 @@ h3 + .timeline-period {
     from -90deg,
     var(--color-indicator-orange) 0%,
     var(--color-indicator-orange) calc(var(--score) * 1%),
-    var(--color-gray-light) calc(var(--score) * 1%),
-    var(--color-gray-light) 100%
+    var(--color-cream) calc(var(--score) * 1%),
+    var(--color-cream) 100%
   );
 }
 
@@ -1013,8 +1013,8 @@ h3 + .timeline-period {
     from -90deg,
     var(--color-indicator-red) 0%,
     var(--color-indicator-red) calc(var(--score) * 1%),
-    var(--color-gray-light) calc(var(--score) * 1%),
-    var(--color-gray-light) 100%
+    var(--color-cream) calc(var(--score) * 1%),
+    var(--color-cream) 100%
   );
 }
 
