@@ -82,3 +82,52 @@ function paddle_integration_mail($key, &$message, $params) {
       break;
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function paddle_integration_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Hide username field on user registration and edit forms.
+  // Users will login with email only via the mail_login module.
+  if (in_array($form_id, ['user_register_form', 'user_form'])) {
+    if (isset($form['account']['name'])) {
+      // Hide the username field.
+      $form['account']['name']['#access'] = FALSE;
+
+      // Auto-generate username from email on form submission.
+      $form['#validate'][] = 'paddle_integration_user_form_validate';
+    }
+  }
+}
+
+/**
+ * Custom validation handler to auto-generate username from email.
+ */
+function paddle_integration_user_form_validate(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  $email = $form_state->getValue('mail');
+
+  if (!empty($email)) {
+    // Use email as the username.
+    $username = $email;
+
+    // Check if this username already exists (only for new users).
+    $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+    $existing_users = $user_storage->loadByProperties(['name' => $username]);
+
+    // If editing existing user, exclude the current user from the check.
+    if ($form_state->getFormObject()->getEntity()->id()) {
+      $current_uid = $form_state->getFormObject()->getEntity()->id();
+      $existing_users = array_filter($existing_users, function($user) use ($current_uid) {
+        return $user->id() != $current_uid;
+      });
+    }
+
+    // If username is taken, append timestamp for uniqueness.
+    if (!empty($existing_users)) {
+      $username = $email . '_' . time();
+    }
+
+    // Set the auto-generated username.
+    $form_state->setValue('name', $username);
+  }
+}

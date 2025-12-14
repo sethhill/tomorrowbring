@@ -1,6 +1,6 @@
 # Public checkout page
 paddle_integration.checkout:
-  path: '/register/checkout'
+  path: '/sign-up'
   defaults:
     _controller: '\Drupal\paddle_integration\Controller\CheckoutController::checkout'
     _title: 'Get Started'
@@ -9,7 +9,7 @@ paddle_integration.checkout:
 
 # Payment success page
 paddle_integration.checkout_success:
-  path: '/register/success'
+  path: '/sign-up/success'
   defaults:
     _controller: '\Drupal\paddle_integration\Controller\CheckoutController::success'
     _title: 'Payment Successful'
@@ -18,7 +18,7 @@ paddle_integration.checkout_success:
 
 # Payment cancelled page
 paddle_integration.checkout_cancel:
-  path: '/register/cancel'
+  path: '/sign-up/cancel'
   defaults:
     _controller: '\Drupal\paddle_integration\Controller\CheckoutController::cancel'
     _title: 'Payment Cancelled'
@@ -36,7 +36,7 @@ paddle_integration.webhook:
 
 # Registration form
 paddle_integration.register:
-  path: '/register/complete/{token}'
+  path: '/sign-up/complete/{token}'
   defaults:
     _form: '\Drupal\paddle_integration\Form\PaddleRegistrationForm'
     _title: 'Complete Your Registration'

@@ -84,7 +84,7 @@ class PaddleRegistrationForm extends FormBase {
     }
 
     $form['intro'] = [
-      '#markup' => '<p>' . $this->t('Welcome! Complete the form below to create your account and access the AI Career Impact Analysis platform.') . '</p>',
+      '#markup' => '<p>' . $this->t('Welcome! Complete the form below to create your account and access the AI Career Impact Analysis platform. You will use your email address to log in.') . '</p>',
     ];
 
     $form['email'] = [
@@ -92,15 +92,7 @@ class PaddleRegistrationForm extends FormBase {
       '#title' => $this->t('Email'),
       '#default_value' => $this->purchase->customer_email,
       '#disabled' => TRUE,
-      '#description' => $this->t('This is the email address associated with your payment.'),
-    ];
-
-    $form['username'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Username'),
-      '#required' => TRUE,
-      '#maxlength' => 60,
-      '#description' => $this->t('Choose a username for logging in.'),
+      '#description' => $this->t('This is the email address associated with your payment. Use this to log in.'),
     ];
 
     $form['password'] = [
@@ -176,25 +168,30 @@ class PaddleRegistrationForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $username = $form_state->getValue('username');
-
-    // Check username uniqueness.
-    $existing_users = \Drupal::entityTypeManager()
-      ->getStorage('user')
-      ->loadByProperties(['name' => $username]);
-
-    if (!empty($existing_users)) {
-      $form_state->setErrorByName('username', $this->t('The username %name is already taken.', ['%name' => $username]));
-    }
+    // No additional validation needed - username will be auto-generated from email.
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Auto-generate username from email address.
+    // Drupal requires a unique username, but users will login with email.
+    $username = $this->purchase->customer_email;
+
+    // Ensure username is unique (in case email is already used as username).
+    $existing_users = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->loadByProperties(['name' => $username]);
+
+    if (!empty($existing_users)) {
+      // If email is taken as username, append timestamp for uniqueness.
+      $username = $this->purchase->customer_email . '_' . time();
+    }
+
     // Prepare form data.
     $form_data = [
-      'username' => $form_state->getValue('username'),
+      'username' => $username,
       'password' => $form_state->getValue('password'),
       'name' => $form_state->getValue('name'),
       'industry' => $form_state->getValue('industry'),
