@@ -78,6 +78,7 @@ class PaddleWebhookHandler {
 
     switch ($event_type) {
       case 'transaction.completed':
+      case 'transaction.updated':
         return $this->handleTransactionCompleted($data);
 
       case 'transaction.payment_failed':
@@ -106,18 +107,50 @@ class PaddleWebhookHandler {
 
     // Extract transaction details.
     $transaction_id = $event_data['id'] ?? NULL;
-    $customer_email = $event_data['customer_email'] ?? NULL;
     $customer_id = $event_data['customer_id'] ?? NULL;
+    $status = $event_data['status'] ?? NULL;
 
-    if (empty($transaction_id) || empty($customer_email)) {
-      $this->logger->error('Invalid transaction data: missing transaction ID or email');
+    // Only process completed transactions.
+    if ($status !== 'completed') {
+      $this->logger->info('Ignoring transaction @txn with status @status', [
+        '@txn' => $transaction_id,
+        '@status' => $status,
+      ]);
+      return TRUE;
+    }
+
+    if (empty($transaction_id) || empty($customer_id)) {
+      $this->logger->error('Invalid transaction data: missing transaction ID or customer ID');
+      return FALSE;
+    }
+
+    // Fetch customer details to get email.
+    $customer = $this->apiClient->getCustomer($customer_id);
+
+    if (!$customer) {
+      $this->logger->error('Failed to fetch customer details for @id', ['@id' => $customer_id]);
+      return FALSE;
+    }
+
+    $customer_email = $customer['email'] ?? NULL;
+
+    if (empty($customer_email)) {
+      $this->logger->error('Customer @id has no email address', ['@id' => $customer_id]);
       return FALSE;
     }
 
     // Check for duplicate transaction (idempotency).
     $existing = $this->customerManager->getPurchaseByTransactionId($transaction_id);
-    if ($existing && $existing->status === 'completed') {
-      $this->logger->info('Duplicate transaction @txn already completed', ['@txn' => $transaction_id]);
+    if ($existing) {
+      if ($existing->status === 'completed') {
+        $this->logger->info('Duplicate transaction @txn already completed', ['@txn' => $transaction_id]);
+        return TRUE;
+      }
+      // If pending, also just return success - the email has already been queued.
+      $this->logger->info('Transaction @txn already processed (status: @status)', [
+        '@txn' => $transaction_id,
+        '@status' => $existing->status,
+      ]);
       return TRUE;
     }
 
@@ -131,10 +164,11 @@ class PaddleWebhookHandler {
       $currency = $totals['currency_code'] ?? NULL;
     }
 
-    // Extract product ID.
+    // Extract product ID from items.
     $product_id = NULL;
     if (isset($event_data['items']) && is_array($event_data['items']) && !empty($event_data['items'])) {
-      $product_id = $event_data['items'][0]['product_id'] ?? NULL;
+      // Try to get product_id from the item, or from the nested price object.
+      $product_id = $event_data['items'][0]['product_id'] ?? $event_data['items'][0]['price']['product_id'] ?? NULL;
     }
 
     // Prepare transaction data.

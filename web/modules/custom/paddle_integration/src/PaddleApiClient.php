@@ -173,4 +173,53 @@ class PaddleApiClient {
       : 'https://sandbox-api.paddle.com';
   }
 
+  /**
+   * Get customer details from Paddle API.
+   *
+   * @param string $customer_id
+   *   The Paddle customer ID.
+   *
+   * @return array|null
+   *   The customer data, or NULL on failure.
+   */
+  public function getCustomer($customer_id) {
+    $api_key = $this->getApiKey();
+    $base_url = $this->getApiBaseUrl();
+
+    if (empty($api_key)) {
+      $this->logger->error('API key not configured');
+      return NULL;
+    }
+
+    $url = $base_url . '/customers/' . $customer_id;
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+      'Authorization: Bearer ' . $api_key,
+      'Content-Type: application/json',
+    ]);
+
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_code !== 200) {
+      $this->logger->error('Failed to fetch customer @id: HTTP @code', [
+        '@id' => $customer_id,
+        '@code' => $http_code,
+      ]);
+      return NULL;
+    }
+
+    $data = json_decode($response, TRUE);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+      $this->logger->error('Failed to parse customer response JSON');
+      return NULL;
+    }
+
+    return $data['data'] ?? NULL;
+  }
+
 }

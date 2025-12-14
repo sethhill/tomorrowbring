@@ -99,6 +99,11 @@ class WebhookController extends ControllerBase {
       return new Response('Bad Request', 400);
     }
 
+    // Log the full webhook payload for debugging.
+    $this->logger->info('Webhook payload: @payload', [
+      '@payload' => json_encode($data, JSON_PRETTY_PRINT),
+    ]);
+
     // Process webhook.
     try {
       $result = $this->webhookHandler->processWebhook($data);
