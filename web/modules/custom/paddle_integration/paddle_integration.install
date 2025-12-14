@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Paddle Integration module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function paddle_integration_schema() {
+  $schema['paddle_purchases'] = [
+    'description' => 'Stores Paddle transaction data and registration tokens.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique purchase ID.',
+      ],
+      'transaction_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Paddle transaction ID.',
+      ],
+      'customer_email' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Customer email address.',
+      ],
+      'paddle_customer_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Paddle customer ID.',
+      ],
+      'status' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => 'pending',
+        'description' => 'Purchase status: pending, completed, failed, refunded.',
+      ],
+      'amount' => [
+        'type' => 'numeric',
+        'precision' => 10,
+        'scale' => 2,
+        'not null' => FALSE,
+        'description' => 'Transaction amount.',
+      ],
+      'currency' => [
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => FALSE,
+        'description' => 'Currency code (USD, EUR, etc.).',
+      ],
+      'product_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Paddle product ID.',
+      ],
+      'registration_token' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+        'description' => 'One-time registration token.',
+      ],
+      'token_expiry' => [
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => 'Unix timestamp when token expires.',
+      ],
+      'uid' => [
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => 'Drupal user ID (NULL until account created).',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Unix timestamp when purchase record was created.',
+      ],
+      'completed' => [
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => 'Unix timestamp when registration was completed.',
+      ],
+      'email_sent' => [
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => 'Unix timestamp when registration email was sent.',
+      ],
+      'metadata' => [
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+        'description' => 'JSON encoded metadata from Paddle.',
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'transaction_id' => ['transaction_id'],
+      'registration_token' => ['registration_token'],
+    ],
+    'indexes' => [
+      'customer_email' => ['customer_email'],
+      'uid' => ['uid'],
+      'status' => ['status'],
+      'token_expiry' => ['token_expiry'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function paddle_integration_install() {
+  // Create Individual client node for self-service users.
+  try {
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    // Get all module nodes.
+    $module_query = $node_storage->getQuery()
+      ->condition('type', 'module')
+      ->accessCheck(FALSE)
+      ->execute();
+
+    // Create the client node.
+    $node = $node_storage->create([
+      'type' => 'client',
+      'title' => 'Individual Subscribers',
+      'status' => 1,
+      'field_enabled_modules' => array_values($module_query),
+    ]);
+    $node->save();
+
+    // Save NID to config.
+    \Drupal::configFactory()
+      ->getEditable('paddle_integration.settings')
+      ->set('individual_client_nid', $node->id())
+      ->save();
+
+    \Drupal::messenger()->addMessage(t('Individual Subscribers client created with NID @nid. All @count modules enabled.', [
+      '@nid' => $node->id(),
+      '@count' => count($module_query),
+    ]));
+
+    \Drupal::logger('paddle_integration')->info('Individual client created (NID: @nid)', ['@nid' => $node->id()]);
+  }
+  catch (\Exception $e) {
+    \Drupal::messenger()->addError(t('Failed to create Individual client: @message', ['@message' => $e->getMessage()]));
+    \Drupal::logger('paddle_integration')->error('Failed to create Individual client: @message', ['@message' => $e->getMessage()]);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function paddle_integration_uninstall() {
+  // Optionally delete the Individual client node.
+  // We leave it for now to preserve data, but you could uncomment this:
+  /*
+  $config = \Drupal::config('paddle_integration.settings');
+  $client_nid = $config->get('individual_client_nid');
+  if ($client_nid) {
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($client_nid);
+    if ($node) {
+      $node->delete();
+    }
+  }
+  */
+}

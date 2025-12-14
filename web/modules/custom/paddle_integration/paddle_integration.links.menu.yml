@@ -1,0 +1,6 @@
+paddle_integration.settings:
+  title: 'Paddle Integration'
+  description: 'Configure Paddle payment integration settings.'
+  parent: system.admin_config_system
+  route_name: paddle_integration.settings
+  weight: 10

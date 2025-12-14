@@ -1,0 +1,92 @@
+{#
+/**
+ * @file
+ * Template for payment cancellation page.
+ *
+ * Available variables:
+ * - message: Cancellation message
+ * - checkout_url: URL to return to checkout
+ */
+#}
+<div class="paddle-cancel-container">
+  <div class="cancel-icon">
+    ×
+  </div>
+
+  <h1>{{ 'Payment Cancelled'|t }}</h1>
+
+  <div class="cancel-message">
+    <p>{{ 'Your payment was cancelled. No charges have been made.'|t }}</p>
+  </div>
+
+  <div class="cancel-actions">
+    <p>{{ 'Ready to try again?'|t }}</p>
+    <a href="{{ checkout_url }}" class="btn-return-checkout">
+      {{ 'Return to Checkout'|t }}
+    </a>
+  </div>
+
+  <div class="cancel-support">
+    <p>{{ 'Need help? Please contact our support team.'|t }}</p>
+  </div>
+</div>
+
+<style>
+  .paddle-cancel-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .cancel-icon {
+    width: 80px;
+    height: 80px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin: 0 auto 2rem;
+    line-height: 1;
+  }
+
+  .paddle-cancel-container h1 {
+    color: #dc3545;
+    margin-bottom: 1.5rem;
+  }
+
+  .cancel-message {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .cancel-actions {
+    margin: 2rem 0;
+  }
+
+  .btn-return-checkout {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+    margin-top: 1rem;
+  }
+
+  .btn-return-checkout:hover {
+    background: #0056b3;
+  }
+
+  .cancel-support {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+  }
+</style>

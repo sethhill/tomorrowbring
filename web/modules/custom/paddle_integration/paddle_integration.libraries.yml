@@ -1,0 +1,6 @@
+paddle_checkout:
+  version: 1.x
+  js:
+    https://cdn.paddle.com/paddle/v2/paddle.js: { type: external, minified: true }
+  dependencies:
+    - core/drupal

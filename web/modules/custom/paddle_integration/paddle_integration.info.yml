@@ -1,0 +1,10 @@
+name: Paddle Integration
+type: module
+description: 'Integrates Paddle.com payment processing for self-service user registration.'
+package: Custom
+core_version_requirement: ^11
+dependencies:
+  - drupal:user
+  - drupal:profile
+  - client_webform
+  - brevo

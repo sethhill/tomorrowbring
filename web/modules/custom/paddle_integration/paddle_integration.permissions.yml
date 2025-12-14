@@ -1,0 +1,13 @@
+administer paddle integration:
+  title: 'Administer Paddle Integration'
+  description: 'Configure Paddle payment integration settings.'
+  restrict access: true
+
+view own paddle purchases:
+  title: 'View own Paddle purchases'
+  description: 'View own purchase history from Paddle.'
+
+view any paddle purchases:
+  title: 'View any Paddle purchases'
+  description: 'View all Paddle purchase records.'
+  restrict access: true

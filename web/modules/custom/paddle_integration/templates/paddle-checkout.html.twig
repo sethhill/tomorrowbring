@@ -1,0 +1,162 @@
+{#
+/**
+ * @file
+ * Template for Paddle checkout page.
+ *
+ * Available variables:
+ * - client_token: Paddle client-side token
+ * - product_id: Paddle product ID
+ * - success_url: URL to redirect after successful payment
+ * - cancel_url: URL to redirect if payment is cancelled
+ */
+#}
+<div class="paddle-checkout-container">
+  <div class="checkout-header">
+    <h1>{{ 'Get Started with AI Career Impact Analysis'|t }}</h1>
+    <p>{{ 'Unlock access to 30 comprehensive assessment modules and 8 personalized AI-generated reports.'|t }}</p>
+  </div>
+
+  <div class="checkout-benefits">
+    <h2>{{ 'What You\'ll Get:'|t }}</h2>
+    <ul>
+      <li>{{ '30 comprehensive assessment modules'|t }}</li>
+      <li>{{ '8 personalized AI-generated career reports'|t }}</li>
+      <li>{{ 'Role impact analysis'|t }}</li>
+      <li>{{ 'Career transition opportunities'|t }}</li>
+      <li>{{ 'Task automation recommendations'|t }}</li>
+      <li>{{ 'Industry insights and trends'|t }}</li>
+      <li>{{ 'Skills gap analysis'|t }}</li>
+      <li>{{ 'Personalized learning resources'|t }}</li>
+    </ul>
+  </div>
+
+  <div class="checkout-button-container">
+    <button id="paddle-checkout-button" class="paddle-checkout-btn">
+      {{ 'Complete Purchase'|t }}
+    </button>
+  </div>
+
+  <div class="checkout-security">
+    <p>{{ 'Secure payment powered by Paddle.com'|t }}</p>
+  </div>
+</div>
+
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  window.addEventListener('load', function() {
+    // Set environment first if sandbox
+    {% if environment == 'sandbox' %}
+    Paddle.Environment.set('sandbox');
+    {% endif %}
+
+    // Initialize Paddle
+    Paddle.Initialize({
+      token: '{{ client_token }}',
+      eventCallback: function(data) {
+        console.log('Paddle event:', data.name, data);
+
+        if (data.name === 'checkout.error') {
+          console.error('Paddle checkout error:', data.error || data.detail || data);
+          alert('Paddle Error: ' + (data.error?.detail || data.detail || 'Unknown error. Check console for details.'));
+        }
+
+        if (data.name === 'checkout.completed') {
+          window.location.href = '{{ success_url }}';
+        } else if (data.name === 'checkout.closed') {
+          window.location.href = '{{ cancel_url }}';
+        }
+      }
+    });
+
+    // Open checkout when button is clicked
+    document.getElementById('paddle-checkout-button').addEventListener('click', function() {
+      console.log('Opening checkout with price:', '{{ product_id }}');
+      Paddle.Checkout.open({
+        items: [
+          {
+            priceId: '{{ product_id }}',
+            quantity: 1
+          }
+        ],
+        settings: {
+          successUrl: '{{ success_url }}',
+          theme: 'light'
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .paddle-checkout-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .checkout-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .checkout-header h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .checkout-benefits {
+    background: #f5f5f5;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .checkout-benefits h2 {
+    margin-top: 0;
+  }
+
+  .checkout-benefits ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .checkout-benefits li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+
+  .checkout-benefits li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #28a745;
+    font-weight: bold;
+  }
+
+  .checkout-button-container {
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .paddle-checkout-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .paddle-checkout-btn:hover {
+    background: #0056b3;
+  }
+
+  .checkout-security {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+  }
+</style>

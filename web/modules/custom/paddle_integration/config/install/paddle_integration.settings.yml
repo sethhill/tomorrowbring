@@ -1,0 +1,11 @@
+environment: sandbox
+api_key_sandbox: ''
+api_key_production: ''
+webhook_secret_sandbox: ''
+webhook_secret_production: ''
+client_token_sandbox: ''
+client_token_production: ''
+product_id_sandbox: ''
+product_id_production: ''
+registration_token_lifetime: 604800
+individual_client_nid: 0

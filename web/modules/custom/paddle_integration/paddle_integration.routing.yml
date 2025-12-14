@@ -1,0 +1,53 @@
+# Public checkout page
+paddle_integration.checkout:
+  path: '/register/checkout'
+  defaults:
+    _controller: '\Drupal\paddle_integration\Controller\CheckoutController::checkout'
+    _title: 'Get Started'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
+# Payment success page
+paddle_integration.checkout_success:
+  path: '/register/success'
+  defaults:
+    _controller: '\Drupal\paddle_integration\Controller\CheckoutController::success'
+    _title: 'Payment Successful'
+  requirements:
+    _access: 'TRUE'
+
+# Payment cancelled page
+paddle_integration.checkout_cancel:
+  path: '/register/cancel'
+  defaults:
+    _controller: '\Drupal\paddle_integration\Controller\CheckoutController::cancel'
+    _title: 'Payment Cancelled'
+  requirements:
+    _access: 'TRUE'
+
+# Webhook receiver
+paddle_integration.webhook:
+  path: '/paddle/webhook'
+  defaults:
+    _controller: '\Drupal\paddle_integration\Controller\WebhookController::receive'
+  requirements:
+    _access: 'TRUE'
+  methods: [POST]
+
+# Registration form
+paddle_integration.register:
+  path: '/register/complete/{token}'
+  defaults:
+    _form: '\Drupal\paddle_integration\Form\PaddleRegistrationForm'
+    _title: 'Complete Your Registration'
+  requirements:
+    _access: 'TRUE'
+
+# Admin settings
+paddle_integration.settings:
+  path: '/admin/config/paddle-integration/settings'
+  defaults:
+    _form: '\Drupal\paddle_integration\Form\PaddleSettingsForm'
+    _title: 'Paddle Integration Settings'
+  requirements:
+    _permission: 'administer paddle integration'

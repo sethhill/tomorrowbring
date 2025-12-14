@@ -1,0 +1,96 @@
+{#
+/**
+ * @file
+ * Template for payment success page.
+ *
+ * Available variables:
+ * - message: Success message
+ */
+#}
+<div class="paddle-success-container">
+  <div class="success-icon">
+    ✓
+  </div>
+
+  <h1>{{ 'Payment Successful!'|t }}</h1>
+
+  <div class="success-message">
+    <p>{{ 'Thank you for your purchase! Your payment has been processed successfully.'|t }}</p>
+    <p><strong>{{ 'Check your email for the next steps.'|t }}</strong></p>
+    <p>{{ 'We\'ve sent you an email with a link to complete your account registration. The link will be valid for 7 days.'|t }}</p>
+  </div>
+
+  <div class="success-details">
+    <h2>{{ 'What happens next?'|t }}</h2>
+    <ol>
+      <li>{{ 'Check your email inbox (and spam folder)'|t }}</li>
+      <li>{{ 'Click the registration link in the email'|t }}</li>
+      <li>{{ 'Complete your account setup'|t }}</li>
+      <li>{{ 'Start your AI career impact analysis'|t }}</li>
+    </ol>
+  </div>
+
+  <div class="success-support">
+    <p>{{ 'Haven\'t received the email? Please check your spam folder or contact support.'|t }}</p>
+  </div>
+</div>
+
+<style>
+  .paddle-success-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto 2rem;
+  }
+
+  .paddle-success-container h1 {
+    color: #28a745;
+    margin-bottom: 1.5rem;
+  }
+
+  .success-message {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .success-message p {
+    margin: 0.5rem 0;
+  }
+
+  .success-details {
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  .success-details h2 {
+    text-align: center;
+  }
+
+  .success-details ol {
+    padding-left: 1.5rem;
+  }
+
+  .success-details li {
+    padding: 0.5rem 0;
+  }
+
+  .success-support {
+    color: #666;
+    font-size: 0.9rem;
+  }
+</style>

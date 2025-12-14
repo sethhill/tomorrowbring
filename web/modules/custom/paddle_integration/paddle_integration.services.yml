@@ -1,0 +1,20 @@
+services:
+  logger.channel.paddle_integration:
+    parent: logger.channel_base
+    arguments: ['paddle_integration']
+
+  paddle_integration.api_client:
+    class: Drupal\paddle_integration\PaddleApiClient
+    arguments: ['@config.factory', '@logger.channel.paddle_integration']
+
+  paddle_integration.customer_manager:
+    class: Drupal\paddle_integration\PaddleCustomerManager
+    arguments: ['@database', '@password_generator', '@logger.channel.paddle_integration', '@config.factory']
+
+  paddle_integration.webhook_handler:
+    class: Drupal\paddle_integration\PaddleWebhookHandler
+    arguments: ['@paddle_integration.api_client', '@paddle_integration.customer_manager', '@queue', '@logger.channel.paddle_integration']
+
+  paddle_integration.registration:
+    class: Drupal\paddle_integration\PaddleRegistrationService
+    arguments: ['@entity_type.manager', '@password_generator', '@logger.channel.paddle_integration', '@config.factory', '@current_user']

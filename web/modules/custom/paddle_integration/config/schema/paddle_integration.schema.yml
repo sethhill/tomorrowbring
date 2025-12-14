@@ -1,0 +1,37 @@
+paddle_integration.settings:
+  type: config_object
+  label: 'Paddle Integration Settings'
+  mapping:
+    environment:
+      type: string
+      label: 'Environment (sandbox or production)'
+    api_key_sandbox:
+      type: string
+      label: 'Sandbox API Key'
+    api_key_production:
+      type: string
+      label: 'Production API Key'
+    webhook_secret_sandbox:
+      type: string
+      label: 'Sandbox Webhook Secret'
+    webhook_secret_production:
+      type: string
+      label: 'Production Webhook Secret'
+    client_token_sandbox:
+      type: string
+      label: 'Sandbox Client-Side Token'
+    client_token_production:
+      type: string
+      label: 'Production Client-Side Token'
+    product_id_sandbox:
+      type: string
+      label: 'Sandbox Product ID'
+    product_id_production:
+      type: string
+      label: 'Production Product ID'
+    registration_token_lifetime:
+      type: integer
+      label: 'Registration token lifetime (seconds)'
+    individual_client_nid:
+      type: integer
+      label: 'Individual Client Node ID'
