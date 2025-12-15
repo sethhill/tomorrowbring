@@ -101,7 +101,9 @@ class SendPaddleRegistrationEmailWorker extends QueueWorkerBase implements Conta
 
     try {
       // Generate registration URL.
-      $registration_url = \Drupal::request()->getSchemeAndHttpHost() . '/register/complete/' . $token;
+      // Use Url::fromRoute() which properly handles base URLs.
+      $url = \Drupal\Core\Url::fromRoute('paddle_integration.register', ['token' => $token], ['absolute' => TRUE]);
+      $registration_url = $url->toString();
 
       // Prepare email parameters.
       $params = [
