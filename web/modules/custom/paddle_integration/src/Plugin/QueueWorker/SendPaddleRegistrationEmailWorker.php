@@ -101,9 +101,32 @@ class SendPaddleRegistrationEmailWorker extends QueueWorkerBase implements Conta
 
     try {
       // Generate registration URL.
+      // Ensure we have a proper base URL for CLI/queue context.
+      if (!isset($GLOBALS['base_url']) || $GLOBALS['base_url'] === 'http://default') {
+        // Try to get from environment variable first, then site config.
+        $site_url = getenv('SITE_URL') ?: \Drupal::config('system.site')->get('base_url');
+        if ($site_url) {
+          $GLOBALS['base_url'] = $site_url;
+        }
+        else {
+          // Fallback to production URL if nothing is configured.
+          $GLOBALS['base_url'] = 'https://tomorrowbring.com';
+        }
+      }
+
       // Use Url::fromRoute() which properly handles base URLs.
       $url = \Drupal\Core\Url::fromRoute('paddle_integration.register', ['token' => $token], ['absolute' => TRUE]);
       $registration_url = $url->toString();
+
+      // If still getting http://default, manually construct URL as final fallback.
+      if (strpos($registration_url, 'http://default') === 0) {
+        // Get base_url, ensuring it's not http://default.
+        $base_url = $GLOBALS['base_url'];
+        if ($base_url === 'http://default') {
+          $base_url = 'https://tomorrowbring.com';
+        }
+        $registration_url = $base_url . '/sign-up/complete/' . $token;
+      }
 
       // Prepare email parameters.
       $params = [
