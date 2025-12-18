@@ -6,4 +6,4 @@ id: brevo
 label: Brevo
 plugin: dsn
 configuration:
-  dsn: 'brevo+api://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@default'
+  dsn: ''
