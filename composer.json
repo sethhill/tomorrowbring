@@ -26,6 +26,7 @@
         "drupal/core-project-message": "^11.2",
         "drupal/core-recipe-unpack": "^11.2",
         "drupal/core-recommended": ">11.2 <11.3",
+        "drupal/easy_email": "^3.0",
         "drupal/gin": "^5.0",
         "drupal/gin_login": "^2.1",
         "drupal/login_destination": "^2.0@beta",
@@ -37,8 +38,12 @@
         "drupal/range_slider": "^3.0@alpha",
         "drupal/smtp": "^1.4",
         "drupal/svg_image": "^3.2",
+        "drupal/symfony_mailer": "^1.6",
+        "drupal/ultimate_cron": "^2.0@beta",
         "drupal/webform": "^6.3@beta",
-        "drush/drush": "^13.6"
+        "drush/drush": "^13.6",
+        "symfony/brevo-mailer": "^7.4",
+        "symfony/http-client": "^7.4"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -119,9 +124,11 @@
             ]
         },
         "patches": {
-            "drupal/postmark": {
-                "Fix null error code causing TypeError in watchdog": "patches/postmark-null-error-code-fix.patch"
+            "drupal/htmlmail": {
+                "#3512158: Too few arguments to function": "https://git.drupalcode.org/project/htmlmail/-/merge_requests/11.diff"
             }
-        }
+        },
+        "composer-exit-on-patch-failure": true,
+        "patches-ignore-root": "false"
     }
 }

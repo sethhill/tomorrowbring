@@ -1,12 +1,12 @@
 {
-    "_hash": "72914c36df6bd8fce85e0110808de4de8a38acbff32ae6880ad1f67840a7cc0c",
+    "_hash": "2875fe00c158ca1d0bc148e0ba91350f04a86359bd504b3833a37bb128012e02",
     "patches": {
-        "drupal/postmark": [
+        "drupal/htmlmail": [
             {
-                "package": "drupal/postmark",
-                "description": "Fix null error code causing TypeError in watchdog",
-                "url": "patches/postmark-null-error-code-fix.patch",
-                "sha256": "c17c62ac7ac42e3dcc20df2e6eddb71f8e21989a0b4d01403a2448a22acdcd61",
+                "package": "drupal/htmlmail",
+                "description": "#3512158: Too few arguments to function",
+                "url": "https://git.drupalcode.org/project/htmlmail/-/merge_requests/11.diff",
+                "sha256": "c09513d049d3da1e93b2a825081f4eaa407e4f2b3359fdf4d4bd4299cabdf678",
                 "depth": 1,
                 "extra": {
                     "provenance": "root"

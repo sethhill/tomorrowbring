@@ -1,0 +1,5 @@
+name: TomorrowBring User
+type: module
+description: 'Custom user functionality for TomorrowBring site.'
+core_version_requirement: ^11
+package: Custom

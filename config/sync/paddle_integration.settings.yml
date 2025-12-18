@@ -10,4 +10,4 @@ client_token_production: ''
 product_id_sandbox: ''
 product_id_production: ''
 registration_token_lifetime: 604800
-individual_client_nid: 34
+individual_client_nid: 32
