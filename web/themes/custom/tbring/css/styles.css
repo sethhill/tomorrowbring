@@ -32,16 +32,16 @@
 }
 
 :root {
-  --color-cream: rgba(255, 236, 180, 1);
+  --color-cream: #ffecb4;
   --color-cream-2: rgba(255, 242, 202, 1);
   --color-cream-light: hsl(44, 100%, 96%);
   --color-cream-dark: #ffe3a6;
   --color-deep-green: rgb(26, 60, 52);
   --color-deep-blue: #0f3d59;
   --color-deep-green: var(--color-deep-blue);
-  --color-green: rgb(163, 167, 72);
-  --color-gold: rgb(244, 161, 39);
-  --color-orange: rgb(229, 119, 30);
+  --color-green: #a3a748;
+  --color-gold: #f4a127;
+  --color-orange: #e5771e;
   --color-white: rgb(255, 255, 255);
   --color-black: rgb(0, 0, 0);
   --color-green-light: rgb(199, 195, 126);

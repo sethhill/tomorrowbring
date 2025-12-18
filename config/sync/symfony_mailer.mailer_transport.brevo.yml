@@ -1,0 +1,9 @@
+uuid: b0bc27b1-0f60-49c1-ad54-0d41018258b1
+langcode: en
+status: true
+dependencies: {  }
+id: brevo
+label: Brevo
+plugin: dsn
+configuration:
+  dsn: 'brevo+api://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@default'

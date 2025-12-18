@@ -2,7 +2,7 @@ _core:
   default_config_hash: IhwTepsVwtbtbcT5GzQKhCXDCRvbk3MNkWqPiuiZ10s
 theme: current
 defaults:
-  sender: brevo_mail
+  sender: symfony_mailer
   formatter: php_mail
 modules:
   mailgun:
