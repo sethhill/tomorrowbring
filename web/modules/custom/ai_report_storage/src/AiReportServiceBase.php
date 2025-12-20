@@ -1108,7 +1108,7 @@ abstract class AiReportServiceBase {
     }
 
     // Check for processing reports first (higher priority).
-    $processing_reports = $this->reportStorage->safeLoadByProperties([
+    $processing_reports = $this->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'processing',
@@ -1119,7 +1119,7 @@ abstract class AiReportServiceBase {
     }
 
     // Then check for pending (queued) reports.
-    $pending_reports = $this->reportStorage->safeLoadByProperties([
+    $pending_reports = $this->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'pending',
