@@ -7,3 +7,11 @@ report_polling:
       css/report-pending.css: {}
   dependencies:
     - core/drupal
+
+regenerate_form:
+  version: 1.x
+  js:
+    js/regenerate-form.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

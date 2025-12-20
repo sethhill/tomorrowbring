@@ -22,11 +22,10 @@ services:
     tags:
       - { name: event_subscriber }
 
-  ai_report_storage.commands:
-    class: Drupal\ai_report_storage\Commands\AiReportStorageCommands
+  ai_report_storage.user_report_regenerator:
+    class: Drupal\ai_report_storage\Service\UserReportRegenerator
     arguments:
-      - '@queue'
-      - '@plugin.manager.queue_worker'
+      - '@entity_type.manager'
+      - '@ai_report_storage.manager'
+      - '@messenger'
       - '@logger.channel.ai_report_storage'
-    tags:
-      - { name: drush.command }

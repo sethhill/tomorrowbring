@@ -1,0 +1,9 @@
+services:
+  ai_report_storage.commands:
+    class: \Drupal\ai_report_storage\Commands\AiReportStorageCommands
+    arguments:
+      - '@queue'
+      - '@plugin.manager.queue_worker'
+      - '@ai_report_storage.user_report_regenerator'
+    tags:
+      - { name: drush.command }

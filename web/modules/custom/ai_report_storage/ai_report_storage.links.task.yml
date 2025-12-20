@@ -1,0 +1,5 @@
+ai_report_storage.regenerate_user_reports:
+  route_name: ai_report_storage.regenerate_user_reports
+  title: 'Regenerate Reports'
+  base_route: entity.user.canonical
+  weight: 100

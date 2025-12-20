@@ -59,3 +59,15 @@ ai_report_storage.settings:
     _title: 'AI Reports Settings'
   requirements:
     _permission: 'administer site configuration'
+
+ai_report_storage.regenerate_user_reports:
+  path: '/user/{user}/regenerate-reports'
+  defaults:
+    _form: '\Drupal\ai_report_storage\Form\RegenerateUserReportsForm'
+    _title: 'Regenerate Reports'
+  requirements:
+    _permission: 'administer ai reports'
+  options:
+    parameters:
+      user:
+        type: 'entity:user'

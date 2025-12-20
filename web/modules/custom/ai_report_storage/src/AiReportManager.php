@@ -29,6 +29,9 @@ class AiReportManager {
     'task_recommendations' => 'ai_task_recommender.analysis_service',
     'hybrid_analysis' => 'role_impact_analysis.analysis_service',
     'concerns_navigator' => 'ai_concerns_navigator.service',
+    'breakthrough_strategies' => 'ai_breakthrough_strategies.service',
+    'learning_resources' => 'ai_learning_resources.analysis_service',
+    'summary' => 'ai_summary.service',
   ];
 
   /**
@@ -42,6 +45,9 @@ class AiReportManager {
     'task_recommendations' => 'Task Recommendations',
     'hybrid_analysis' => 'Hybrid Analysis',
     'concerns_navigator' => 'AI Concerns Navigator',
+    'breakthrough_strategies' => 'Breakthrough Strategies',
+    'learning_resources' => 'Learning Resources',
+    'summary' => 'Summary',
   ];
 
   /**
