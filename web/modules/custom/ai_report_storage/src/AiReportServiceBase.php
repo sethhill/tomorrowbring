@@ -95,6 +95,42 @@ abstract class AiReportServiceBase {
   abstract protected function validateResponse(array $response): bool;
 
   /**
+   * Safely load report entities by properties with error handling.
+   *
+   * @param array $properties
+   *   Properties to filter by.
+   *
+   * @return array
+   *   Array of entities, or empty array on error.
+   */
+  protected function safeLoadByProperties(array $properties): array {
+    try {
+      // Use entity query instead of loadByProperties for better error handling.
+      $query = $this->reportStorage->getQuery()
+        ->accessCheck(FALSE);
+
+      foreach ($properties as $field => $value) {
+        $query->condition($field, $value);
+      }
+
+      $ids = $query->execute();
+
+      if (empty($ids)) {
+        return [];
+      }
+
+      return $this->reportStorage->loadMultiple($ids);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error loading reports: @error. Properties: @props', [
+        '@error' => $e->getMessage(),
+        '@props' => json_encode($properties),
+      ]);
+      return [];
+    }
+  }
+
+  /**
    * Determine if this report is complex based on configuration.
    *
    * @return bool
@@ -213,7 +249,7 @@ abstract class AiReportServiceBase {
       $uid = $this->currentUser->id();
     }
 
-    $entities = $this->reportStorage->loadByProperties([
+    $entities = $this->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'published',
@@ -292,7 +328,7 @@ abstract class AiReportServiceBase {
    *   Number of versions to keep (default: 5).
    */
   protected function archiveOldReports($uid, int $keep_count = 5): void {
-    $entities = $this->reportStorage->loadByProperties([
+    $entities = $this->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'published',
@@ -876,7 +912,7 @@ abstract class AiReportServiceBase {
     }
 
     // Check if there's already a pending report for this user and type.
-    $existing_pending = $this->reportStorage->loadByProperties([
+    $existing_pending = $this->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'pending',
@@ -1072,7 +1108,7 @@ abstract class AiReportServiceBase {
     }
 
     // Check for processing reports first (higher priority).
-    $processing_reports = $this->reportStorage->loadByProperties([
+    $processing_reports = $this->reportStorage->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'processing',
@@ -1083,7 +1119,7 @@ abstract class AiReportServiceBase {
     }
 
     // Then check for pending (queued) reports.
-    $pending_reports = $this->reportStorage->loadByProperties([
+    $pending_reports = $this->reportStorage->safeLoadByProperties([
       'uid' => $uid,
       'type' => $this->getReportType(),
       'status' => 'pending',
