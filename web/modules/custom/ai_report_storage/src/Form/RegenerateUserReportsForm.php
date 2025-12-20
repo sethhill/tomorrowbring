@@ -77,7 +77,21 @@ class RegenerateUserReportsForm extends FormBase {
     $form_state->set('user', $user);
 
     // Get report statistics.
-    $stats = $this->userReportRegenerator->getUserReportStatistics($user->id());
+    try {
+      $stats = $this->userReportRegenerator->getUserReportStatistics($user->id());
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('ai_report_storage')->error('Error getting report statistics for user @uid: @error', [
+        '@uid' => $user->id(),
+        '@error' => $e->getMessage(),
+      ]);
+      $stats = [
+        'total' => 0,
+        'by_type' => [],
+        'by_status' => [],
+        'has_reports' => FALSE,
+      ];
+    }
 
     // Display user information.
     $form['user_info'] = [
