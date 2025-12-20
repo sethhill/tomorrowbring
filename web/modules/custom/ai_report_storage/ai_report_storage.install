@@ -309,3 +309,63 @@ function ai_report_storage_update_9004() {
 
   return t('Added report_image field to ai_report entity.');
 }
+
+/**
+ * Ensure ai_report table has all required fields.
+ */
+function ai_report_storage_update_9005() {
+  $schema = Database::getConnection()->schema();
+  $messages = [];
+
+  // Check and add uid field if missing.
+  if (!$schema->fieldExists('ai_report', 'uid')) {
+    $schema->addField('ai_report', 'uid', [
+      'description' => 'The user ID of the report owner.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+    ]);
+    $messages[] = 'Added uid field';
+  }
+
+  // Check and add status field if missing.
+  if (!$schema->fieldExists('ai_report', 'status')) {
+    $schema->addField('ai_report', 'status', [
+      'description' => 'The status of the report (published, archived, draft).',
+      'type' => 'varchar',
+      'length' => 32,
+      'not null' => TRUE,
+      'default' => 'published',
+    ]);
+    $messages[] = 'Added status field';
+  }
+
+  // Add indexes if they don't exist.
+  if (!$schema->indexExists('ai_report', 'uid_type')) {
+    $schema->addIndex('ai_report', 'uid_type', ['uid', 'type'], [
+      'fields' => [
+        'uid' => [],
+        'type' => [],
+      ],
+    ]);
+    $messages[] = 'Added uid_type index';
+  }
+
+  if (!$schema->indexExists('ai_report', 'uid_type_status')) {
+    $schema->addIndex('ai_report', 'uid_type_status', ['uid', 'type', 'status'], [
+      'fields' => [
+        'uid' => [],
+        'type' => [],
+        'status' => [],
+      ],
+    ]);
+    $messages[] = 'Added uid_type_status index';
+  }
+
+  if (empty($messages)) {
+    return t('All required fields already exist.');
+  }
+
+  return t('Schema updates: @updates', ['@updates' => implode(', ', $messages)]);
+}

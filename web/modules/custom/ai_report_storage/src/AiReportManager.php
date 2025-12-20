@@ -136,23 +136,42 @@ class AiReportManager {
       $uid = $this->currentUser->id();
     }
 
-    $properties = [
-      'uid' => $uid,
-      'status' => $status,
-    ];
+    try {
+      // Use entity query instead of loadByProperties for better error handling.
+      $query = $this->reportStorage->getQuery()
+        ->accessCheck(FALSE);
 
-    if ($type !== NULL) {
-      $properties['type'] = $type;
+      // Check if uid field exists before adding condition.
+      $entity_type = $this->entityTypeManager->getDefinition('ai_report');
+      if ($entity_type->hasKey('owner')) {
+        $query->condition('uid', $uid);
+      }
+
+      if ($status !== NULL) {
+        $query->condition('status', $status);
+      }
+
+      if ($type !== NULL) {
+        $query->condition('type', $type);
+      }
+
+      $query->sort('generated_at', 'DESC');
+
+      $ids = $query->execute();
+
+      if (empty($ids)) {
+        return [];
+      }
+
+      return $this->reportStorage->loadMultiple($ids);
     }
-
-    $entities = $this->reportStorage->loadByProperties($properties);
-
-    // Sort by generated_at descending.
-    usort($entities, function ($a, $b) {
-      return $b->getGeneratedAt() - $a->getGeneratedAt();
-    });
-
-    return $entities;
+    catch (\Exception $e) {
+      $this->logger->error('Error loading reports for user @uid: @error', [
+        '@uid' => $uid,
+        '@error' => $e->getMessage(),
+      ]);
+      return [];
+    }
   }
 
   /**
