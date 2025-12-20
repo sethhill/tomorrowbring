@@ -279,6 +279,123 @@ class AiReportStorageCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Check and fix the ai_report table schema.
+   *
+   * @command ai-reports:fix-schema
+   * @aliases ai-fix-schema
+   * @usage ai-reports:fix-schema
+   *   Check and repair the ai_report table schema.
+   */
+  public function fixSchema() {
+    $schema = \Drupal\Core\Database\Database::getConnection()->schema();
+    $this->output()->writeln('Checking ai_report table schema...');
+    $this->output()->writeln('');
+
+    $messages = [];
+    $fixed = FALSE;
+
+    // Check for uid field.
+    if (!$schema->fieldExists('ai_report', 'uid')) {
+      $this->output()->writeln('  ✗ uid field is MISSING');
+      try {
+        $schema->addField('ai_report', 'uid', [
+          'description' => 'The user ID of the report owner.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ]);
+        $messages[] = 'Added uid field';
+        $this->output()->writeln('    ✓ Added uid field');
+        $fixed = TRUE;
+      }
+      catch (\Exception $e) {
+        $this->output()->writeln('    ✗ Failed to add uid field: ' . $e->getMessage());
+      }
+    }
+    else {
+      $this->output()->writeln('  ✓ uid field exists');
+    }
+
+    // Check for status field.
+    if (!$schema->fieldExists('ai_report', 'status')) {
+      $this->output()->writeln('  ✗ status field is MISSING');
+      try {
+        $schema->addField('ai_report', 'status', [
+          'description' => 'The status of the report.',
+          'type' => 'varchar',
+          'length' => 32,
+          'not null' => TRUE,
+          'default' => 'published',
+        ]);
+        $messages[] = 'Added status field';
+        $this->output()->writeln('    ✓ Added status field');
+        $fixed = TRUE;
+      }
+      catch (\Exception $e) {
+        $this->output()->writeln('    ✗ Failed to add status field: ' . $e->getMessage());
+      }
+    }
+    else {
+      $this->output()->writeln('  ✓ status field exists');
+    }
+
+    // Check for indexes.
+    if (!$schema->indexExists('ai_report', 'uid_type')) {
+      $this->output()->writeln('  ✗ uid_type index is MISSING');
+      try {
+        $schema->addIndex('ai_report', 'uid_type', ['uid', 'type'], [
+          'fields' => [
+            'uid' => [],
+            'type' => [],
+          ],
+        ]);
+        $messages[] = 'Added uid_type index';
+        $this->output()->writeln('    ✓ Added uid_type index');
+        $fixed = TRUE;
+      }
+      catch (\Exception $e) {
+        $this->output()->writeln('    ✗ Failed to add uid_type index: ' . $e->getMessage());
+      }
+    }
+    else {
+      $this->output()->writeln('  ✓ uid_type index exists');
+    }
+
+    if (!$schema->indexExists('ai_report', 'uid_type_status')) {
+      $this->output()->writeln('  ✗ uid_type_status index is MISSING');
+      try {
+        $schema->addIndex('ai_report', 'uid_type_status', ['uid', 'type', 'status'], [
+          'fields' => [
+            'uid' => [],
+            'type' => [],
+            'status' => [],
+          ],
+        ]);
+        $messages[] = 'Added uid_type_status index';
+        $this->output()->writeln('    ✓ Added uid_type_status index');
+        $fixed = TRUE;
+      }
+      catch (\Exception $e) {
+        $this->output()->writeln('    ✗ Failed to add uid_type_status index: ' . $e->getMessage());
+      }
+    }
+    else {
+      $this->output()->writeln('  ✓ uid_type_status index exists');
+    }
+
+    $this->output()->writeln('');
+    if ($fixed) {
+      $this->output()->writeln('✓ Schema has been repaired: ' . implode(', ', $messages));
+      $this->output()->writeln('');
+      $this->output()->writeln('Run "drush cr" to clear caches.');
+    }
+    else {
+      $this->output()->writeln('✓ All schema checks passed. No repairs needed.');
+    }
+  }
+
 }
 
 
