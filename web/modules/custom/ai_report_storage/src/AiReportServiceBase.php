@@ -748,6 +748,7 @@ abstract class AiReportServiceBase {
         $report_data['uid'] = $uid;
         $report_data['generation_time'] = $latest_entity->getGenerationTime();
         $report_data['version'] = $latest_entity->getVersion();
+        $report_data['model_used'] = $latest_entity->getModelUsed();
 
         // Populate cache from entity.
         $this->setCachedReport($uid, $report_data);
@@ -776,6 +777,7 @@ abstract class AiReportServiceBase {
         $report_data['uid'] = $uid;
         $report_data['generation_time'] = $latest_entity->getGenerationTime();
         $report_data['version'] = $latest_entity->getVersion();
+        $report_data['model_used'] = $latest_entity->getModelUsed();
         $this->setCachedReport($uid, $report_data);
         return $report_data;
       }
@@ -881,6 +883,7 @@ abstract class AiReportServiceBase {
       $report_data['uid'] = $uid;
       $report_data['generation_time'] = $latest_entity->getGenerationTime();
       $report_data['version'] = $latest_entity->getVersion();
+      $report_data['model_used'] = $latest_entity->getModelUsed();
 
       // Populate cache from entity.
       $this->setCachedReport($uid, $report_data);
