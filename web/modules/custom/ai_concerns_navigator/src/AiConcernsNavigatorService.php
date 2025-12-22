@@ -71,6 +71,12 @@ class AiConcernsNavigatorService extends AiReportServiceBase {
     $ai_frequency = $ai_usage_data['m1_q2_frequency'] ?? 'not specified';
     $ai_comfort = $ai_usage_data['m1_q3_comfort'] ?? 'not specified';
 
+    // Optional: Extract confidence data for emotional intelligence.
+    $confidence_data = $submission_data['confidence']['data'] ?? [];
+    $emotional_context = $this->buildEmotionalContext($confidence_data);
+    $emotional_section = $emotional_context['section'];
+    $tone_rules = $emotional_context['tone_rules'];
+
     return <<<PROMPT
 Generate a personalized AI concerns navigation report. This person needs specific, actionable guidance on addressing their concerns about AI and positioning themselves for the future.
 
@@ -95,6 +101,10 @@ Ageism concern level: {$ageism_concern}/5
 AI training likelihood: {$training_likelihood}
 AI as threat vs opportunity (1=threat, 9=opportunity): {$threat_opportunity_scale}/9
 
+{$emotional_section}
+
+{$tone_rules}
+
 CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
 
 Generate a JSON report with these sections (keep responses CONCISE):
@@ -115,17 +125,30 @@ Generate a JSON report with these sections (keep responses CONCISE):
    - personalized_narrative (1 paragraph, 3-4 sentences - empowering and specific to their data)
    - hidden_strengths: [3-4 items: {strength, evidence_from_data, how_to_amplify}]
 
-CRITICAL RULES:
+4. closing_message:
+   - title (2-5 words, relevant to thoughtful/considered approach)
+   - message (2-3 sentences connecting their concerns to responsible AI use. Be constructive, not dismissive. Reference specific ethical positioning from this report.)
+
+ENHANCED PERSONALIZATION RULES:
 - Be SPECIFIC to their data - avoid generic advice
 - Address their actual concerns directly, don't dismiss them
 - Show how concerns can become competitive advantages
 - If they're pessimistic (threat_opportunity < 5), focus on empowerment angles
 - If they're optimistic (threat_opportunity >= 7), focus on accelerating their momentum
 - If they have high ethical concerns, emphasize how those are valuable differentiators
-- Base opportunity_mindset_score on multiple signals: threat_opportunity_scale, ai_comfort, career_5_years
+- Base opportunity_mindset_score on multiple signals: threat_opportunity_scale, ai_comfort, career_5_years, anxiety, confidence
 - All strategies must be actionable, not theoretical
+- If emotional state data is provided, weave their support needs into trust_building_strategies
+- Adjust tone based on emotional state (reassuring if anxious, energizing if excited)
 - Tone: empowering, practical, evidence-based, respectful of concerns
 - Return ONLY JSON
+
+TONE RULES for closing_message:
+- Be direct and respectful
+- Connect their concerns to competitive advantage or responsible use
+- Focus on trust through understanding, not blind acceptance
+- Avoid "don't worry", "everything will be fine", "embrace the future"
+- Use language like "positions you to use responsibly", "trust grows through understanding", "questions position you"
 PROMPT;
   }
 
@@ -137,6 +160,7 @@ PROMPT;
       'concern_assessment',
       'ethical_positioning',
       'ai_insights',
+      'closing_message',
     ];
 
     foreach ($required_fields as $field) {
@@ -262,6 +286,13 @@ PROMPT;
     if ($ai_usage_result) {
       $submission_data['current_ai_usage'] = $ai_usage_result;
       $submission_ids[] = $ai_usage_result['sid'];
+    }
+
+    // Optional: confidence for emotional intelligence and tone calibration.
+    $confidence_result = $this->getSubmissionData('confidence', $uid);
+    if ($confidence_result) {
+      $submission_data['confidence'] = $confidence_result;
+      $submission_ids[] = $confidence_result['sid'];
     }
 
     // Check if we should regenerate based on source data hash.

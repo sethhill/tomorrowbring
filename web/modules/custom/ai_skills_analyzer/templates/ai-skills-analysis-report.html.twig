@@ -157,23 +157,13 @@
 		</section>
 	{% endif %}
 
-	{# Motivational Insights #}
-	{% if report.motivational_insights %}
+	{# Closing Message Section #}
+	{% if report.closing_message %}
 		<section class="report-section report-favorable">
-			<h2>{{ 'Your Unique Advantages'|t }}</h2>
-
-			{% if report.motivational_insights.unique_advantages %}
-					<div class="highlight-grid">
-						{% for advantage in report.motivational_insights.unique_advantages %}
-							<div class="highlight-card">
-								<h3>{{ advantage.insight|default(advantage.advantage|default(advantage)) }}</h3>
-								{% if advantage.evidence %}
-									<p>{{ advantage.evidence }}</p>
-								{% endif %}
-							</div>
-						{% endfor %}
-					</div>
-			{% endif %}
+			<h2>{{ report.closing_message.title|t }}</h2>
+			<div class="highlight-card">
+				<h3>{{ report.closing_message.message }}</h3>
+			</div>
 		</section>
 	{% endif %}
 

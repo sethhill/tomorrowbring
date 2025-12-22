@@ -1174,4 +1174,223 @@ abstract class AiReportServiceBase {
     }
   }
 
+  /**
+   * Build emotional context and tone calibration rules from confidence data.
+   *
+   * This helper method extracts emotional state information from the confidence
+   * webform and generates tone calibration rules for use in AI prompts.
+   * Implements a moderate approach to tone calibration - adjusting pacing,
+   * reassurance level, and step sizes based on user's emotional state.
+   *
+   * @param array $confidence_data
+   *   Data from confidence webform submission.
+   *
+   * @return array
+   *   Array with keys:
+   *   - 'section': Prompt section with emotional state data
+   *   - 'tone_rules': Tone calibration instructions
+   *   - 'state': Parsed emotional state for logging
+   */
+  protected function buildEmotionalContext(array $confidence_data): array {
+    if (empty($confidence_data)) {
+      return ['section' => '', 'tone_rules' => '', 'state' => NULL];
+    }
+
+    $anxiety = $confidence_data['m7_q1_anxiety'] ?? NULL;
+    $excitement = $confidence_data['m7_q1_excitement'] ?? NULL;
+    $confidence = $confidence_data['m7_q1_confidence'] ?? NULL;
+    $describes = $confidence_data['m7_q2_describes_you'] ?? NULL;
+    $support_needed = $confidence_data['m7_q5_support_needed'] ?? [];
+    $leadership_support = $confidence_data['m7_q3_leadership_support'] ?? NULL;
+    $company_trust = $confidence_data['m7_q4_trust_company'] ?? NULL;
+
+    // Build emotional state section.
+    $section = "EMOTIONAL STATE:\n";
+    $section .= "Anxiety: {$anxiety}/5, Excitement: {$excitement}/5, Confidence: {$confidence}/5\n";
+    $section .= "Self-Description: {$describes}\n";
+    $section .= "Leadership Support: {$leadership_support}/5, Company Trust: {$company_trust}/5\n";
+    if (!empty($support_needed)) {
+      $section .= "Support Needed: " . implode(', ', $support_needed) . "\n";
+    }
+
+    // Build tone calibration rules (moderate approach).
+    $tone_rules = "TONE CALIBRATION (Moderate Approach):\n";
+
+    if ($anxiety > 3 && $confidence < 3) {
+      $tone_rules .= "- Use reassuring, step-by-step tone\n";
+      $tone_rules .= "- Break recommendations into smaller, achievable steps\n";
+      $tone_rules .= "- Emphasize progress over perfection\n";
+    }
+
+    if ($describes === 'overwhelmed' || $describes === 'resistant') {
+      $tone_rules .= "- Validate their concerns without dismissing them\n";
+      $tone_rules .= "- Focus on small wins and quick victories\n";
+      $tone_rules .= "- Reduce pressure, increase support\n";
+    }
+
+    if ($describes === 'energized' || $excitement > 4) {
+      $tone_rules .= "- Match their energy and enthusiasm\n";
+      $tone_rules .= "- Offer accelerated timelines where appropriate\n";
+      $tone_rules .= "- Include stretch goals alongside foundational ones\n";
+    }
+
+    if ($describes === 'cautious_optimistic') {
+      $tone_rules .= "- Balance optimism with practical risk mitigation\n";
+      $tone_rules .= "- Provide both 'safe bet' and 'stretch' options\n";
+    }
+
+    if (in_array('permission', $support_needed)) {
+      $tone_rules .= "- Include strategies for gaining leadership buy-in\n";
+      $tone_rules .= "- Provide conversation starters for manager discussions\n";
+    }
+
+    if (in_array('understand_why', $support_needed)) {
+      $tone_rules .= "- Provide business case evidence and ROI reasoning\n";
+      $tone_rules .= "- Explain the 'why' behind recommendations\n";
+    }
+
+    if (in_array('job_security', $support_needed)) {
+      $tone_rules .= "- Emphasize how actions increase job security\n";
+      $tone_rules .= "- Focus on becoming irreplaceable through adaptation\n";
+    }
+
+    if ($leadership_support < 3) {
+      $tone_rules .= "- Include strategies for working without top-down support\n";
+      $tone_rules .= "- Emphasize peer networks and grassroots approaches\n";
+    }
+
+    return [
+      'section' => $section,
+      'tone_rules' => $tone_rules,
+      'state' => [
+        'anxiety' => $anxiety,
+        'excitement' => $excitement,
+        'confidence' => $confidence,
+        'describes' => $describes,
+      ],
+    ];
+  }
+
+  /**
+   * Build learning preferences context from training_preferences data.
+   *
+   * This helper method extracts learning style preferences, format preferences,
+   * motivators, and barriers from the training_preferences webform and formats
+   * them into a prompt section with personalization rules.
+   *
+   * @param array $training_prefs_data
+   *   Data from training_preferences webform submission.
+   *
+   * @return array
+   *   Array with keys:
+   *   - 'section': Prompt section with learning preferences
+   *   - 'top_styles': Array of top 3 learning styles
+   *   - 'barriers': Array of barriers
+   *   - 'motivators': Array of motivators
+   */
+  protected function buildLearningPreferencesContext(array $training_prefs_data): array {
+    if (empty($training_prefs_data)) {
+      return ['section' => '', 'top_styles' => [], 'barriers' => [], 'motivators' => []];
+    }
+
+    // Parse Likert rankings to get top styles.
+    $style_rankings = $training_prefs_data['m6_q1_learning_style_rank'] ?? [];
+    $top_styles = $this->parseTopLearningStyles($style_rankings);
+
+    $training_time = $training_prefs_data['m6_q2_training_time'] ?? NULL;
+    $format_pref = $training_prefs_data['m6_q3_format'] ?? [];
+    $practice_pref = $training_prefs_data['m6_q4_practice'] ?? NULL;
+    $motivators = $training_prefs_data['m6_q5_motivation'] ?? [];
+    $barriers = $training_prefs_data['m6_q6_barriers'] ?? [];
+
+    $section = "LEARNING PREFERENCES:\n";
+    if (!empty($top_styles)) {
+      $section .= "Top Learning Styles: " . implode(', ', $top_styles) . "\n";
+    }
+    $section .= "Preferred Training Time: {$training_time}\n";
+    if (!empty($format_pref)) {
+      $section .= "Ideal Formats: " . implode(', ', $format_pref) . "\n";
+    }
+    $section .= "Practice Preference: {$practice_pref}\n";
+    if (!empty($motivators)) {
+      $section .= "Top Motivators: " . implode(', ', $motivators) . "\n";
+    }
+    if (!empty($barriers)) {
+      $section .= "Learning Barriers: " . implode(', ', $barriers) . "\n";
+    }
+
+    $section .= "\nPERSONALIZATION RULES:\n";
+    if (!empty($top_styles)) {
+      $section .= "- Recommend platforms offering: " . implode(', ', $top_styles) . "\n";
+    }
+    if (in_array('too_busy', $barriers)) {
+      $section .= "- Emphasize micro-learning sessions (<30 min)\n";
+    }
+    if (in_array('no_support', $barriers)) {
+      $section .= "- Include self-directed, low-permission options\n";
+    }
+    if (in_array('certification', $motivators)) {
+      $section .= "- Prioritize certified programs and credentials\n";
+    }
+    if (in_array('impact', $motivators)) {
+      $section .= "- Show immediate, visible impact on daily work\n";
+    }
+    if ($practice_pref === 'real_work') {
+      $section .= "- Recommend learning-by-doing approaches with real projects\n";
+    }
+    if ($practice_pref === 'sandbox') {
+      $section .= "- Include safe practice environments without real-world consequences\n";
+    }
+
+    return [
+      'section' => $section,
+      'top_styles' => $top_styles,
+      'barriers' => $barriers,
+      'motivators' => $motivators,
+    ];
+  }
+
+  /**
+   * Parse Likert ranking data to extract top 3 learning styles.
+   *
+   * @param array $rankings
+   *   Associative array of style => score from Likert field.
+   *
+   * @return array
+   *   Array of top 3 learning style labels.
+   */
+  protected function parseTopLearningStyles(array $rankings): array {
+    if (empty($rankings)) {
+      return [];
+    }
+
+    $style_labels = [
+      'video' => 'Video tutorials',
+      'labs' => 'Hands-on labs',
+      'live' => 'Live instructor-led sessions',
+      'peer' => 'Peer learning circles',
+      'documentation' => 'Written documentation',
+      'coaching' => 'One-on-one coaching',
+      'micro' => 'Microlearning',
+      'trial' => 'Trial and error',
+      'case' => 'Case studies',
+      'certification' => 'Certification programs',
+    ];
+
+    // Likert scale: 1 = least preferred, 3 = highly preferred.
+    $scored = [];
+    foreach ($rankings as $style => $score) {
+      if ($score >= 3) {
+        $scored[$style] = $score;
+      }
+    }
+
+    arsort($scored);
+    $top_keys = array_slice(array_keys($scored), 0, 3);
+
+    return array_map(function ($key) use ($style_labels) {
+      return $style_labels[$key] ?? $key;
+    }, $top_keys);
+  }
+
 }

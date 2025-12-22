@@ -102,6 +102,12 @@ class AiCareerTransitionsService extends AiReportServiceBase {
       $industry_context = "Industry: Not specified";
     }
 
+    // Optional: Extract confidence data for tone calibration.
+    $confidence_data = $submission_data['confidence']['data'] ?? [];
+    $emotional_context = $this->buildEmotionalContext($confidence_data);
+    $emotional_section = $emotional_context['section'];
+    $tone_rules = $emotional_context['tone_rules'];
+
     return <<<PROMPT
 Analyze career transition opportunities in the AI era. Be concise.
 
@@ -111,6 +117,10 @@ Current Skills: {$current_skills}
 Desired Skills: {$desired_skills}
 
 {$industry_instruction}
+
+{$emotional_section}
+
+{$tone_rules}
 
 CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
 
@@ -134,13 +144,24 @@ Respond with JSON (limit to 3-4 viable transitions):
       "first_steps": ["step 1", "step 2", "step 3"]
     }
   ],
-  "career_confidence": [
-    {
-      "insight": "Inspiring statement about their career transition potential",
-      "evidence": "Supporting detail about why this transition is achievable"
-    }
-  ]
+  "closing_message": {
+    "title": "2-5 words, relevant to career transition",
+    "message": "2-3 sentences connecting their transition readiness to opportunity. Be constructive, not motivational. Reference specific transitions or strengths from this report."
+  }
 }
+
+ENHANCED RULES:
+- If confidence < 3: recommend longer timelines with more incremental steps
+- If anxiety > 3: include "low-risk exploration" options (side projects, informational interviews) in first_steps
+- If support_needed includes "mentor": emphasize mentorship opportunities in why_viable for each role
+- Adjust transition_readiness.summary tone based on emotional state
+
+TONE RULES for closing_message:
+- Be direct and practical
+- Connect their transferable skills to viable opportunities
+- Focus on market positioning, not self-belief
+- Avoid "follow your dreams", "you're ready", "unlimited potential"
+- Use language like "positions you for", "markets value", "transitions favor"
 
 Return ONLY JSON.
 PROMPT;
@@ -153,7 +174,7 @@ PROMPT;
     $required_fields = [
       'transition_readiness',
       'viable_transitions',
-      'career_confidence',
+      'closing_message',
     ];
 
     foreach ($required_fields as $field) {
@@ -179,6 +200,11 @@ PROMPT;
    * Override to include user industry in the prompt context.
    */
   public function generateReport($uid = NULL, bool $force_regenerate = FALSE, bool $retry = TRUE) {
+    // Check minimum data first.
+    if (!$this->hasMinimumData($uid)) {
+      return NULL;
+    }
+
     // Store uid for use in buildPrompt.
     if ($uid === NULL) {
       $uid = $this->currentUser->id();
@@ -187,7 +213,66 @@ PROMPT;
     // Create a temporary storage for uid to pass to buildPrompt.
     $this->tempUid = $uid;
 
-    return parent::generateReport($uid, $force_regenerate, $retry);
+    // Check cache first (unless forcing regenerate).
+    if (!$force_regenerate) {
+      $cached = $this->getCachedReport($uid);
+      if ($cached !== NULL) {
+        return $cached;
+      }
+
+      // Check for existing entity.
+      $latest_entity = $this->loadLatestReport($uid);
+      if ($latest_entity) {
+        $report_data = $latest_entity->getReportData();
+        $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+        $report_data['uid'] = $uid;
+        $report_data['generation_time'] = $latest_entity->getGenerationTime();
+        $report_data['version'] = $latest_entity->getVersion();
+
+        // Populate cache from entity.
+        $this->setCachedReport($uid, $report_data);
+        return $report_data;
+      }
+    }
+
+    // Collect submission data (required + optional).
+    $submission_data = [];
+    $submission_ids = [];
+
+    // Required webforms.
+    foreach ($this->getRequiredWebforms() as $webform_id) {
+      $result = $this->getSubmissionData($webform_id, $uid);
+      if ($result) {
+        $submission_data[$webform_id] = $result;
+        $submission_ids[] = $result['sid'];
+      }
+    }
+
+    // Optional: confidence for tone calibration.
+    $confidence_result = $this->getSubmissionData('confidence', $uid);
+    if ($confidence_result) {
+      $submission_data['confidence'] = $confidence_result;
+      $submission_ids[] = $confidence_result['sid'];
+    }
+
+    // Check if we should regenerate based on source data hash.
+    if (!$force_regenerate && $latest_entity = $this->loadLatestReport($uid)) {
+      $current_hash = $this->getSourceDataHash($submission_data);
+      if ($latest_entity->getSourceDataHash() === $current_hash) {
+        // Source data hasn't changed, return existing report.
+        $report_data = $latest_entity->getReportData();
+        $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+        $report_data['uid'] = $uid;
+        $report_data['generation_time'] = $latest_entity->getGenerationTime();
+        $report_data['version'] = $latest_entity->getVersion();
+
+        $this->setCachedReport($uid, $report_data);
+        return $report_data;
+      }
+    }
+
+    // Generate the report.
+    return $this->generateReportFromData($uid, $submission_data, $submission_ids, $retry);
   }
 
   /**

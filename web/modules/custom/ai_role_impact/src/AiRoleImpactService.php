@@ -99,6 +99,12 @@ class AiRoleImpactService extends AiReportServiceBase {
     $keep_percentage = $total_tasks > 0 ? round((count($tasks_keep) / $total_tasks) * 100) : 0;
     $unsure_percentage = $total_tasks > 0 ? round((count($tasks_unsure) / $total_tasks) * 100) : 0;
 
+    // Optional: Extract confidence data for tone calibration.
+    $confidence_data = $submission_data['confidence']['data'] ?? [];
+    $emotional_context = $this->buildEmotionalContext($confidence_data);
+    $emotional_section = $emotional_context['section'];
+    $tone_rules = $emotional_context['tone_rules'];
+
     return <<<PROMPT
 Analyze AI displacement risk for this professional. Be concise but actionable.
 
@@ -114,6 +120,10 @@ TASKS ({$total_tasks} total):
 - Want to KEEP ({$keep_percentage}%): {$tasks_keep_str}
 - UNSURE ({$unsure_percentage}%): {$tasks_unsure_str}
 
+{$emotional_section}
+
+{$tone_rules}
+
 CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
 
 Generate JSON report with these sections (be concise):
@@ -128,15 +138,27 @@ Generate JSON report with these sections (be concise):
 
 3. ai_insights:
    - personalized_narrative (1 paragraph, 3 sentences max)
-   - confidence_boosters: [exactly 2 items with {insight, evidence}] - specific reasons THIS person should be optimistic
    - industry_context: {role_evolution, competitive_advantage, watch_out_for} (1 sentence each)
 
-RULES:
+4. closing_message:
+   - title (2-5 words, relevant to role evolution)
+   - message (2-3 sentences connecting their positioning to role evolution. Be constructive, not reassuring. Reference specific insights about their role or skills.)
+
+ENHANCED RULES:
 - Risk score: 0-30=low, 31-55=medium, 56-75=high, 76+=critical (based on help_me% and role)
+- If anxiety > 3: soften risk language, emphasize agency and control they have
+- If confidence < 3: break evolution_path into smaller, more achievable steps
+- If describes "overwhelmed": focus on immediate, low-risk actions in positioning_points
 - Be specific to THEIR data, avoid generic advice
 - Keep responses concise - this is about actionable insights, not volume
-- ALWAYS include confidence_boosters - find genuine reasons for optimism in their profile
 - Return ONLY JSON
+
+TONE RULES for closing_message:
+- Be direct and pragmatic
+- Connect role evolution to positioning advantage
+- Focus on adaptation through capability, not survival through hope
+- Avoid "stay positive", "embrace change", "you'll be fine"
+- Use language like "positions you", "roles reward", "evolution favors"
 PROMPT;
   }
 
@@ -176,6 +198,7 @@ PROMPT;
       'displacement_risk',
       'evolution_path',
       'ai_insights',
+      'closing_message',
     ];
 
     foreach ($required_fields as $field) {
@@ -241,6 +264,13 @@ PROMPT;
     if ($ai_usage_result) {
       $submission_data['current_ai_usage'] = $ai_usage_result;
       $submission_ids[] = $ai_usage_result['sid'];
+    }
+
+    // Optional: confidence for tone calibration.
+    $confidence_result = $this->getSubmissionData('confidence', $uid);
+    if ($confidence_result) {
+      $submission_data['confidence'] = $confidence_result;
+      $submission_ids[] = $confidence_result['sid'];
     }
 
     // Check if we should regenerate based on source data hash.

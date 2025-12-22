@@ -133,8 +133,19 @@ Respond with JSON:
     "immediate_actions": ["action 1", "action 2"],
     "six_month_focus": "What to prioritize",
     "long_term_positioning": "How to stay relevant"
+  },
+  "closing_message": {
+    "title": "Concise, relevant title (2-5 words)",
+    "message": "2-3 sentences that connect this specific industry context to actionable positioning. Be constructive and grounded, not cheesy or overly optimistic. Reference specific insights from this report."
   }
 }
+
+TONE RULES for closing_message:
+- Be direct and professional
+- Connect to specific industry/role insights from this report
+- Focus on positioning and action, not motivation
+- Avoid phrases like "exciting journey", "bright future", "endless possibilities"
+- Use language like "positions you", "markets reward", "signals to act on"
 PROMPT;
   }
 
@@ -148,6 +159,7 @@ PROMPT;
       'competitive_positioning',
       'emerging_trends',
       'strategic_recommendations',
+      'closing_message',
     ];
 
     foreach ($required as $field) {

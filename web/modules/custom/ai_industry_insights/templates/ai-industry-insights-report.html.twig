@@ -78,10 +78,10 @@
 
 		{% if report.competitive_positioning %}
 			<section class="report-section competitive">
-				<h2>{{ 'Competitive Positioning'|t }}</h2>
+				<h2>{{ 'Positioning Yourself'|t }}</h2>
 				<div class="report-lists columns-narrow competitive-positioning-list">
 					<div class="report-list">
-						<h3>{{ 'Differentiators'|t }}</h3>
+						<h3>{{ 'Potential Differentiators'|t }}</h3>
 						<ul>
 							{% for differentiator in report.competitive_positioning.differentiators %}
 								<li>{{ differentiator }}</li>
@@ -97,7 +97,7 @@
 						</ul>
 					</div>
 					<div class="report-list">
-						<h3>{{ 'Red Flags'|t }}</h3>
+						<h3>{{ 'Potential Red Flags'|t }}</h3>
 						<ul>
 							{% for red_flag in report.competitive_positioning.red_flags %}
 								<li>{{ red_flag }}</li>
@@ -162,13 +162,15 @@
 			</section>
 		{% endif %}
 
-		{# Favorable Outlook Section #}
-		<section class="report-section report-favorable">
-			<h2>{{ 'Industry Awareness as Advantage'|t }}</h2>
-			<div class="highlight-card">
-			<h3>Understanding how AI reshapes your industry puts you among the prepared, not the surprised. Markets reward those who see change coming and position accordingly. The insights here aren't predictions to wait for—they're signals to act on.</h3>
-			</div>
-		</section>
+		{# Closing Message Section #}
+		{% if report.closing_message %}
+			<section class="report-section report-favorable">
+				<h2>{{ report.closing_message.title|t }}</h2>
+				<div class="highlight-card">
+					<h3>{{ report.closing_message.message }}</h3>
+				</div>
+			</section>
+		{% endif %}
 
 	{% endif %}
 

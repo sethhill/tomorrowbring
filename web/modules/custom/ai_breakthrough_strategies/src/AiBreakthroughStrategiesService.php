@@ -69,6 +69,12 @@ class AiBreakthroughStrategiesService extends AiReportServiceBase {
     $ai_frequency = $ai_usage_data['m1_q2_frequency'] ?? 'not specified';
     $ai_comfort = $ai_usage_data['m1_q3_comfort'] ?? 'not specified';
 
+    // Optional: Extract confidence data for emotional intelligence.
+    $confidence_data = $submission_data['confidence']['data'] ?? [];
+    $emotional_context = $this->buildEmotionalContext($confidence_data);
+    $emotional_section = $emotional_context['section'];
+    $tone_rules = $emotional_context['tone_rules'];
+
     return <<<PROMPT
 Generate a personalized breakthrough strategies report for AI adoption.
 
@@ -79,6 +85,10 @@ Ethics importance: {$ethical_importance}/5, Concerns: {$ethics_concerns}
 Trust (1-5): Hiring {$trust_hiring}, Medical {$trust_medical}, Financial {$trust_financial}, Creative {$trust_creative}, Legal {$trust_legal}
 Career outlook: {$career_5_years}, Skills: {$valuable_skills}
 AI view (1=threat, 9=opportunity): {$threat_opportunity_scale}/9
+
+{$emotional_section}
+
+{$tone_rules}
 
 CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
 
@@ -97,7 +107,23 @@ Structure (keep responses CONCISE - max 1-2 sentences per text field, 3 items pe
 4. breakthrough_insights:
    - transformation_narrative (2 sentences about their transformation potential)
 
-RULES: Be specific and concise. Match advice to threat_opportunity score. Return ONLY JSON.
+5. closing_message:
+   - title (2-5 words, relevant to breakthrough theme)
+   - message (2-3 sentences connecting their specific mindset work to capability. Be constructive, not cheesy. Reference specific insights from the fear audit or mindset shifts.)
+
+ENHANCED RULES:
+- Be specific and concise. Match advice to threat_opportunity score
+- If anxiety > 3 or describes "overwhelmed/resistant": emphasize fear_to_empowerment heavily, use validating tone
+- If describes "energized": skip fear work, focus on acceleration in breakthrough_insights
+- If support_needed includes specific items, reference them in overcoming_barriers
+- Return ONLY JSON
+
+TONE RULES for closing_message:
+- Be direct and professional
+- Connect to their specific journey through doubt and uncertainty
+- Focus on capability building through action, not eliminating fear
+- Avoid "you can do it", "believe in yourself", "limitless potential"
+- Use language like "positions you ahead", "compounds into capability", "moving forward with doubt"
 PROMPT;
   }
 
@@ -110,6 +136,7 @@ PROMPT;
       'overcoming_barriers',
       'confidence_building',
       'breakthrough_insights',
+      'closing_message',
     ];
 
     $missing_fields = [];
@@ -189,6 +216,13 @@ PROMPT;
     if ($ai_usage_result) {
       $submission_data['current_ai_usage'] = $ai_usage_result;
       $submission_ids[] = $ai_usage_result['sid'];
+    }
+
+    // Optional: confidence for emotional intelligence and tone calibration.
+    $confidence_result = $this->getSubmissionData('confidence', $uid);
+    if ($confidence_result) {
+      $submission_data['confidence'] = $confidence_result;
+      $submission_ids[] = $confidence_result['sid'];
     }
 
     // Check if we should regenerate based on source data hash.

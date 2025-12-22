@@ -31,6 +31,81 @@ class AiTaskRecommenderService extends AiReportServiceBase {
   }
 
   /**
+   * Override to collect optional confidence data.
+   */
+  public function generateReport($uid = NULL, bool $force_regenerate = FALSE, bool $retry = TRUE) {
+    // Check minimum data first.
+    if (!$this->hasMinimumData($uid)) {
+      return NULL;
+    }
+
+    if ($uid === NULL) {
+      $uid = $this->currentUser->id();
+    }
+
+    // Check cache first (unless forcing regenerate).
+    if (!$force_regenerate) {
+      $cached = $this->getCachedReport($uid);
+      if ($cached !== NULL) {
+        return $cached;
+      }
+
+      // Check for existing entity.
+      $latest_entity = $this->loadLatestReport($uid);
+      if ($latest_entity) {
+        $report_data = $latest_entity->getReportData();
+        $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+        $report_data['uid'] = $uid;
+        $report_data['generation_time'] = $latest_entity->getGenerationTime();
+        $report_data['version'] = $latest_entity->getVersion();
+
+        // Populate cache from entity.
+        $this->setCachedReport($uid, $report_data);
+        return $report_data;
+      }
+    }
+
+    // Collect submission data (required + optional).
+    $submission_data = [];
+    $submission_ids = [];
+
+    // Required webforms.
+    foreach ($this->getRequiredWebforms() as $webform_id) {
+      $result = $this->getSubmissionData($webform_id, $uid);
+      if ($result) {
+        $submission_data[$webform_id] = $result;
+        $submission_ids[] = $result['sid'];
+      }
+    }
+
+    // Optional: confidence for tone calibration.
+    $confidence_result = $this->getSubmissionData('confidence', $uid);
+    if ($confidence_result) {
+      $submission_data['confidence'] = $confidence_result;
+      $submission_ids[] = $confidence_result['sid'];
+    }
+
+    // Check if we should regenerate based on source data hash.
+    if (!$force_regenerate && $latest_entity = $this->loadLatestReport($uid)) {
+      $current_hash = $this->getSourceDataHash($submission_data);
+      if ($latest_entity->getSourceDataHash() === $current_hash) {
+        // Source data hasn't changed, return existing report.
+        $report_data = $latest_entity->getReportData();
+        $report_data['generated_at'] = $latest_entity->getGeneratedAt();
+        $report_data['uid'] = $uid;
+        $report_data['generation_time'] = $latest_entity->getGenerationTime();
+        $report_data['version'] = $latest_entity->getVersion();
+
+        $this->setCachedReport($uid, $report_data);
+        return $report_data;
+      }
+    }
+
+    // Generate the report.
+    return $this->generateReportFromData($uid, $submission_data, $submission_ids, $retry);
+  }
+
+  /**
    * Get human-readable task labels.
    *
    * @return array
@@ -135,6 +210,12 @@ class AiTaskRecommenderService extends AiReportServiceBase {
     $help_tasks_str = implode(', ', $help_tasks);
     $keep_tasks_str = implode(', ', $keep_tasks);
 
+    // Optional: Extract confidence data for tone calibration.
+    $confidence_data = $submission_data['confidence']['data'] ?? [];
+    $emotional_context = $this->buildEmotionalContext($confidence_data);
+    $emotional_section = $emotional_context['section'];
+    $tone_rules = $emotional_context['tone_rules'];
+
     return <<<PROMPT
 Recommend specific AI tools for task automation. Be concise and practical.
 
@@ -142,6 +223,10 @@ Role: {$role}
 AI Comfort Level: {$current_ai_comfort}/5
 Tasks wanting automation help with: {$help_tasks_str}
 Tasks they want to keep doing themselves: {$keep_tasks_str}
+
+{$emotional_section}
+
+{$tone_rules}
 
 CRITICAL: Return ONLY valid JSON. No markdown, no explanations. Start with { and end with }.
 
@@ -161,16 +246,10 @@ Respond with JSON (limit to 3-5 tool recommendations):
       "Specific example task 6",
       "Specific example task 7",
     ],
-    "quick_wins": [
-      {
-        "insight": "Inspiring statement about a quick automation win",
-        "evidence": "Supporting detail on why this is achievable"
-      },
-      {
-        "insight": "Second inspiring quick win statement",
-        "evidence": "Supporting detail on this opportunity"
-      }
-    ]
+  },
+  "closing_message": {
+    "title": "2-5 words, relevant to task automation",
+    "message": "2-3 sentences connecting automation opportunities to capability gains. Be constructive, not motivational. Reference specific tasks or time savings from this report."
   },
   "tool_recommendations": [
     {
@@ -196,6 +275,19 @@ Respond with JSON (limit to 3-5 tool recommendations):
   }
 }
 
+ENHANCED PERSONALIZATION RULES:
+- If anxiety > 3: start with low-risk automation suggestions, emphasize AI-assisted vs. full automation
+- If confidence < 3: recommend easier-to-implement tools first (difficulty: easy), build confidence gradually
+- If describes "energized" or excitement > 4: suggest aggressive automation strategy with advanced workflows
+- Adjust automation_potential tone based on emotional state
+
+TONE RULES for closing_message:
+- Be direct and quantitative
+- Connect automation to time reclaimed and capability expansion
+- Focus on practical impact, not potential
+- Avoid "work smarter", "unleash productivity", "transform your workflow"
+- Use language like "reclaims hours", "compounds returns", "automation positions"
+
 Return ONLY JSON.
 PROMPT;
   }
@@ -206,6 +298,7 @@ PROMPT;
   protected function validateResponse(array $response): bool {
     $required_fields = [
       'overview',
+      'closing_message',
       'tool_recommendations',
       'workflow_integration',
     ];

@@ -103,18 +103,12 @@
 		</section>
 	{% endif %}
 
-	{% if report.career_confidence %}
+	{# Closing Message Section #}
+	{% if report.closing_message %}
 		<section class="report-section report-favorable">
-			<h2>{{ 'A Favorable Outlook'|t }}</h2>
-			<div class="highlight-grid">
-				{% for item in report.career_confidence %}
-					<div class="highlight-card">
-						<h3>{{ item.insight }}</h3>
-						{% if item.evidence %}
-							<p>{{ item.evidence }}</p>
-						{% endif %}
-					</div>
-				{% endfor %}
+			<h2>{{ report.closing_message.title|t }}</h2>
+			<div class="highlight-card">
+				<h3>{{ report.closing_message.message }}</h3>
 			</div>
 		</section>
 	{% endif %}
