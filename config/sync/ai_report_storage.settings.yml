@@ -1,6 +1,6 @@
 simple_reports:
   operation_type: chat
-  provider_model: anthropic__claude-sonnet-4-5-20250929
+  provider_model: anthropic__claude-opus-4-5-20251101
 complex_reports:
   operation_type: chat
   provider_model: anthropic__claude-opus-4-5-20251101
