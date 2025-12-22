@@ -627,6 +627,10 @@ h3 + .timeline-period {
   margin-bottom: 0.5em;
 }
 
+.ai-attribution {
+  font-style: italic;
+}
+
 /* Footer */
 .report-footer {
   margin-top: 3rem;
