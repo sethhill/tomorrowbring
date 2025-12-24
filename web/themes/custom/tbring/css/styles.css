@@ -158,6 +158,12 @@ h2 {
   text-wrap: balance;
 }
 
+a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--color-orange);
+  text-underline-offset: 0.25em;
+}
+
 .content {
   font-size: 1.5rem;
   font-feature-settings: "ss06";

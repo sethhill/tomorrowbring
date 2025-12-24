@@ -62,3 +62,13 @@
     outline-offset: -2px;
   }
 }
+
+
+#block-tbring-footer {
+  ul {
+    li {
+      display: inline-block;
+      margin: 0 0.5em;
+    }
+  }
+}
