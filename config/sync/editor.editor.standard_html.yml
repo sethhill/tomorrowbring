@@ -1,0 +1,26 @@
+uuid: 0f71692b-d220-47c4-95b7-52956ffe1a58
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.standard_html
+  module:
+    - ckeditor5
+format: standard_html
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - heading
+      - bold
+      - italic
+  plugins:
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+image_upload:
+  status: false

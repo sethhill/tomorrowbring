@@ -1,0 +1,8 @@
+uuid: 6078a175-ff3f-486b-bbec-01a544400e6d
+langcode: en
+status: true
+dependencies: {  }
+name: 'Standard HTML'
+format: standard_html
+weight: -10
+filters: {  }

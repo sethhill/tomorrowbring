@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: 'Private HTML'
 format: private_html
-weight: 0
+weight: -9
 filters: {  }
