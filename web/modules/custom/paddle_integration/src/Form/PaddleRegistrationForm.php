@@ -145,12 +145,6 @@ class PaddleRegistrationForm extends FormBase {
       '#empty_option' => $this->t('- Select -'),
     ];
 
-    $form['terms'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('I agree to the Terms of Service and Privacy Policy'),
-      '#required' => TRUE,
-    ];
-
     $form['actions'] = [
       '#type' => 'actions',
     ];

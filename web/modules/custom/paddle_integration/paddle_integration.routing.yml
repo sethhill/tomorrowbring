@@ -7,6 +7,15 @@ paddle_integration.checkout:
   requirements:
     _user_is_logged_in: 'FALSE'
 
+# Checkout confirmation page
+paddle_integration.checkout_confirm:
+  path: '/sign-up/confirm'
+  defaults:
+    _controller: '\Drupal\paddle_integration\Controller\CheckoutController::confirm'
+    _title: 'Confirm Purchase'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+
 # Payment success page
 paddle_integration.checkout_success:
   path: '/sign-up/success'

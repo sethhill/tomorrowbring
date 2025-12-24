@@ -38,6 +38,22 @@ function paddle_integration_theme($existing, $type, $theme, $path) {
         'cancel_url' => NULL,
       ],
     ],
+    'paddle_checkout_overview' => [
+      'variables' => [
+        'confirm_url' => NULL,
+      ],
+    ],
+    'paddle_checkout_confirm' => [
+      'variables' => [
+        'client_token' => NULL,
+        'product_id' => NULL,
+        'environment' => NULL,
+        'success_url' => NULL,
+        'cancel_url' => NULL,
+        'terms_url' => NULL,
+        'privacy_url' => NULL,
+      ],
+    ],
     'paddle_success' => [
       'variables' => [
         'message' => NULL,

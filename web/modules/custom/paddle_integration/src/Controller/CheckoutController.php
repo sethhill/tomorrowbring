@@ -39,12 +39,27 @@ class CheckoutController extends ControllerBase {
   }
 
   /**
-   * Checkout page.
+   * Checkout page (Screen 1 - Overview).
    *
    * @return array
-   *   Render array for checkout page.
+   *   Render array for checkout overview page.
    */
   public function checkout() {
+    $confirm_url = Url::fromRoute('paddle_integration.checkout_confirm')->toString();
+
+    return [
+      '#theme' => 'paddle_checkout_overview',
+      '#confirm_url' => $confirm_url,
+    ];
+  }
+
+  /**
+   * Checkout confirmation page (Screen 2 - Acknowledgments and Payment).
+   *
+   * @return array
+   *   Render array for checkout confirmation page.
+   */
+  public function confirm() {
     $client_token = $this->apiClient->getClientToken();
     $product_id = $this->apiClient->getProductId();
     $config = $this->config('paddle_integration.settings');
@@ -60,13 +75,20 @@ class CheckoutController extends ControllerBase {
     $success_url = Url::fromRoute('paddle_integration.checkout_success', [], ['absolute' => TRUE])->toString();
     $cancel_url = Url::fromRoute('paddle_integration.checkout_cancel', [], ['absolute' => TRUE])->toString();
 
+    // Terms page route - using path alias.
+    $terms_url = '/terms-and-conditions';
+    // Privacy page - node 36.
+    $privacy_url = Url::fromRoute('entity.node.canonical', ['node' => 36])->toString();
+
     return [
-      '#theme' => 'paddle_checkout',
+      '#theme' => 'paddle_checkout_confirm',
       '#client_token' => $client_token,
       '#product_id' => $product_id,
       '#environment' => $environment,
       '#success_url' => $success_url,
       '#cancel_url' => $cancel_url,
+      '#terms_url' => $terms_url,
+      '#privacy_url' => $privacy_url,
       '#attached' => [
         'library' => [
           'paddle_integration/paddle_checkout',
