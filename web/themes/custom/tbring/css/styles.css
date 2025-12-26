@@ -370,8 +370,6 @@ input[type="radio"]:checked::after {
 
 /* Label styling for form elements */
 label {
-  display: inline-flex;
-  align-items: center;
   cursor: pointer;
   margin-bottom: 0.75em;
   line-height: 1.5;
@@ -522,6 +520,7 @@ label {
 
 header {
   margin-bottom: 0.1em;
+  background: white;
 }
 
 footer {
@@ -551,6 +550,10 @@ footer {
     justify-content: center;
     align-items: center;
   }
+}
+
+.path-sign-up .inner {
+  /* max-width: 100%; */
 }
 
 #block-tbring-page-title{
