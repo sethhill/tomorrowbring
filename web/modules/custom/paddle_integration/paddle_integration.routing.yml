@@ -2,7 +2,7 @@
 paddle_integration.checkout:
   path: '/sign-up'
   defaults:
-    _controller: '\Drupal\paddle_integration\Controller\CheckoutController::checkout'
+    _form: '\Drupal\paddle_integration\Form\PaddleCheckoutForm'
     _title: 'Get Started'
   requirements:
     _user_is_logged_in: 'FALSE'

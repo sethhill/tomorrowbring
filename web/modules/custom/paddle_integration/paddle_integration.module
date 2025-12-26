@@ -52,6 +52,10 @@ function paddle_integration_theme($existing, $type, $theme, $path) {
         'cancel_url' => NULL,
         'terms_url' => NULL,
         'privacy_url' => NULL,
+        'customer_email' => NULL,
+        'customer_first_name' => NULL,
+        'customer_last_name' => NULL,
+        'checkout_session_id' => NULL,
       ],
     ],
     'paddle_success' => [
@@ -146,4 +150,13 @@ function paddle_integration_user_form_validate(&$form, \Drupal\Core\Form\FormSta
     // Set the auto-generated username.
     $form_state->setValue('name', $username);
   }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function paddle_integration_cron() {
+  // Clean up abandoned pre-checkout records (older than 24 hours).
+  \Drupal::service('paddle_integration.customer_manager')
+    ->cleanupAbandonedCheckouts();
 }

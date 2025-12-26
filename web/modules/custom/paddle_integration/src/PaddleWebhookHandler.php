@@ -139,6 +139,9 @@ class PaddleWebhookHandler {
       return FALSE;
     }
 
+    // Extract checkout session ID from custom data.
+    $checkout_session_id = $event_data['custom_data']['checkout_session_id'] ?? NULL;
+
     // Check for duplicate transaction (idempotency).
     $existing = $this->customerManager->getPurchaseByTransactionId($transaction_id);
     if ($existing) {
@@ -182,12 +185,33 @@ class PaddleWebhookHandler {
       'metadata' => $event_data['custom_data'] ?? [],
     ];
 
-    // Create pending purchase record.
-    $purchase_id = $this->customerManager->createPendingPurchase($transaction_data);
+    // Try to update existing pre-checkout record first (if session ID exists).
+    $purchase_id = NULL;
+    if (!empty($checkout_session_id)) {
+      $updated = $this->customerManager->updateToPending($checkout_session_id, $transaction_data);
+      if ($updated) {
+        $this->logger->info('Updated pre-checkout session @session to pending', [
+          '@session' => $checkout_session_id,
+        ]);
+        // Get the updated purchase record.
+        $purchase = $this->customerManager->getPreCheckoutBySessionId($checkout_session_id);
+        $purchase_id = $purchase ? $purchase->id : NULL;
+      }
+      else {
+        $this->logger->warning('No pre-checkout record found for session @session, creating new record', [
+          '@session' => $checkout_session_id,
+        ]);
+      }
+    }
 
+    // Fallback: Create new pending purchase record if no session ID or update failed.
     if (!$purchase_id) {
-      $this->logger->error('Failed to create purchase record for transaction @txn', ['@txn' => $transaction_id]);
-      return FALSE;
+      $purchase_id = $this->customerManager->createPendingPurchase($transaction_data);
+      if (!$purchase_id) {
+        $this->logger->error('Failed to create purchase record for transaction @txn', ['@txn' => $transaction_id]);
+        return FALSE;
+      }
+      $this->logger->info('Created new pending purchase record (no pre-checkout found)');
     }
 
     // Get the purchase record to retrieve the token.

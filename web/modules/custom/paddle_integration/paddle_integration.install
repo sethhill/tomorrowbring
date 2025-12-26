@@ -174,3 +174,168 @@ function paddle_integration_uninstall() {
   }
   */
 }
+
+/**
+ * Add checkout_session_id, customer_first_name, and customer_last_name fields.
+ */
+function paddle_integration_update_9001() {
+  $schema = \Drupal::database()->schema();
+  $table = 'paddle_purchases';
+
+  // Add checkout_session_id field.
+  if (!$schema->fieldExists($table, 'checkout_session_id')) {
+    $schema->addField($table, 'checkout_session_id', [
+      'type' => 'varchar',
+      'length' => 128,
+      'not null' => FALSE,
+      'description' => 'Unique checkout session identifier (UUID).',
+    ]);
+    \Drupal::logger('paddle_integration')->info('Added checkout_session_id field to paddle_purchases table.');
+  }
+
+  // Add customer_first_name field.
+  if (!$schema->fieldExists($table, 'customer_first_name')) {
+    $schema->addField($table, 'customer_first_name', [
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => FALSE,
+      'description' => 'Customer first name.',
+    ]);
+    \Drupal::logger('paddle_integration')->info('Added customer_first_name field to paddle_purchases table.');
+  }
+
+  // Add customer_last_name field.
+  if (!$schema->fieldExists($table, 'customer_last_name')) {
+    $schema->addField($table, 'customer_last_name', [
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => FALSE,
+      'description' => 'Customer last name.',
+    ]);
+    \Drupal::logger('paddle_integration')->info('Added customer_last_name field to paddle_purchases table.');
+  }
+
+  // Add index on checkout_session_id.
+  if (!$schema->indexExists($table, 'checkout_session_id')) {
+    $keys_new = ['checkout_session_id'];
+    $spec = [
+      'fields' => [
+        'checkout_session_id' => [
+          'type' => 'varchar',
+          'length' => 128,
+          'not null' => FALSE,
+        ],
+      ],
+    ];
+    $schema->addIndex($table, 'checkout_session_id', $keys_new, $spec);
+    \Drupal::logger('paddle_integration')->info('Added index on checkout_session_id field.');
+  }
+
+  return t('Added checkout session and customer name fields to paddle_purchases table.');
+}
+
+/**
+ * Create field_first_name and field_last_name on member profile.
+ */
+function paddle_integration_update_9002() {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $field_storage_config_storage = $entity_type_manager->getStorage('field_storage_config');
+  $field_config_storage = $entity_type_manager->getStorage('field_config');
+
+  // Create field_first_name storage.
+  if (!$field_storage_config_storage->load('profile.field_first_name')) {
+    $field_storage = $field_storage_config_storage->create([
+      'field_name' => 'field_first_name',
+      'entity_type' => 'profile',
+      'type' => 'string',
+      'cardinality' => 1,
+      'settings' => [
+        'max_length' => 255,
+      ],
+    ]);
+    $field_storage->save();
+    \Drupal::logger('paddle_integration')->info('Created field_first_name storage.');
+  }
+
+  // Create field_first_name instance on member profile.
+  if (!$field_config_storage->load('profile.member.field_first_name')) {
+    $field = $field_config_storage->create([
+      'field_name' => 'field_first_name',
+      'entity_type' => 'profile',
+      'bundle' => 'member',
+      'label' => 'First Name',
+      'required' => TRUE,
+      'settings' => [],
+    ]);
+    $field->save();
+    \Drupal::logger('paddle_integration')->info('Created field_first_name field on member profile.');
+  }
+
+  // Create field_last_name storage.
+  if (!$field_storage_config_storage->load('profile.field_last_name')) {
+    $field_storage = $field_storage_config_storage->create([
+      'field_name' => 'field_last_name',
+      'entity_type' => 'profile',
+      'type' => 'string',
+      'cardinality' => 1,
+      'settings' => [
+        'max_length' => 255,
+      ],
+    ]);
+    $field_storage->save();
+    \Drupal::logger('paddle_integration')->info('Created field_last_name storage.');
+  }
+
+  // Create field_last_name instance on member profile.
+  if (!$field_config_storage->load('profile.member.field_last_name')) {
+    $field = $field_config_storage->create([
+      'field_name' => 'field_last_name',
+      'entity_type' => 'profile',
+      'bundle' => 'member',
+      'label' => 'Last Name',
+      'required' => TRUE,
+      'settings' => [],
+    ]);
+    $field->save();
+    \Drupal::logger('paddle_integration')->info('Created field_last_name field on member profile.');
+  }
+
+  // Make field_name not required (for backward compatibility).
+  $field_name = $field_config_storage->load('profile.member.field_name');
+  if ($field_name) {
+    $field_name->setRequired(FALSE);
+    $field_name->save();
+    \Drupal::logger('paddle_integration')->info('Updated field_name to not required.');
+  }
+
+  return t('Created first_name and last_name fields on member profile.');
+}
+
+/**
+ * Make transaction_id nullable for pre-checkout records.
+ */
+function paddle_integration_update_9003() {
+  $schema = \Drupal::database()->schema();
+  $table = 'paddle_purchases';
+
+  // Drop the unique key on transaction_id first.
+  if ($schema->indexExists($table, 'transaction_id')) {
+    $schema->dropUniqueKey($table, 'transaction_id');
+    \Drupal::logger('paddle_integration')->info('Dropped unique key on transaction_id.');
+  }
+
+  // Change transaction_id to allow NULL values.
+  $schema->changeField($table, 'transaction_id', 'transaction_id', [
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+    'description' => 'Paddle transaction ID.',
+  ]);
+
+  // Re-add the unique key (MySQL allows multiple NULLs in unique columns).
+  $schema->addUniqueKey($table, 'transaction_id', ['transaction_id']);
+
+  \Drupal::logger('paddle_integration')->info('Made transaction_id field nullable with unique constraint.');
+
+  return t('Updated transaction_id field to allow NULL values for pre-checkout records.');
+}

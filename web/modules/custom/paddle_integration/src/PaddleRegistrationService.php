@@ -212,8 +212,15 @@ class PaddleRegistrationService {
       }
 
       // Set profile fields from form data.
-      if (isset($form_data['name'])) {
-        $profile->set('field_name', $form_data['name']);
+      if (isset($form_data['first_name'])) {
+        $profile->set('field_first_name', $form_data['first_name']);
+      }
+      if (isset($form_data['last_name'])) {
+        $profile->set('field_last_name', $form_data['last_name']);
+      }
+      // Optionally set combined name for backward compatibility.
+      if (isset($form_data['first_name']) && isset($form_data['last_name'])) {
+        $profile->set('field_name', $form_data['first_name'] . ' ' . $form_data['last_name']);
       }
       if (isset($form_data['industry'])) {
         $profile->set('field_industry', $form_data['industry']);

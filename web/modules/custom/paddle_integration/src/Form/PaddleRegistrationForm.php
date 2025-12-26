@@ -95,18 +95,24 @@ class PaddleRegistrationForm extends FormBase {
       '#description' => $this->t('This is the email address associated with your payment. Use this to log in.'),
     ];
 
+    // Display first and last name (read-only).
+    $form['first_name'] = [
+      '#type' => 'item',
+      '#title' => $this->t('First Name'),
+      '#markup' => '<strong>' . htmlspecialchars($this->purchase->customer_first_name) . '</strong>',
+    ];
+
+    $form['last_name'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Last Name'),
+      '#markup' => '<strong>' . htmlspecialchars($this->purchase->customer_last_name) . '</strong>',
+    ];
+
     $form['password'] = [
       '#type' => 'password_confirm',
       '#title' => $this->t('Password'),
       '#required' => TRUE,
       '#size' => 25,
-    ];
-
-    $form['name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('What should we call you?'),
-      '#required' => TRUE,
-      '#maxlength' => 255,
     ];
 
     // Load industry taxonomy terms.
@@ -187,7 +193,8 @@ class PaddleRegistrationForm extends FormBase {
     $form_data = [
       'username' => $username,
       'password' => $form_state->getValue('password'),
-      'name' => $form_state->getValue('name'),
+      'first_name' => $this->purchase->customer_first_name,
+      'last_name' => $this->purchase->customer_last_name,
       'industry' => $form_state->getValue('industry'),
       'company_size' => $form_state->getValue('company_size'),
     ];

@@ -11,12 +11,19 @@
  * - cancel_url: URL to redirect if payment is cancelled
  * - terms_url: URL to Terms of Service page
  * - privacy_url: URL to Privacy Policy page
+ * - customer_email: Customer email address
+ * - customer_first_name: Customer first name
+ * - customer_last_name: Customer last name
+ * - checkout_session_id: Unique checkout session ID
  */
 #}
 <div class="paddle-checkout-confirm">
   <div class="confirm-header">
     <h1>{{ 'Confirm Your Purchase'|t }}</h1>
     <p>{{ 'Please review and accept the following before completing payment.'|t }}</p>
+    {% if customer_first_name and customer_last_name %}
+    <p class="customer-info">{{ 'Completing signup for'|t }}: <strong>{{ customer_first_name }} {{ customer_last_name }}</strong> ({{ customer_email }})</p>
+    {% endif %}
   </div>
 
   <div class="acknowledgments">
@@ -51,7 +58,14 @@
   </div>
 
   <div class="checkout-button-container">
-    <button id="paddle-checkout-button" class="paddle-checkout-btn" disabled aria-disabled="true">
+    <button id="paddle-checkout-button"
+            class="paddle-checkout-btn"
+            data-email="{{ customer_email }}"
+            data-first-name="{{ customer_first_name }}"
+            data-last-name="{{ customer_last_name }}"
+            data-session-id="{{ checkout_session_id }}"
+            disabled
+            aria-disabled="true">
       {{ 'Complete Purchase'|t }}
     </button>
   </div>
@@ -112,6 +126,13 @@
     checkoutButton.addEventListener('click', function() {
       if (!checkoutButton.disabled) {
         console.log('Opening checkout with price:', '{{ product_id }}');
+
+        // Get customer data from button attributes
+        const customerEmail = checkoutButton.dataset.email;
+        const firstName = checkoutButton.dataset.firstName;
+        const lastName = checkoutButton.dataset.lastName;
+        const sessionId = checkoutButton.dataset.sessionId;
+
         Paddle.Checkout.open({
           items: [
             {
@@ -119,6 +140,14 @@
               quantity: 1
             }
           ],
+          customer: {
+            email: customerEmail
+          },
+          customData: {
+            checkout_session_id: sessionId,
+            first_name: firstName,
+            last_name: lastName
+          },
           settings: {
             successUrl: '{{ success_url }}',
             theme: 'light'
@@ -144,6 +173,12 @@
   .confirm-header h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
+  }
+
+  .customer-info {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 1rem;
   }
 
   .acknowledgments {
