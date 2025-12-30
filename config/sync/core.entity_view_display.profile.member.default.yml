@@ -4,7 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.profile.member.field_company_size
+    - field.field.profile.member.field_first_name
     - field.field.profile.member.field_industry
+    - field.field.profile.member.field_last_name
     - field.field.profile.member.field_name
     - profile.type.member
 id: profile.member.default
@@ -36,4 +38,6 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-hidden: {  }
+hidden:
+  field_first_name: true
+  field_last_name: true

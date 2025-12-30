@@ -1,0 +1,8 @@
+uuid: 37e5a248-5e20-436a-a90b-1e682c564173
+langcode: en
+status: true
+dependencies: {  }
+id: public-navigation
+label: 'Public navigation'
+description: 'Menu for anonymous users'
+locked: false

@@ -56,6 +56,7 @@ module:
   symfony_mailer: 0
   system: 0
   taxonomy: 0
+  tbring_user: 0
   text: 0
   token: 0
   user: 0

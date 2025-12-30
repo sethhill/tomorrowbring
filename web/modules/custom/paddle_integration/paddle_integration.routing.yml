@@ -3,7 +3,7 @@ paddle_integration.checkout:
   path: '/sign-up'
   defaults:
     _form: '\Drupal\paddle_integration\Form\PaddleCheckoutForm'
-    _title: 'Get Started'
+    _title: 'Sign up'
   requirements:
     _user_is_logged_in: 'FALSE'
 
@@ -12,7 +12,7 @@ paddle_integration.checkout_confirm:
   path: '/sign-up/confirm'
   defaults:
     _controller: '\Drupal\paddle_integration\Controller\CheckoutController::confirm'
-    _title: 'Confirm Purchase'
+    _title: 'Confirm purchase'
   requirements:
     _user_is_logged_in: 'FALSE'
 
@@ -21,7 +21,7 @@ paddle_integration.checkout_success:
   path: '/sign-up/success'
   defaults:
     _controller: '\Drupal\paddle_integration\Controller\CheckoutController::success'
-    _title: 'Payment Successful'
+    _title: 'Payment successful'
   requirements:
     _access: 'TRUE'
 
@@ -30,7 +30,7 @@ paddle_integration.checkout_cancel:
   path: '/sign-up/cancel'
   defaults:
     _controller: '\Drupal\paddle_integration\Controller\CheckoutController::cancel'
-    _title: 'Payment Cancelled'
+    _title: 'Payment cancelled'
   requirements:
     _access: 'TRUE'
 

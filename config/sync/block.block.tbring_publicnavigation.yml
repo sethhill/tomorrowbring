@@ -1,28 +1,28 @@
-uuid: 4aea48dc-4ce7-4469-9937-0986a9cc2a04
+uuid: 866f0526-275e-452a-a0e4-5e9e3c3acd2f
 langcode: en
 status: true
 dependencies:
   config:
-    - system.menu.main
+    - system.menu.public-navigation
   module:
     - system
     - user
   theme:
     - tbring
-id: tbring_mainnavigation
+id: tbring_publicnavigation
 theme: tbring
 region: primary_menu
-weight: -4
+weight: -5
 provider: null
-plugin: 'system_menu_block:main'
+plugin: 'system_menu_block:public-navigation'
 settings:
-  id: 'system_menu_block:main'
-  label: 'Main navigation'
+  id: 'system_menu_block:public-navigation'
+  label: 'Public navigation'
   label_display: '0'
   provider: system
   level: 1
-  depth: 2
-  expand_all_items: true
+  depth: null
+  expand_all_items: false
 visibility:
   user_role:
     id: user_role
@@ -30,4 +30,4 @@ visibility:
     context_mapping:
       user: '@user.current_user_context:current_user'
     roles:
-      authenticated: authenticated
+      anonymous: anonymous

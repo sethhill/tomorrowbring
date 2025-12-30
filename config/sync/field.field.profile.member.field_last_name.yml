@@ -1,18 +1,18 @@
-uuid: 3ce48e89-0a17-49e6-8099-50b8edb9149d
+uuid: 64a68221-f395-4dd4-bf7c-3452b10ceb6f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.profile.field_name
+    - field.storage.profile.field_last_name
     - profile.type.member
-id: profile.member.field_name
-field_name: field_name
+id: profile.member.field_last_name
+field_name: field_last_name
 entity_type: profile
 bundle: member
-label: 'What should we call you?'
+label: 'Last Name'
 description: ''
-required: false
-translatable: false
+required: true
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

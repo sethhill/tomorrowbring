@@ -1,0 +1,150 @@
+<?php
+
+/**
+ * @file
+ * Custom user functionality for TomorrowBring site.
+ */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function tbring_user_menu_links_discovered_alter(&$links) {
+  // Change "Log in" to "Log in".
+  if (isset($links['user.login'])) {
+    $links['user.login']['title'] = 'Log in';
+  }
+
+  // Change "Log out" to "Log out".
+  if (isset($links['user.logout'])) {
+    $links['user.logout']['title'] = 'Log out';
+  }
+
+  // Change "My account" to "My Account".
+  if (isset($links['user.page'])) {
+    $links['user.page']['title'] = 'My account';
+  }
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function tbring_user_preprocess_menu(&$variables) {
+  if ($variables['menu_name'] === 'account') {
+    $current_user = \Drupal::currentUser();
+
+    foreach ($variables['items'] as $key => &$item) {
+      // Update menu item titles.
+      if (isset($item['url']) && $item['url']->isRouted()) {
+        $route_name = $item['url']->getRouteName();
+
+        switch ($route_name) {
+          case 'user.login':
+            $item['title'] = 'Log in';
+            break;
+          case 'user.logout':
+            $item['title'] = 'Log out';
+            break;
+          case 'user.page':
+            $item['title'] = 'My account';
+            break;
+        }
+      }
+    }
+
+    // Hide sign-up link for authenticated users.
+    if (isset($item['url'])) {
+      $url_string = $item['url']->toString();
+      if (strpos($url_string, '/sign-up') !== FALSE && !$current_user->isAnonymous()) {
+        unset($variables['items'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+function tbring_user_link_alter(&$variables) {
+  if (isset($variables['url']) && $variables['url']->isRouted()) {
+    $route_name = $variables['url']->getRouteName();
+
+    switch ($route_name) {
+      case 'user.login':
+        $variables['text'] = 'Log in';
+        break;
+      case 'user.logout':
+        $variables['text'] = 'Log out';
+        break;
+      case 'user.page':
+        $variables['text'] = 'My account';
+        break;
+      case 'user.pass':
+        $variables['text'] = 'Reset password';
+        break;
+    }
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function tbring_user_menu_local_tasks_alter(&$data, $route_name) {
+  // Update local task titles.
+  if (isset($data['tabs'][0]['user.login'])) {
+    $data['tabs'][0]['user.login']['#link']['title'] = 'Log in';
+  }
+  if (isset($data['tabs'][0]['user.logout'])) {
+    $data['tabs'][0]['user.logout']['#link']['title'] = 'Log out';
+  }
+  if (isset($data['tabs'][0]['user.page'])) {
+    $data['tabs'][0]['user.page']['#link']['title'] = 'My account';
+  }
+  if (isset($data['tabs'][0]['user.pass'])) {
+    $data['tabs'][0]['user.pass']['#link']['title'] = 'Reset password';
+  }
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function tbring_user_preprocess_page_title(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  switch ($route_name) {
+    case 'user.login':
+      $variables['title'] = 'Log in';
+      break;
+    case 'user.logout':
+      $variables['title'] = 'Log out';
+      break;
+    case 'user.pass':
+      $variables['title'] = 'Reset password';
+      break;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function tbring_user_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Update the login form submit button.
+  if ($form_id === 'user_login_form') {
+    $form['actions']['submit']['#value'] = t('Log in');
+  }
+}
+
+/**
+ * Implements hook_user_presave().
+ */
+function tbring_user_user_presave(UserInterface $user) {
+  // Only assign default client for new users.
+  if ($user->isNew()) {
+    // Check if field_client is empty.
+    if ($user->get('field_client')->isEmpty()) {
+      // Assign to "Individual" client (node 32).
+      $user->set('field_client', ['target_id' => 32]);
+    }
+  }
+}
