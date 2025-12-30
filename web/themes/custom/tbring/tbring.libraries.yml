@@ -9,6 +9,7 @@ global:
       css/styles.css: {}
       css/reports.css: {}
       css/menu.css: {}
+      css/checkout.css: {}
       css/print.css: { media: print }
   dependencies:
     - core/drupal

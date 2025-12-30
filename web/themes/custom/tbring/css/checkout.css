@@ -1,0 +1,46 @@
+.paddle-checkout-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: top;
+}
+
+.checkout-benefits {
+  flex-basis: 60%;
+
+  h2 {
+    margin-bottom: 0.25em;
+  }
+
+  ul {
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.checkout-price {
+  font-size: 3em;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  color: var(--color-orange);
+  margin-bottom: 0.5em;
+
+  span {
+    display: block;
+    font-size: 0.333em;
+  }
+}
+
+.checkout-form-fields {
+  flex-basis: 40%;
+
+  .form-item {
+    margin-bottom: 1em;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.25em;
+  }
+}

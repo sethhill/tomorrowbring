@@ -77,12 +77,14 @@ class PaddleCheckoutForm extends FormBase {
     $form['#attached']['library'][] = 'paddle_integration/paddle_checkout';
 
 
+
     // Benefits section (from original template).
     $form['benefits'] = [
       '#type' => 'markup',
       '#markup' => '<div class="checkout-benefits">
-        <h2>' . $this->t("What You’ll Get") . '</h2>
-        <h3>' . $this->t('8 personalized career reports:') . '</h3>
+        <div class="checkout-price">$29.00 <span class="">one-time payment</span></div>
+        <h2>' . $this->t("What you’ll get") . '</h2>
+        <h3>' . $this->t('8 personalized career reports') . '</h3>
         <ul>
           <li>' . $this->t('Industry Insights') . '</li>
           <li>' . $this->t('Evolution of Your Role') . '</li>
