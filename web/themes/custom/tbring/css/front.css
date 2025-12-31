@@ -1,0 +1,138 @@
+.path-node-34 {
+
+  #block-tbring-page-title {
+    display: none;
+  }
+
+  .inner {
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .headline {
+    background: url("/themes/custom/tbring/images/pattern-repeat.png") repeat center center;
+    background-size: 24rem auto;
+    padding-top: 3em;
+    padding-bottom: 3em;
+    min-height: 50vh;
+    display: grid;
+    place-items: center;
+    place-content: center;
+    margin-top: -0.875em;
+
+    & > .inner {
+      max-width: 60em;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+
+    h1 {
+      font-size: 4rem;
+      color: var(--color-deep-blue);
+      font-weight: bold;
+      line-height: 1.1;
+
+      background: white;
+      padding: 1em;
+      border-start-start-radius: 1em;
+      border-end-end-radius: 1em;
+      border: 0.5rem solid var(--color-cream-2);
+    }
+
+  }
+}
+
+.introduction {
+  background-color: var(--color-deep-blue);
+  padding-top: 5em;
+  padding-bottom: 5em;
+
+  & > .inner {
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  h2 {
+    color: var(--color-gold);
+    font-size: 2em;
+    font-weight: 900;
+  }
+
+  p {
+    color: var(--color-white);
+    font-size: 1.25em;
+    font-weight: 600;
+  }
+}
+
+.service {
+  background-color: var(--color-white);
+  padding-top: 5em;
+  padding-bottom: 5em;
+
+  & > .inner {
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  h2 {
+    font-size: 2em;
+    font-weight: 900;
+    color: var(--color-deep-blue);
+  }
+
+  ul,
+  p {
+    font-size: 1.25em;
+    font-weight: 600;
+  }
+
+  strong {
+    color: var(--color-orange);
+    font-weight: 900;
+  }
+
+  li {
+    margin-bottom: 0.25em;
+  }
+}
+
+.pricing {
+  background-color: var(--color-green);
+  padding-top: 5em;
+  padding-bottom: 5em;
+  color: var(--color-white);
+
+  & > .inner {
+    max-width: 60em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  p {
+    font-size: 1.25em;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  p:last-child {
+    margin-top: 1.5em;
+  }
+
+  strong {
+    display: block;
+    font-weight: 900;
+    font-size: 3.2em;
+  }
+}

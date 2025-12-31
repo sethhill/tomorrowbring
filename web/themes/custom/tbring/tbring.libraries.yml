@@ -10,6 +10,7 @@ global:
       css/reports.css: {}
       css/menu.css: {}
       css/checkout.css: {}
+      css/front.css: {}
       css/print.css: { media: print }
   dependencies:
     - core/drupal
