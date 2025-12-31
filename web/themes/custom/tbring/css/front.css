@@ -30,7 +30,7 @@
     }
 
     h1 {
-      font-size: 4rem;
+      font-size: 2rem;
       color: var(--color-deep-blue);
       font-weight: bold;
       line-height: 1.1;
@@ -40,6 +40,10 @@
       border-start-start-radius: 1em;
       border-end-end-radius: 1em;
       border: 0.5rem solid var(--color-cream-2);
+
+      @media (min-width: 1024px) {
+        font-size: 4rem;
+      }
     }
 
   }

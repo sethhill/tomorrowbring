@@ -6,13 +6,17 @@
   /* border-radius: 5em; */
   overflow: hidden;
   margin-bottom: 1em;
-  display: flex;
+
   justify-content: space-between;
   /* background: linear-gradient(to bottom, var(--color-white), var(--color-cream-light)); */
   /* background: linear-gradient(to right, var(--color-gold) 0% 25%, var(--color-orange) 37.5% 62.5%, var(--color-green) 75% 100%); */
   /* background: white; */
   padding-left: 1em;
   padding-right: 1em;
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
 
   nav {
     display: inline-block;
@@ -61,10 +65,12 @@
     outline: 2px solid var(--color-cream);
     outline-offset: -2px;
   }
+
 }
 
-
 #block-tbring-footer {
+  padding-left: 1em;
+  padding-right: 1em;
   ul {
     li {
       display: inline-block;
