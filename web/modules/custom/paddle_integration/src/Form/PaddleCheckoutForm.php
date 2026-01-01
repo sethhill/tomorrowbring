@@ -82,7 +82,7 @@ class PaddleCheckoutForm extends FormBase {
     $form['benefits'] = [
       '#type' => 'markup',
       '#markup' => '<div class="checkout-benefits">
-        <div class="checkout-price">$29.00 <span class="">one-time payment</span></div>
+        <div class="checkout-price">US$29.00 <span class="">one-time payment</span></div>
         <h2>' . $this->t("What you’ll get") . '</h2>
         <h3>' . $this->t('8 personalized career reports') . '</h3>
         <ul>
