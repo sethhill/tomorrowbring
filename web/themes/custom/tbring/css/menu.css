@@ -68,7 +68,8 @@
 
 }
 
-#block-tbring-footer {
+#block-tbring-footer,
+#block-tbring-copyright {
   padding-left: 1em;
   padding-right: 1em;
   ul {

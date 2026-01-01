@@ -1,12 +1,16 @@
 .paddle-checkout-form {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: top;
+
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: top;
+  }
 }
 
 .checkout-benefits {
   flex-basis: 60%;
+  margin-bottom: 2em;
 
   h2 {
     margin-bottom: 0.25em;
@@ -15,6 +19,8 @@
   ul {
     text-align: center;
     font-weight: bold;
+    list-style-type: none;
+    padding: 0;
   }
 }
 
@@ -43,4 +49,8 @@
     display: block;
     margin-bottom: 0.25em;
   }
+}
+
+.path-sign-up {
+
 }

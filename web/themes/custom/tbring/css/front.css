@@ -137,6 +137,10 @@
   strong {
     display: block;
     font-weight: 900;
-    font-size: 3.2em;
+    font-size: 1.6em;
+
+    @media (min-width: 1024px) {
+      font-size: 3.2em;
+    }
   }
 }
